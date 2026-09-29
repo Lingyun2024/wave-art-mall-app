@@ -81,37 +81,20 @@
       }
       .record-block {
         position: absolute;
-        left: 8.57%;
-        width: 82.86%;
-        height: 36.8%;
+        left: 14.7%;
+        width: 76.4%;
         display: grid;
-        grid-template-columns: 8.8% repeat(5, 1fr);
-        grid-template-rows: minmax(0, 38.5%) 8.2% 8.2% 8.2% 14.5% 7.3% 7.3% 7.3% 7.3%;
-        color: #a9000d;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: 214fr 48fr 47fr 48fr 98fr 46fr 50fr;
+        color: #222;
       }
       .record-block.first {
-        top: 11.15%;
+        top: 11.18%;
+        height: 40.57%;
       }
       .record-block.second {
-        top: 52%;
-      }
-      .row-label {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        font-size: 10px;
-        font-weight: 700;
-        line-height: 1.2;
-        text-align: center;
-        overflow: hidden;
-        writing-mode: vertical-rl;
-      }
-      .row-label.photo-label {
-        grid-row: span 3;
-      }
-      .row-label.empty {
-        color: transparent;
+        top: 51.74%;
+        height: 40.57%;
       }
       .record-cell {
         display: flex;
@@ -129,26 +112,20 @@
       .record-cell.photo-cell {
         padding: 0;
         overflow: hidden;
+        font-size: 0;
+        line-height: 0;
       }
       .record-cell.photo-cell img {
         display: block;
-        width: 35mm;
-        height: 45mm;
-        max-width: 100%;
-        max-height: 100%;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        object-position: center;
+        object-position: center top;
         background: #fff;
         border-radius: 1mm;
-        margin: 0 auto;
       }
-
       .record-cell.photo-cell.shift-right img {
         transform: translateX(1mm);
-      }
-      .record-cell.photo-cell {
-        font-size: 0;
-        line-height: 0;
       }
       .record-cell.empty {
         color: transparent;
@@ -251,14 +228,11 @@
       }
 
       function renderRecordBlock(rows, position) {
-        const labels = ["照片", null, null, "姓名", "虛歲", "電話", "地址", "職業", "日期"];
         const fields = [
           (row) =>
             row?.photo_path
               ? `<div class="record-cell photo-cell ${row.id === "6f814771-fe89-4cef-800c-e34182184ad2" ? "shift-right" : ""}" data-photo-id="${escapeHtml(row.id)}"></div>`
               : '<div class="record-cell empty"></div>',
-          () => '<div class="record-cell empty"></div>',
-          () => '<div class="record-cell empty"></div>',
           (row) => `<div class="record-cell">${escapeHtml(row?.representative_name)}</div>`,
           (row) => `<div class="record-cell">${escapeHtml(row?.age)}</div>`,
           (row) => `<div class="record-cell">${escapeHtml(row?.phone)}</div>`,
@@ -268,27 +242,10 @@
         ];
 
         return `<div class="record-block ${position}">
-          ${labels
-            .map((label, rowIndex) => {
-              if (label === "照片") {
-                const labelCell = `<div class="row-label photo-label">照片</div>`;
-                const dataCells = rows
-                  .map((row) => (row ? fields[rowIndex](row) : '<div class="record-cell empty"></div>'))
-                  .join("");
-                return labelCell + dataCells;
-              }
-              if (label === null) {
-                const dataCells = rows
-                  .map((row) => (row ? fields[rowIndex](row) : '<div class="record-cell empty"></div>'))
-                  .join("");
-                return dataCells;
-              }
-              const labelCell = `<div class="row-label">${label}</div>`;
-              const dataCells = rows
-                .map((row) => (row ? fields[rowIndex](row) : '<div class="record-cell empty"></div>'))
-                .join("");
-              return labelCell + dataCells;
-            })
+          ${fields
+            .map((field) =>
+              rows.map((row) => (row ? field(row) : '<div class="record-cell empty"></div>')).join("")
+            )
             .join("")}
         </div>`;
       }
