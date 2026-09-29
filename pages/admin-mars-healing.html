@@ -105,6 +105,7 @@
         line-height: 1.15;
         text-align: center;
         writing-mode: vertical-rl;
+        overflow: hidden;
       }
       .row-label.empty {
         color: transparent;
@@ -247,12 +248,14 @@
       }
 
       function renderRecordBlock(rows, position) {
-        const labels = ["照片", "姓名", "虛歲", "電話", "地址", "職業", "日期"];
+        const labels = ["照片", "", "", "姓名", "虛歲", "電話", "地址", "職業", "日期"];
         const fields = [
           (row) =>
             row?.photo_path
               ? `<div class="record-cell photo-cell ${row.id === "6f814771-fe89-4cef-800c-e34182184ad2" ? "shift-right" : ""}" data-photo-id="${escapeHtml(row.id)}"></div>`
               : '<div class="record-cell empty"></div>',
+          () => '<div class="record-cell empty"></div>',
+          () => '<div class="record-cell empty"></div>',
           (row) => `<div class="record-cell">${escapeHtml(row?.representative_name)}</div>`,
           (row) => `<div class="record-cell">${escapeHtml(row?.age)}</div>`,
           (row) => `<div class="record-cell">${escapeHtml(row?.phone)}</div>`,
@@ -264,21 +267,11 @@
         return `<div class="record-block ${position}">
           ${labels
             .map((label, rowIndex) => {
-              const baseRow = `<div class="row-label">${label}</div>${rows
+              const labelCell = label ? `<div class="row-label">${label}</div>` : '<div class="row-label empty"></div>';
+              const dataCells = rows
                 .map((row) => (row ? fields[rowIndex](row) : '<div class="record-cell empty"></div>'))
-                .join("")}`;
-
-              if (label === "地址") {
-                const spacer1 = `<div class="row-label empty"></div>${rows
-                  .map(() => '<div class="record-cell empty"></div>')
-                  .join("")}`;
-                const spacer2 = `<div class="row-label empty"></div>${rows
-                  .map(() => '<div class="record-cell empty"></div>')
-                  .join("")}`;
-                return [baseRow, spacer1, spacer2].join("");
-              }
-
-              return baseRow;
+                .join("");
+              return labelCell + dataCells;
             })
             .join("")}
         </div>`;
