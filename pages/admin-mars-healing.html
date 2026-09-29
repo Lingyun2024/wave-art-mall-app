@@ -89,11 +89,11 @@
         color: #222;
       }
       .record-block.first {
-        top: 5.18%;
+        top: 11.18%;
         height: 40.57%;
       }
       .record-block.second {
-        top: 45.74%;
+        top: 51.74%;
         height: 40.57%;
       }
       .label-mask {
@@ -254,13 +254,16 @@
           (row) => `<div class="record-cell">${escapeHtml(row?.phone)}</div>`,
           (row) => `<div class="record-cell">${escapeHtml(row?.address)}</div>`,
           (row) => `<div class="record-cell">${escapeHtml(row?.occupation)}</div>`,
-          (row) => `<div class="record-cell">${escapeHtml(new Date(row.created_at).toLocaleDateString("zh-TW"))}</div>`,
+          (row) =>
+            `<div class="record-cell">${escapeHtml(new Date(row.created_at).toLocaleDateString("zh-TW"))}</div>`,
         ];
 
         return `<div class="record-block ${position}">
           ${fields
             .map((field) =>
-              rows.map((row) => (row ? field(row) : '<div class="record-cell empty"></div>')).join("")
+              rows
+                .map((row) => (row ? field(row) : '<div class="record-cell empty"></div>'))
+                .join("")
             )
             .join("")}
         </div>`;
