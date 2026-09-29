@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="api-base" content="" />
+    <title>註冊｜全棧範本</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="js/tailwind-config.js"></script>
+    <script src="js/api.js"></script>
+    <style>
+      body { background: #141314; color: #e5e2e2; font-family: Manrope, "Noto Sans TC", sans-serif; }
+      .card { background: #1c1b1c; border: 1px solid #46464b; }
+      .field { background: #201f20; border: 1px solid #46464b; color: #e5e2e2; }
+      .field:focus { outline: none; border-color: #e9c349; }
+      .hidden { display: none !important; }
+    </style>
+  </head>
+  <body class="flex min-h-screen items-center justify-center px-4">
+    <div class="card w-full max-w-md rounded-xl p-8">
+      <h1 class="font-display text-3xl text-secondary">註冊</h1>
+      <p class="mt-1 text-xs text-on-surface-variant">註冊後自動登入，可直接開始使用</p>
+
+      <form id="form-register" class="mt-6 grid gap-4">
+        <div>
+          <label for="displayName" class="mb-1 block text-xs uppercase tracking-widest text-on-surface-variant">顯示名稱</label>
+          <input id="displayName" required maxlength="60" class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="email" class="mb-1 block text-xs uppercase tracking-widest text-on-surface-variant">Email</label>
+          <input id="email" type="email" autocomplete="username" required class="field w-full rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="password" class="mb-1 block text-xs uppercase tracking-widest text-on-surface-variant">密碼（至少 8 碼）</label>
+          <input
+            id="password"
+            type="password"
+            minlength="8"
+            autocomplete="new-password"
+            required
+            class="field w-full rounded-lg px-3 py-2 text-sm"
+          />
+        </div>
+        <div>
+          <label for="confirm" class="mb-1 block text-xs uppercase tracking-widest text-on-surface-variant">確認密碼</label>
+          <input
+            id="confirm"
+            type="password"
+            minlength="8"
+            autocomplete="new-password"
+            required
+            class="field w-full rounded-lg px-3 py-2 text-sm"
+          />
+        </div>
+        <p id="hint" class="hidden text-xs text-error"></p>
+        <button
+          id="btn-submit"
+          type="submit"
+          class="rounded-lg bg-secondary px-5 py-2 text-sm font-semibold text-on-secondary hover:bg-secondary-fixed"
+        >
+          註冊並登入
+        </button>
+      </form>
+
+      <p class="mt-6 text-center text-sm text-on-surface-variant">
+        已經有帳號？
+        <a href="login.html" class="text-secondary hover:underline">前往登入</a>
+      </p>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+        function hint(message) {
+          var el = document.getElementById("hint");
+          el.textContent = message || "";
+          el.classList.toggle("hidden", !message);
+        }
+
+        document.getElementById("form-register").addEventListener("submit", async function (e) {
+          e.preventDefault();
+          var password = document.getElementById("password").value;
+          var confirm = document.getElementById("confirm").value;
+
+          if (password.length < 8) {
+            hint("密碼至少需要 8 個字元");
+            return;
+          }
+          if (password !== confirm) {
+            hint("兩次輸入的密碼不一致");
+            return;
+          }
+          hint("");
+
+          var btn = document.getElementById("btn-submit");
+          btn.disabled = true;
+          btn.textContent = "註冊中…";
+
+          var r = await API.auth.register({
+            displayName: document.getElementById("displayName").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            password: password,
+          });
+
+          btn.disabled = false;
+          btn.textContent = "註冊並登入";
+
+          if (!r.ok) {
+            hint(r.message);
+            API.toast(r.message, "error");
+            return;
+          }
+          API.setTokens(r.data.accessToken, r.data.refreshToken);
+          API.toast("註冊成功，已自動登入");
+          location.href = "index.html";
+        });
+      })();
+    </script>
+  </body>
+</html>

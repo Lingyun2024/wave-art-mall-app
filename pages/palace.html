@@ -1,0 +1,423 @@
+﻿<!doctype html>
+
+<html class="dark" lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>宮殿藝廊</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400&amp;family=Playfair+Display:wght@600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              error: "#ffb4ab",
+              "on-primary-container": "#797980",
+              "surface-container-low": "#1c1b1c",
+              "secondary-fixed": "#ffe088",
+              "on-primary-fixed-variant": "#46464c",
+              "primary-fixed": "#e3e1e9",
+              "starlight-white": "#F9F9F9",
+              "galactic-purple": "#8A2BE2",
+              "on-tertiary": "#372f27",
+              "error-container": "#93000a",
+              "on-error-container": "#ffdad6",
+              "on-surface-variant": "#c7c6cb",
+              "on-error": "#690005",
+              outline: "#919095",
+              "surface-dim": "#141314",
+              "secondary-container": "#af8d11",
+              "surface-tint": "#c7c6cd",
+              secondary: "#e9c349",
+              "surface-container": "#201f20",
+              "on-background": "#e5e2e2",
+              background: "#141314",
+              "outline-variant": "#46464b",
+              "on-secondary-fixed": "#241a00",
+              "on-primary": "#2f3036",
+              "tertiary-container": "#100a05",
+              surface: "#141314",
+              "primary-container": "#0a0b10",
+              "surface-variant": "#353435",
+              "primary-fixed-dim": "#c7c6cd",
+              "surface-container-high": "#2a2a2a",
+              "tertiary-fixed": "#efe0d5",
+              "on-tertiary-container": "#83786f",
+              "inverse-primary": "#5e5e64",
+              "on-tertiary-fixed-variant": "#4e453d",
+              "on-secondary": "#3c2f00",
+              "neon-cyan": "#00FFFF",
+              "on-tertiary-fixed": "#211a14",
+              "inverse-surface": "#e5e2e2",
+              "on-secondary-fixed-variant": "#574500",
+              "void-black": "#020203",
+              "surface-container-lowest": "#0e0e0e",
+              "on-secondary-container": "#342800",
+              "on-surface": "#e5e2e2",
+              "surface-container-highest": "#353435",
+              tertiary: "#d2c4b9",
+              "on-primary-fixed": "#1a1b21",
+              "inverse-on-surface": "#313030",
+              "surface-bright": "#3a3939",
+              "tertiary-fixed-dim": "#d2c4b9",
+              "secondary-fixed-dim": "#e9c349",
+              primary: "#c7c6cd",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              "margin-desktop": "80px",
+              gutter: "24px",
+              "container-max": "1440px",
+              "margin-mobile": "20px",
+              unit: "8px",
+            },
+            fontFamily: {
+              "body-md": ["Manrope"],
+              "headline-lg-mobile": ["Playfair Display"],
+              "headline-lg": ["Playfair Display"],
+              "headline-xl": ["Playfair Display"],
+              "label-sm": ["JetBrains Mono"],
+            },
+            fontSize: {
+              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+              "headline-lg-mobile": ["28px", { lineHeight: "1.3", fontWeight: "600" }],
+              "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "600" }],
+              "headline-xl": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" },
+              ],
+              "label-sm": [
+                "12px",
+                { lineHeight: "1.0", letterSpacing: "0.1em", fontWeight: "500" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #000000; /* Pure black override */
+        color: #e5e2e2;
+        overflow-x: hidden;
+      }
+
+      .gold-glow {
+        filter: drop-shadow(0 0 20px rgba(233, 195, 73, 0.4));
+      }
+
+      .glass-card {
+        background: rgba(10, 11, 16, 0.2);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(233, 195, 73, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .glass-card:hover {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        border-color: rgba(233, 195, 73, 0.6);
+      }
+
+      .art-frame {
+        border: 10px solid #020203; /* Void Black matte */
+        outline: 1px solid #e9c349; /* Gold outer stroke */
+        position: relative;
+      }
+
+      .art-frame::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 1px solid rgba(233, 195, 73, 0.5); /* Inner thin gold */
+        pointer-events: none;
+      }
+
+      /* Luminous Layers Gradient Backgrounds */
+      .bg-radial-glow {
+        background: radial-gradient(
+          circle at top center,
+          rgba(138, 43, 226, 0.15) 0%,
+          transparent 60%
+        );
+      }
+    </style>
+  </head>
+  <body
+    class="bg-void-black text-on-surface font-body-md antialiased bg-radial-glow min-h-screen flex flex-col"
+  >
+    <!-- Top App Bar (From JSON) -->
+    <header
+      class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-secondary/30 shadow-lg shadow-neon-cyan/10"
+    >
+      <div
+        class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto"
+      >
+        <a
+          href="religion.html"
+          aria-label="返回宗教類別"
+          class="text-secondary dark:text-secondary hover:text-neon-cyan transition-colors duration-300"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <div
+          class="font-headline-lg font-bold tracking-widest text-secondary dark:text-secondary text-center"
+        >
+          宮殿藝廊
+        </div>
+        <button
+          aria-label="購物袋"
+          class="text-secondary dark:text-secondary hover:text-neon-cyan transition-colors duration-300"
+        >
+          <span class="material-symbols-outlined">shopping_bag</span>
+        </button>
+      </div>
+    </header>
+    <!-- Main Content -->
+    <main
+      class="flex-grow pt-32 pb-margin-desktop max-w-container-max mx-auto px-gutter md:px-margin-desktop w-full"
+    >
+      <!-- Hero Section -->
+      <section class="flex flex-col items-center justify-center text-center mb-margin-desktop mt-8">
+        <div
+          class="relative w-48 h-48 md:w-64 md:h-64 mb-8 gold-glow transition-transform duration-700 hover:scale-105 cursor-pointer"
+        >
+          <img
+            alt="宮殿徽章"
+            class="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(233,195,73,0.6)]"
+            src="../assets/palace/palace-0827-1.png"
+          />
+        </div>
+        <h1 class="font-headline-xl text-secondary mb-6 tracking-wide drop-shadow-md">宮</h1>
+        <p class="font-body-md text-on-surface-variant max-w-2xl mx-auto text-lg leading-relaxed">
+          融合古典宮殿的莊嚴氣韻與數位世界的無限可能，探索跨越時空、精心呈現的宮殿珍藏。
+        </p>
+        <div class="mt-8 flex gap-4">
+          <span
+            class="px-4 py-2 bg-secondary/10 backdrop-blur-sm border border-secondary/30 rounded-full font-label-sm text-starlight-white uppercase tracking-widest text-xs"
+          >
+            精選典藏
+          </span>
+          <span
+            class="px-4 py-2 bg-secondary/10 backdrop-blur-sm border border-secondary/30 rounded-full font-label-sm text-starlight-white uppercase tracking-widest text-xs flex items-center gap-2"
+          >
+            <span class="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></span>
+            線上展覽
+          </span>
+        </div>
+      </section>
+      <!-- Gallery Grid -->
+      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter lg:gap-8">
+        <!-- Artifact Card 1 -->
+        <article class="glass-card flex flex-col h-full group relative overflow-hidden">
+          <!-- Hover Glow Effect Background -->
+          <div
+            class="absolute inset-0 bg-galactic-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          ></div>
+          <div class="p-6 pb-0 z-10">
+            <div class="art-frame aspect-square mb-6 overflow-hidden bg-surface-container-lowest">
+              <img
+                alt="Sequence 03 Artwork"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[20%] group-hover:grayscale-0"
+                src="../assets/palace/palace-0827-1.png"
+              />
+            </div>
+          </div>
+          <div
+            class="p-6 flex flex-col flex-grow z-10 bg-gradient-to-t from-primary-container to-transparent"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <h2 class="font-headline-lg text-starlight-white">宮闕序章</h2>
+              <span
+                class="font-label-sm text-neon-cyan border border-neon-cyan/30 px-2 py-1 rounded bg-neon-cyan/5"
+              >
+                獨一無二
+              </span>
+            </div>
+            <p class="font-body-md text-on-surface-variant text-sm mb-6 flex-grow line-clamp-3">
+              以時光長廊為靈感的數位作品，透過鮮明對比與穩固結構，重新詮釋古典建築的秩序之美。
+            </p>
+            <div class="flex items-end justify-between mt-auto pt-4 border-t border-white/10">
+              <div>
+                <p class="font-label-sm text-on-surface-variant uppercase text-xs mb-1">典藏價值</p>
+                <p class="font-headline-lg-mobile text-secondary font-bold tracking-tight">
+                  4.2 ETH
+                </p>
+              </div>
+              <button
+                class="px-6 py-2 bg-secondary text-void-black font-label-sm uppercase tracking-widest hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] hover:bg-starlight-white transition-all duration-300 transform active:scale-95 group/btn flex items-center gap-2"
+              >
+                探索作品
+                <span
+                  class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1"
+                >
+                  arrow_forward
+                </span>
+              </button>
+            </div>
+          </div>
+        </article>
+        <!-- Artifact Card 2 -->
+        <article class="glass-card flex flex-col h-full group relative overflow-hidden">
+          <div
+            class="absolute inset-0 bg-galactic-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          ></div>
+          <div class="p-6 pb-0 z-10">
+            <div class="art-frame aspect-[1.09] mb-6 overflow-hidden bg-surface-container-lowest">
+              <img
+                alt="Astral Hall Artwork"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[20%] group-hover:grayscale-0"
+                src="../assets/palace/palace-0827-1.png"
+              />
+            </div>
+          </div>
+          <div
+            class="p-6 flex flex-col flex-grow z-10 bg-gradient-to-t from-primary-container to-transparent"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <h2 class="font-headline-lg text-starlight-white">星輝殿堂</h2>
+              <span
+                class="font-label-sm text-neon-cyan border border-neon-cyan/30 px-2 py-1 rounded bg-neon-cyan/5"
+              >
+                獨一無二
+              </span>
+            </div>
+            <p class="font-body-md text-on-surface-variant text-sm mb-6 flex-grow line-clamp-3">
+              沐浴在空靈光影中的宏偉建築，呈現數位宮殿的核心構想：由光線構築真實。
+            </p>
+            <div class="flex items-end justify-between mt-auto pt-4 border-t border-white/10">
+              <div>
+                <p class="font-label-sm text-on-surface-variant uppercase text-xs mb-1">典藏價值</p>
+                <p class="font-headline-lg-mobile text-secondary font-bold tracking-tight">
+                  5.8 ETH
+                </p>
+              </div>
+              <button
+                class="px-6 py-2 bg-secondary text-void-black font-label-sm uppercase tracking-widest hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] hover:bg-starlight-white transition-all duration-300 transform active:scale-95 group/btn flex items-center gap-2"
+              >
+                探索作品
+                <span
+                  class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1"
+                >
+                  arrow_forward
+                </span>
+              </button>
+            </div>
+          </div>
+        </article>
+        <!-- Artifact Card 3 (Placeholder for layout demonstration) -->
+        <article class="glass-card flex flex-col h-full group relative overflow-hidden">
+          <div
+            class="absolute inset-0 bg-galactic-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          ></div>
+          <div class="p-6 pb-0 z-10">
+            <div
+              class="art-frame aspect-square mb-6 overflow-hidden bg-surface-container-lowest relative flex items-center justify-center"
+            >
+              <img
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 mix-blend-luminosity group-hover:mix-blend-normal"
+                data-alt="一件以發光金色幾何圖形為主題的數位裝置藝術，置於寬闊的黑曜藝廊空間之中。柔和的天體光線勾勒出深邃、現代的暗色氛圍；作品融合虛空黑、金色與霓虹青色，呈現神祕又前衛的科技感。"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuArzqJ03arE2toeXT6TL2EaK5NCOSrBkpMtzK_CLRTuQUXexRVapJQDAN3zQzoSUe4CU530q7NPhyJFUdaRq1ptRUGW5VzCmjZRUv7aPw11E-0Ws5yc_otLyLV0BHsHOTbMW_X1d26KI9kJ0PO3Q7-VNx7xYlZf5EvK2h0k308-ypnUSh8DF0s_kGTkZmILaUeJRp_doXqiJ-_GLGRJaZvygiyIVpDTBXUajkG4zMweTKu0zsgZ49w"
+              />
+              <!-- Abstract overlay to represent procedural art -->
+              <div
+                class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-secondary/20 via-transparent to-transparent pointer-events-none"
+              ></div>
+            </div>
+          </div>
+          <div
+            class="p-6 flex flex-col flex-grow z-10 bg-gradient-to-t from-primary-container to-transparent"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <h2 class="font-headline-lg text-starlight-white">皇城核心</h2>
+              <span
+                class="font-label-sm text-on-surface-variant border border-white/20 px-2 py-1 rounded bg-white/5"
+              >
+                限量 3/10
+              </span>
+            </div>
+            <p class="font-body-md text-on-surface-variant text-sm mb-6 flex-grow line-clamp-3">
+              帝國數位領域的中心，層層環繞的資料之環，象徵去中心化世界中的凝聚力量。
+            </p>
+            <div class="flex items-end justify-between mt-auto pt-4 border-t border-white/10">
+              <div>
+                <p class="font-label-sm text-on-surface-variant uppercase text-xs mb-1">典藏價值</p>
+                <p class="font-headline-lg-mobile text-secondary font-bold tracking-tight">
+                  1.5 ETH
+                </p>
+              </div>
+              <button
+                class="px-6 py-2 border border-secondary text-neon-cyan font-label-sm uppercase tracking-widest hover:bg-secondary/10 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)] transition-all duration-300 transform active:scale-95 group/btn flex items-center gap-2 bg-transparent"
+              >
+                Explore
+                <span
+                  class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1"
+                >
+                  arrow_forward
+                </span>
+              </button>
+            </div>
+          </div>
+        </article>
+      </section>
+      <!-- Load More / Pagination -->
+      <div class="mt-20 flex justify-center">
+        <button
+          class="group relative px-8 py-4 font-label-sm text-secondary tracking-widest uppercase border-b border-secondary/30 hover:border-neon-cyan hover:text-neon-cyan transition-all duration-300"
+        >
+          <span class="relative z-10">載入更多典藏</span>
+          <div
+            class="absolute bottom-0 left-0 w-full h-[1px] bg-neon-cyan scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left shadow-[0_0_10px_rgba(0,255,255,0.8)]"
+          ></div>
+        </button>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-primary-container border-t border-secondary/10 py-12 mt-auto">
+      <div
+        class="max-w-container-max mx-auto px-gutter md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-8"
+      >
+        <div class="flex items-center gap-4">
+          <span class="font-headline-lg-mobile font-bold tracking-widest text-secondary opacity-50">
+            GG
+          </span>
+          <div class="h-6 w-px bg-secondary/20"></div>
+          <span class="font-label-sm text-on-surface-variant uppercase tracking-widest text-xs">
+            © 2026 宮殿藝廊．保留所有權利。
+          </span>
+        </div>
+        <div class="flex gap-8">
+          <a
+            class="font-label-sm text-on-surface-variant hover:text-neon-cyan hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.6)] transition-all uppercase tracking-widest text-xs"
+            href="#"
+          >
+            藝廊理念
+          </a>
+          <a
+            class="font-label-sm text-on-surface-variant hover:text-neon-cyan hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.6)] transition-all uppercase tracking-widest text-xs"
+            href="#"
+          >
+            典藏庫
+          </a>
+          <a
+            class="font-label-sm text-on-surface-variant hover:text-neon-cyan hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.6)] transition-all uppercase tracking-widest text-xs"
+            href="#"
+          >
+            聯絡我們
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

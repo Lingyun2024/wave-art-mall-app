@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="api-base" content="" />
+    <title>管理後台｜全棧範本</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="js/tailwind-config.js"></script>
+    <script src="js/api.js"></script>
+    <style>
+      body { background: #141314; color: #e5e2e2; font-family: Manrope, "Noto Sans TC", sans-serif; }
+      .card { background: #1c1b1c; border: 1px solid #46464b; }
+      .field { background: #201f20; border: 1px solid #46464b; color: #e5e2e2; }
+      .field:focus { outline: none; border-color: #e9c349; }
+      .hidden { display: none !important; }
+      .tab-active { border-color: #e9c349; color: #e9c349; }
+    </style>
+  </head>
+
+  <body class="min-h-screen">
+    <header class="border-b border-outline-variant bg-surface-container-low">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+        <div>
+          <h1 class="font-display text-2xl tracking-wide text-secondary">管理後台</h1>
+          <p class="text-xs text-on-surface-variant">使用者與全站任務管理</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="user-info" class="text-sm text-on-surface-variant">載入中…</span>
+          <a href="index.html" class="rounded-lg border border-outline-variant px-3 py-2 text-sm hover:border-secondary hover:text-secondary">回到工作台</a>
+          <button id="btn-logout" class="rounded-lg border border-outline-variant px-3 py-2 text-sm hover:border-error hover:text-error">
+            登出
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-5 py-8">
+      <!-- 總覽 -->
+      <section class="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div class="card rounded-xl p-4">
+          <p class="text-xs uppercase tracking-widest text-on-surface-variant">使用者</p>
+          <p id="ov-users" class="mt-1 font-display text-3xl">–</p>
+          <p class="text-xs text-on-surface-variant">活躍 <span id="ov-users-active">–</span>・管理員 <span id="ov-users-admin">–</span></p>
+        </div>
+        <div class="card rounded-xl p-4">
+          <p class="text-xs uppercase tracking-widest text-on-surface-variant">任務總數</p>
+          <p id="ov-tasks" class="mt-1 font-display text-3xl text-secondary">–</p>
+        </div>
+        <div class="card rounded-xl p-4">
+          <p class="text-xs uppercase tracking-widest text-on-surface-variant">待辦 / 進行中</p>
+          <p class="mt-1 font-display text-3xl"><span id="ov-todo" class="text-neon-cyan">–</span> / <span id="ov-doing" class="text-secondary">–</span></p>
+        </div>
+        <div class="card rounded-xl p-4">
+          <p class="text-xs uppercase tracking-widest text-on-surface-variant">線上會話</p>
+          <p id="ov-sessions" class="mt-1 font-display text-3xl text-tertiary">–</p>
+        </div>
+      </section>
+
+      <!-- 分頁籤 -->
+      <section class="mb-6 flex gap-2 border-b border-outline-variant">
+        <button data-tab="users" class="tab-active border-b-2 px-4 py-2 text-sm">使用者</button>
+        <button data-tab="tasks" class="border-b-2 border-transparent px-4 py-2 text-sm text-on-surface-variant">全站任務</button>
+      </section>
+
+      <!-- 使用者面板 -->
+      <section id="panel-users">
+        <div class="mb-4 flex items-center gap-3">
+          <input id="users-search" class="field w-full rounded-lg px-3 py-2 text-sm md:w-72" placeholder="搜尋 Email 或顯示名稱…" />
+          <span id="users-info" class="ml-auto text-xs text-on-surface-variant"></span>
+        </div>
+        <div class="card overflow-hidden rounded-xl">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="border-b border-outline-variant text-xs uppercase tracking-widest text-on-surface-variant">
+                <tr>
+                  <th class="px-4 py-3">Email</th>
+                  <th class="px-4 py-3">顯示名稱</th>
+                  <th class="px-4 py-3">角色</th>
+                  <th class="px-4 py-3">狀態</th>
+                  <th class="px-4 py-3 text-right">操作</th>
+                </tr>
+              </thead>
+              <tbody id="users-body" class="divide-y divide-outline-variant"></tbody>
+            </table>
+          </div>
+          <div id="users-empty" class="hidden p-8 text-center text-sm text-on-surface-variant">尚無使用者</div>
+          <div id="users-pagination" class="hidden items-center justify-between border-t border-outline-variant px-5 py-3 text-sm">
+            <button id="users-prev" class="rounded-lg border border-outline-variant px-3 py-1 hover:border-secondary">上一頁</button>
+            <span id="users-page-info" class="text-on-surface-variant"></span>
+            <button id="users-next" class="rounded-lg border border-outline-variant px-3 py-1 hover:border-secondary">下一頁</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 任務面板 -->
+      <section id="panel-tasks" class="hidden">
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+          <input id="tasks-search" class="field w-full rounded-lg px-3 py-2 text-sm md:w-72" placeholder="搜尋標題或備註…" />
+          <select id="tasks-filter-status" class="field rounded-lg px-3 py-2 text-sm">
+            <option value="">全部狀態</option>
+            <option value="todo">待辦</option>
+            <option value="doing">進行中</option>
+            <option value="done">已完成</option>
+          </select>
+          <span id="tasks-info" class="ml-auto text-xs text-on-surface-variant"></span>
+        </div>
+        <div class="card overflow-hidden rounded-xl">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="border-b border-outline-variant text-xs uppercase tracking-widest text-on-surface-variant">
+                <tr>
+                  <th class="px-4 py-3">標題</th>
+                  <th class="px-4 py-3">擁有者</th>
+                  <th class="px-4 py-3">狀態</th>
+                  <th class="px-4 py-3">優先度</th>
+                  <th class="px-4 py-3">到期</th>
+                  <th class="px-4 py-3 text-right">操作</th>
+                </tr>
+              </thead>
+              <tbody id="tasks-body" class="divide-y divide-outline-variant"></tbody>
+            </table>
+          </div>
+          <div id="tasks-empty" class="hidden p-8 text-center text-sm text-on-surface-variant">尚無任務</div>
+          <div id="tasks-pagination" class="hidden items-center justify-between border-t border-outline-variant px-5 py-3 text-sm">
+            <button id="tasks-prev" class="rounded-lg border border-outline-variant px-3 py-1 hover:border-secondary">上一頁</button>
+            <span id="tasks-page-info" class="text-on-surface-variant"></span>
+            <button id="tasks-next" class="rounded-lg border border-outline-variant px-3 py-1 hover:border-secondary">下一頁</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var state = {
+          users: { page: 1, pageSize: 10, q: "" },
+          tasks: { page: 1, pageSize: 10, q: "", status: "" },
+        };
+
+        function $(id) {
+          return document.getElementById(id);
+        }
+        function escapeHtml(text) {
+          var div = document.createElement("div");
+          div.textContent = text === null || text === undefined ? "" : String(text);
+          return div.innerHTML;
+        }
+        function show(el, yes) {
+          el.classList.toggle("hidden", !yes);
+        }
+        function togglePager(pager, info, page, totalPages, total) {
+          info.textContent = "共 " + total + " 筆";
+          pager.classList.remove("hidden");
+          pager.classList.add("flex");
+          $("users-page-info") !== info && info.id !== "users-page-info"
+            ? null
+            : null;
+          var infoEl = info;
+          infoEl.textContent = "第 " + page + " / " + totalPages + " 頁（共 " + total + " 筆）";
+          var prev = pager.querySelector('[id$="-prev"]');
+          var next = pager.querySelector('[id$="-next"]');
+          prev.disabled = page <= 1;
+          next.disabled = page >= totalPages;
+          prev.className =
+            "rounded-lg border border-outline-variant px-3 py-1 " + (page <= 1 ? "opacity-40" : "hover:border-secondary");
+          next.className =
+            "rounded-lg border border-outline-variant px-3 py-1 " + (page >= totalPages ? "opacity-40" : "hover:border-secondary");
+        }
+
+        var STATUS_LABEL = { todo: "待辦", doing: "進行中", done: "已完成" };
+        var STATUS_CLASS = {
+          todo: "border-neon-cyan text-neon-cyan",
+          doing: "border-secondary text-secondary",
+          done: "border-tertiary text-tertiary",
+        };
+        var PRIORITY_LABEL = { 1: "低", 2: "中", 3: "高" };
+
+        // ---------- 總覽 ----------
+        async function loadOverview() {
+          var r = await API.admin.overview();
+          if (!r.ok) {
+            API.toast(r.message, "error");
+            return;
+          }
+          var d = r.data;
+          $("ov-users").textContent = d.users.total;
+          $("ov-users-active").textContent = d.users.active;
+          $("ov-users-admin").textContent = d.users.admins;
+          $("ov-tasks").textContent = d.tasks.total;
+          $("ov-todo").textContent = d.tasks.todo;
+          $("ov-doing").textContent = d.tasks.doing;
+          $("ov-sessions").textContent = d.activeSessions;
+        }
+
+        // ---------- 使用者 ----------
+        async function loadUsers() {
+          var s = state.users;
+          var r = await API.admin.users({ page: s.page, pageSize: s.pageSize, q: s.q });
+          if (!r.ok) {
+            API.toast(r.message, "error");
+            return;
+          }
+          var data = r.data;
+          var body = $("users-body");
+          if (!data.items.length) {
+            show($("users-empty"), true);
+            show($("users-pagination"), false);
+            return;
+          }
+          show($("users-empty"), false);
+          body.innerHTML = data.items.map(renderUserRow).join("");
+          togglePager($("users-pagination"), $("users-info"), data.pagination.page, data.pagination.totalPages, data.pagination.total);
+        }
+
+        function renderUserRow(u) {
+          var roleBadge =
+            u.role === "admin"
+              ? '<span class="rounded-full border border-secondary px-2 py-0.5 text-xs text-secondary">管理員</span>'
+              : '<span class="rounded-full border border-outline-variant px-2 py-0.5 text-xs text-on-surface-variant">會員</span>';
+          var statusBadge = u.isActive
+            ? '<span class="rounded-full border border-tertiary px-2 py-0.5 text-xs text-tertiary">啟用</span>'
+            : '<span class="rounded-full border border-error px-2 py-0.5 text-xs text-error">停用</span>';
+          return (
+            '<tr data-id="' + u.id + '">' +
+            '<td class="px-4 py-3 text-on-surface">' + escapeHtml(u.email) + "</td>" +
+            '<td class="px-4 py-3 text-on-surface-variant">' + escapeHtml(u.displayName) + "</td>" +
+            "<td class=\"px-4 py-3\">" + roleBadge + "</td>" +
+            "<td class=\"px-4 py-3\">" + statusBadge + "</td>" +
+            '<td class="px-4 py-3 text-right">' +
+            '<button class="js-role rounded-lg border border-outline-variant px-3 py-1 text-xs hover:border-secondary">' +
+            (u.role === "admin" ? "降為會員" : "升為管理員") +
+            "</button> " +
+            '<button class="js-toggle rounded-lg border border-outline-variant px-3 py-1 text-xs hover:border-error hover:text-error">' +
+            (u.isActive ? "停用" : "啟用") +
+            "</button>" +
+            "</td></tr>"
+          );
+        }
+
+        $("users-body").addEventListener("click", async function (e) {
+          var tr = e.target.closest("tr[data-id]");
+          if (!tr) return;
+          var id = tr.getAttribute("data-id");
+          if (e.target.classList.contains("js-role")) {
+            var cur = tr.querySelector(".text-secondary") ? "admin" : "member";
+            var r = await API.admin.updateUser(id, { role: cur === "admin" ? "member" : "admin" });
+            if (!r.ok) {
+              API.toast(r.message, "error");
+              return;
+            }
+            API.toast("已更新角色");
+            loadOverview();
+            loadUsers();
+          }
+          if (e.target.classList.contains("js-toggle")) {
+            var active = tr.innerHTML.indexOf("停用") >= 0;
+            var r2 = await API.admin.updateUser(id, { isActive: !active });
+            if (!r2.ok) {
+              API.toast(r2.message, "error");
+              return;
+            }
+            API.toast("已更新狀態");
+            loadOverview();
+            loadUsers();
+          }
+        });
+
+        var userSearchTimer = null;
+        $("users-search").addEventListener("input", function () {
+          clearTimeout(userSearchTimer);
+          userSearchTimer = setTimeout(function () {
+            state.users.page = 1;
+            state.users.q = $("users-search").value.trim();
+            loadUsers();
+          }, 300);
+        });
+        $("users-prev").addEventListener("click", function () {
+          if (state.users.page > 1) {
+            state.users.page -= 1;
+            loadUsers();
+          }
+        });
+        $("users-next").addEventListener("click", function () {
+          state.users.page += 1;
+          loadUsers();
+        });
+
+        // ---------- 任務 ----------
+        async function loadTasks() {
+          var s = state.tasks;
+          var r = await API.admin.tasks({ page: s.page, pageSize: s.pageSize, q: s.q, status: s.status });
+          if (!r.ok) {
+            API.toast(r.message, "error");
+            return;
+          }
+          var data = r.data;
+          var body = $("tasks-body");
+          if (!data.items.length) {
+            show($("tasks-empty"), true);
+            show($("tasks-pagination"), false);
+            return;
+          }
+          show($("tasks-empty"), false);
+          body.innerHTML = data.items.map(renderTaskRow).join("");
+          togglePager($("tasks-pagination"), $("tasks-info"), data.pagination.page, data.pagination.totalPages, data.pagination.total);
+        }
+
+        function renderTaskRow(t) {
+          var due = t.dueDate ? escapeHtml(t.dueDate) : "—";
+          return (
+            '<tr data-id="' + t.id + '">' +
+            '<td class="px-4 py-3 text-on-surface">' + escapeHtml(t.title) + "</td>" +
+            '<td class="px-4 py-3 text-on-surface-variant">' + escapeHtml(t.ownerEmail || "—") + "</td>" +
+            '<td class="px-4 py-3"><span class="rounded-full border px-2 py-0.5 text-xs ' + STATUS_CLASS[t.status] + '">' +
+            STATUS_LABEL[t.status] + "</span></td>" +
+            '<td class="px-4 py-3 text-on-surface-variant">優先度 ' + (PRIORITY_LABEL[t.priority] || t.priority) + "</td>" +
+            '<td class="px-4 py-3 text-on-surface-variant">' + due + "</td>" +
+            '<td class="px-4 py-3 text-right">' +
+            '<button class="js-delete rounded-lg border border-outline-variant px-3 py-1 text-xs hover:border-error hover:text-error">刪除</button>' +
+            "</td></tr>"
+          );
+        }
+
+        $("tasks-body").addEventListener("click", async function (e) {
+          var tr = e.target.closest("tr[data-id]");
+          if (!tr) return;
+          if (e.target.classList.contains("js-delete")) {
+            var id = tr.getAttribute("data-id");
+            if (!confirm("確定要刪除這筆任務嗎？此操作不可復原。")) return;
+            var r = await API.admin.removeTask(id);
+            if (!r.ok) {
+              API.toast(r.message, "error");
+              return;
+            }
+            API.toast("已刪除");
+            loadOverview();
+            loadTasks();
+          }
+        });
+
+        var taskSearchTimer = null;
+        $("tasks-search").addEventListener("input", function () {
+          clearTimeout(taskSearchTimer);
+          taskSearchTimer = setTimeout(function () {
+            state.tasks.page = 1;
+            state.tasks.q = $("tasks-search").value.trim();
+            loadTasks();
+          }, 300);
+        });
+        $("tasks-filter-status").addEventListener("change", function () {
+          state.tasks.page = 1;
+          state.tasks.status = $("tasks-filter-status").value;
+          loadTasks();
+        });
+        $("tasks-prev").addEventListener("click", function () {
+          if (state.tasks.page > 1) {
+            state.tasks.page -= 1;
+            loadTasks();
+          }
+        });
+        $("tasks-next").addEventListener("click", function () {
+          state.tasks.page += 1;
+          loadTasks();
+        });
+
+        // ---------- 分頁籤 ----------
+        document.querySelectorAll("[data-tab]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var tab = btn.getAttribute("data-tab");
+            document.querySelectorAll("[data-tab]").forEach(function (b) {
+              b.classList.toggle("tab-active", b === btn);
+              b.classList.toggle("text-on-surface-variant", b !== btn);
+              b.classList.toggle("border-transparent", b !== btn);
+            });
+            show($("panel-users"), tab === "users");
+            show($("panel-tasks"), tab === "tasks");
+            if (tab === "tasks") loadTasks();
+          });
+        });
+
+        $("btn-logout").addEventListener("click", async function () {
+          await API.auth.logout();
+          location.href = "login.html";
+        });
+
+        // ---------- 啟動 ----------
+        (async function boot() {
+          var ok = await API.refreshSession();
+          if (!ok) {
+            API.redirectToLogin("admin.html");
+            return;
+          }
+          var me = await API.auth.me();
+          if (!me.ok) {
+            API.redirectToLogin("admin.html");
+            return;
+          }
+          if (me.data.user.role !== "admin") {
+            API.toast("權限不足，將跳轉回首頁", "error");
+            setTimeout(function () {
+              location.href = "index.html";
+            }, 1200);
+            return;
+          }
+          var u = me.data.user;
+          $("user-info").textContent = u.displayName + "（" + u.email + "）";
+          loadOverview();
+          loadUsers();
+        })();
+      })();
+    </script>
+  </body>
+</html>

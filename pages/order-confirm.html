@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#141314">
+  <title>付款確認 | WAVE ART MALL</title>
+  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/material-symbols.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root { --bg:#141314; --panel:#1d1c1d; --panel-deep:#111011; --gold:#e9c349; --muted:#a5a1a4; --line:rgba(233,195,73,.24); --cyan:#00ffff; --danger:#f04d31; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:var(--bg); color:#f4f1ec; font-family:'Noto Serif TC','PingFang TC','Microsoft JhengHei',sans-serif; }
+    button { font:inherit; }
+    .page { width:min(100%,760px); margin:0 auto; padding-bottom:112px; }
+    .topbar { height:64px; padding:0 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,.1); background:rgba(20,19,20,.96); }
+    .topbar h1 { margin:0; font-size:17px; font-weight:600; letter-spacing:.12em; }
+    .icon-button { width:34px; height:34px; padding:0; display:grid; place-items:center; border:0; color:var(--gold); background:transparent; cursor:pointer; }
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+    .content { padding:18px 20px 28px; }
+    .status { display:flex; align-items:center; justify-content:space-between; padding:14px 0 18px; border-bottom:1px solid rgba(255,255,255,.09); }
+    .status-label { color:var(--muted); font-size:14px; }
+    .status-value { color:var(--gold); font:700 14px 'Space Mono',monospace; }
+    .section { margin-top:18px; padding:20px; background:var(--panel); border:1px solid var(--line); border-radius:5px; }
+    .section-title { display:flex; align-items:center; gap:9px; margin-bottom:18px; color:var(--gold); font-size:16px; font-weight:700; }
+    .section-title .material-symbols-outlined { color:var(--gold); font-size:21px; }
+    .payment-row { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:13px 0; border-bottom:1px solid rgba(255,255,255,.07); }
+    .payment-row:last-child { border-bottom:0; padding-bottom:0; }
+    .payment-row span:first-child { color:var(--muted); font-size:14px; }
+    .payment-row span:last-child { color:#f6f3ee; font-size:14px; font-weight:700; text-align:right; }
+    .payment-row .account { color:var(--gold); font:700 19px 'Space Mono',monospace; letter-spacing:.08em; }
+    .account-line { display:flex; align-items:center; gap:8px; }
+    .copy-button { width:28px; height:28px; padding:0; display:grid; place-items:center; color:var(--cyan); background:transparent; border:1px solid rgba(0,255,255,.35); border-radius:3px; cursor:pointer; }
+    .copy-button .material-symbols-outlined { font-size:16px; }
+    .order-card { background:var(--panel-deep); }
+    .plan-name { margin:0; color:#f4f1ec; font-size:22px; line-height:1.4; }
+    .plan-blessing { margin:9px 0 0; color:var(--muted); font-size:13px; line-height:1.8; }
+    .plan-price { margin-top:18px; display:flex; justify-content:space-between; align-items:end; gap:12px; padding-top:15px; border-top:1px solid rgba(255,255,255,.08); }
+    .plan-price span:first-child { color:var(--muted); font-size:13px; }
+    .plan-price span:last-child { color:var(--gold); font:700 18px 'Space Mono',monospace; }
+    .details { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px; }
+    .detail { min-width:0; padding:12px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); }
+    .detail small { display:block; margin-bottom:6px; color:#817d81; font-size:11px; }
+    .detail strong { display:block; overflow-wrap:anywhere; color:#ebe7e1; font-size:13px; font-weight:500; }
+    .notice { color:#d2a6dc; background:rgba(112,38,130,.14); border:1px solid rgba(161,65,188,.5); font-size:13px; line-height:1.8; text-align:center; }
+    .bottom-action { position:fixed; inset:auto 0 0; z-index:20; padding:12px 20px calc(12px + env(safe-area-inset-bottom)); background:rgba(20,19,20,.97); border-top:1px solid rgba(255,255,255,.1); }
+    .bottom-action-inner { width:min(720px,100%); margin:0 auto; display:flex; gap:10px; }
+    .back-button,.pay-button { min-height:50px; border-radius:4px; cursor:pointer; font-weight:700; }
+    .back-button { width:110px; border:1px solid rgba(233,195,73,.5); color:var(--gold); background:transparent; }
+    .pay-button { flex:1; border:1px solid var(--danger); color:#fff; background:var(--danger); box-shadow:0 3px 0 #a92d1b; }
+    .pay-button:active { transform:translateY(2px); box-shadow:none; }
+    .result { min-height:22px; margin:12px 0 0; color:var(--cyan); font-size:13px; text-align:center; }
+    .confirm-modal { position:fixed; inset:0; z-index:60; display:grid; place-items:center; padding:20px; background:rgba(0,0,0,.68); opacity:0; pointer-events:none; transition:opacity .2s ease; }
+    .confirm-modal.open { opacity:1; pointer-events:auto; }
+    .confirm-dialog { width:min(100%,420px); padding:28px 22px 22px; background:#1d1c1d; border:1px solid var(--gold); border-radius:6px; box-shadow:0 18px 70px rgba(0,0,0,.55); text-align:center; transform:translateY(12px) scale(.98); transition:transform .2s ease; }
+    .confirm-modal.open .confirm-dialog { transform:translateY(0) scale(1); }
+    .confirm-icon { width:58px; height:58px; margin:0 auto 16px; display:grid; place-items:center; border:1px solid var(--gold); border-radius:50%; color:var(--gold); }
+    .confirm-dialog h2 { margin:0 0 10px; color:var(--gold); font-size:24px; }
+    .confirm-dialog p { margin:0; color:var(--muted); font-size:14px; line-height:1.8; }
+    .confirm-summary { margin:18px 0; padding:14px; background:#111011; border:1px solid rgba(233,195,73,.18); }
+    .confirm-summary strong { display:block; color:#f4f1ec; font-size:16px; }
+    .confirm-summary span { display:block; margin-top:8px; color:var(--gold); font:700 18px 'Space Mono',monospace; }
+    .modal-actions { display:flex; gap:10px; margin-top:20px; }
+    .modal-actions button,.modal-actions a { flex:1; min-height:46px; display:grid; place-items:center; border-radius:4px; cursor:pointer; font-weight:700; text-decoration:none; }
+    .modal-close { border:1px solid rgba(233,195,73,.5); color:var(--gold); background:transparent; }
+    .modal-orders { border:1px solid var(--gold); color:#141314; background:var(--gold); }
+    @media (max-width:480px) { .content { padding-inline:14px; } .section { padding:16px; } .payment-row .account { font-size:16px; } .topbar { padding-inline:14px; } .bottom-action { padding-inline:14px; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <button class="icon-button" type="button" onclick="history.back()" aria-label="返回"><span class="material-symbols-outlined">arrow_back</span></button>
+      <h1>付款確認</h1>
+      <button class="icon-button" type="button" onclick="window.location.href='../index.html'" aria-label="回首頁"><span class="material-symbols-outlined">home</span></button>
+    </header>
+
+    <main class="content">
+      <div class="status"><span class="status-label">付款金額</span><strong class="status-value" id="status-amount">NT$ 11,000</strong></div>
+      <div class="status" style="border-top:0;padding-top:0"><span class="status-label">訂單編號</span><strong class="status-value" id="order-number">-</strong></div>
+
+      <section class="section">
+        <div class="section-title"><span class="material-symbols-outlined">account_balance</span><span>付款方式</span></div>
+        <div class="payment-row"><span>付款方式</span><span>銀行轉帳</span></div>
+        <div class="payment-row"><span>匯款資訊</span><span>請向官方人員確認</span></div>
+        <div class="payment-row"><span>安全提醒</span><span>網站不公開收款帳戶</span></div>
+      </section>
+
+      <section class="section order-card">
+        <div class="section-title"><span class="material-symbols-outlined">receipt_long</span><span>訂單內容</span></div>
+        <h2 class="plan-name" id="order-plan-name">事業者乎 特赦方案</h2>
+        <p class="plan-blessing" id="order-blessing">事業者之 冤冤 仇仇 恨恨 殺殺 債債 孽孽 特特 赦赦</p>
+        <div class="plan-price"><span>身分驗證（特優價）</span><span id="order-price">NT$ 11,000</span></div>
+        <div class="details">
+          <div class="detail"><small>代表人姓名</small><strong id="order-name">-</strong></div>
+          <div class="detail"><small>虛歲</small><strong id="order-age">-</strong></div>
+          <div class="detail"><small>聯絡電話</small><strong id="order-phone">-</strong></div>
+          <div class="detail"><small>代理人</small><strong id="order-agent">-</strong></div>
+          <div class="detail" style="grid-column:1 / -1"><small>地址</small><strong id="order-address">-</strong></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title"><span class="material-symbols-outlined">tag</span><span>匯款後五碼</span></div>
+        <div style="display:flex;gap:10px">
+          <input id="transfer-last5" type="text" maxlength="5" inputmode="numeric" placeholder="匯款完成後的後五碼"
+                 style="flex:1;background:var(--panel-deep);border:1px solid var(--line);border-radius:4px;padding:12px;color:#f4f1ec;font:700 16px 'Space Mono',monospace;letter-spacing:.1em">
+          <button type="button" onclick="saveTransferNote()" style="border:1px solid var(--gold);color:var(--gold);background:transparent;border-radius:4px;padding:0 18px;font-weight:700;cursor:pointer">儲存</button>
+        </div>
+      </section>
+
+      <section class="section notice">請確認以上資料與匯款金額。完成匯款後，請至「我的訂單」填寫帳號後五碼，方便我們核對款項。</section>
+      <p class="result" id="result-message" aria-live="polite"></p>
+    </main>
+  </div>
+
+  <div class="bottom-action">
+    <div class="bottom-action-inner">
+      <button class="back-button" type="button" onclick="history.back()">返回修改</button>
+      <button class="pay-button" type="button" onclick="confirmPayment()">付款</button>
+    </div>
+  </div>
+
+  <div class="confirm-modal" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+    <div class="confirm-dialog">
+      <div class="confirm-icon"><span class="material-symbols-outlined">check</span></div>
+      <h2 id="confirm-title">付款資料已確認</h2>
+      <p>請依照畫面上的銀行資料完成轉帳。系統會保留這筆付款流程，實際入帳仍以銀行確認為準。</p>
+      <div class="confirm-summary"><strong id="modal-plan-name">事業者乎 特赦方案</strong><span id="modal-amount">NT$ 11,000</span></div>
+      <div class="modal-actions"><button class="modal-close" type="button" onclick="closePaymentModal()">返回頁面</button><a class="modal-orders" href="order-history.html">前往我的訂單</a></div>
+    </div>
+  </div>
+
+  <script src="../js/supabaseClient.js"></script>
+  <script>
+    const money = (value) => 'NT$ ' + (Number(value) || 0).toLocaleString('zh-TW');
+    const orderData = JSON.parse(localStorage.getItem('orderData') || '{}');
+    const plan = orderData.planData || {};
+    const amount = Number(orderData.specialPrice || plan.special || 11000);
+
+    document.getElementById('status-amount').textContent = money(amount);
+    document.getElementById('order-price').textContent = money(amount);
+    document.getElementById('order-plan-name').textContent = (orderData.planName || plan.name || '事業者乎') + ' 特赦方案';
+    document.getElementById('order-blessing').textContent = plan.blessing || '事業者之 冤冤 仇仇 恨恨 殺殺 債債 孽孽 特特 赦赦';
+    document.getElementById('order-name').textContent = orderData.name || '-';
+    document.getElementById('order-age').textContent = orderData.age ? orderData.age + ' 歲' : '-';
+    document.getElementById('order-phone').textContent = orderData.phone || '-';
+    document.getElementById('order-agent').textContent = orderData.agent || '無';
+    document.getElementById('order-address').textContent = orderData.address || '-';
+    document.getElementById('modal-plan-name').textContent = (orderData.planName || plan.name || '事業者乎') + ' 特赦方案';
+    document.getElementById('modal-amount').textContent = money(amount);
+
+    // 顯示資料庫回傳的真實訂單編號（holiday-form 建立訂單後寫入 localStorage）
+    if (orderData.orderNumber) {
+      document.getElementById('order-number').textContent = orderData.orderNumber;
+    }
+
+    // 儲存匯款後五碼到 orders.transfer_note（需在 Supabase 執行 holiday_admin_patch.sql）
+    async function saveTransferNote() {
+      const note = document.getElementById('transfer-last5').value.trim();
+      if (!/^\d{5}$/.test(note)) { alert('請輸入 5 位數字匯款後五碼'); return false; }
+      if (!orderData.orderId) { alert('尚未建立訂單，無法儲存後五碼'); return false; }
+      const user = await getCurrentUser();
+      if (!user || (orderData.userId && orderData.userId !== user.id)) { alert('登入帳號與訂單不符，無法儲存後五碼'); return false; }
+      const { error } = await supabaseClient
+        .from('orders')
+        .update({ transfer_note: note })
+        .eq('id', orderData.orderId)
+        .eq('user_id', user.id);
+      if (error) { alert('儲存失敗：' + error.message); return false; }
+      document.getElementById('result-message').textContent = '後五碼已儲存：' + note;
+      return true;
+    }
+
+    function closePaymentModal() {
+      document.getElementById('confirm-modal').classList.remove('open');
+    }
+
+    async function confirmPayment() {
+      const result = document.getElementById('result-message');
+      const noteInput = document.getElementById('transfer-last5');
+      const note = noteInput ? noteInput.value.trim() : '';
+      result.textContent = '付款資料已確認，請依畫面資訊完成轉帳。';
+      localStorage.setItem('wave_payment_started', new Date().toISOString());
+      document.getElementById('confirm-modal').classList.add('open');
+
+      if (note) {
+        const saved = await saveTransferNote();
+        if (!saved) {
+          result.textContent = '確認畫面已開啟，但後五碼尚未同步，請稍後到我的訂單重新儲存。';
+        }
+      }
+    }
+
+    document.getElementById('confirm-modal').addEventListener('click', (event) => {
+      if (event.target.id === 'confirm-modal') closePaymentModal();
+    });
+  </script>
+</body>
+</html>

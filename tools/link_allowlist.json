@@ -1,0 +1,7 @@
+{
+  "holiday.html": "刻意保留的歷史活動紀錄頁（2026 七七地赦已結束），由 holiday-entry 公告區連結保留；若日後移除入口須同步清理",
+  "mars-healing-detail.html": "待決策：半成品詳情頁，2026-09-12 分析報告第 2 節，等族族決定改寫或刪除",
+  "holiday-select.html": "待決策：功能與 holiday-entry 方案卡重複，等族族決定接回動線或刪除",
+  "mars-healing-admin.html": "管理用途頁面，無公開入口屬正常（僅管理員直接使用網址）",
+  "reset-password.html": "待決策：與已移除的 pwreset.html 逐字節重複、無入口；密碼重設實際由 auth.html 內建表單處理。重寫時決定保留或刪除"
+}

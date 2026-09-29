@@ -1,0 +1,679 @@
+<!DOCTYPE html><html lang="zh-Hant"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>火星療癒 MARS HEALING | 旨令登記與資料填寫 - WAVE ART MALL</title>
+<!-- Google Fonts: Playfair Display, Cinzel, Noto Serif TC, Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&amp;family=Noto+Serif+TC:wght@300;400;600;700;900&amp;family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 with Forms & Container-Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cosmic: {
+              950: '#030407',
+              900: '#07080d',
+              850: '#0c0e14',
+              800: '#12141c',
+              700: '#1b1f2b',
+            },
+            gold: {
+              100: '#fef9e7',
+              200: '#f9e8a2',
+              300: '#f3d360',
+              400: '#e5be38',
+              500: '#cca125',
+              600: '#a67f16',
+              700: '#7e5d0b',
+            }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', '"Noto Serif TC"', 'serif'],
+            cinzel: ['"Cinzel"', 'serif'],
+            tc: ['"Noto Serif TC"', 'serif']
+          },
+          boxShadow: {
+            'gold-glow': '0 0 35px -5px rgba(229, 190, 56, 0.35)',
+            'gold-glow-lg': '0 0 60px -10px rgba(229, 190, 56, 0.45)',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-typography">
+    body {
+      background-color: #030407;
+      color: #e5e7eb;
+      font-family: 'Noto Serif TC', serif;
+    }
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+    .font-playfair {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+<style data-purpose="luxury-effects">
+    /* Subtle cosmic background gradient overlay */
+    .cosmic-radial-bg {
+      background: radial-gradient(circle at 50% 15%, rgba(204, 161, 37, 0.12) 0%, rgba(7, 8, 13, 0.85) 45%, #030407 80%);
+    }
+    
+    /* Golden metallic text gradient */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #ffffff 0%, #f9e8a2 30%, #cca125 70%, #ffd768 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Subtle golden borders & glass effects */
+    .glass-gold-panel {
+      background: rgba(12, 14, 20, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(204, 161, 37, 0.22);
+    }
+    
+    .gold-input-focus:focus {
+      border-color: #e5be38;
+      box-shadow: 0 0 0 1px #e5be38, 0 0 16px rgba(229, 190, 56, 0.3);
+      outline: none;
+    }
+
+    /* Selected state styling for tier cards */
+    .plan-card.selected {
+      border-color: #f3d360;
+      background: radial-gradient(circle at 50% 0%, rgba(204, 161, 37, 0.18) 0%, rgba(18, 20, 28, 0.95) 75%);
+      box-shadow: 0 0 25px rgba(204, 161, 37, 0.25);
+    }
+  </style>
+</head>
+<body class="min-h-screen cosmic-radial-bg antialiased selection:bg-gold-500/30 selection:text-gold-200">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-50 border-b border-gold-500/20 bg-cosmic-950/85 backdrop-blur-md" data-purpose="global-navigation">
+<div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+<!-- Brand & Return Link -->
+<div class="flex items-center space-x-6">
+<a class="font-cinzel tracking-widest text-lg font-bold text-gold-300 hover:text-white transition flex items-center gap-2" href="#">
+<span class="">WAVE ART MALL</span>
+</a>
+<span class="text-gold-500/40 hidden sm:inline">|</span>
+<a class="text-xs sm:text-sm tracking-wider text-gray-400 hover:text-gold-300 transition flex items-center gap-1.5 group" href="./mars-healing.html">
+      <span class="group-hover:-translate-x-0.5 transition-transform duration-200">←</span>
+      <span class="">返回火星療癒</span>
+    </a>
+</div>
+<!-- Navigation Actions -->
+<nav class="flex items-center space-x-7 text-xs font-cinzel tracking-widest text-gray-300">
+<a class="hover:text-gold-300 transition hidden md:block" href="#">GALLERY</a>
+<a class="text-gold-400 font-semibold transition border-b border-gold-400/80 pb-0.5" href="#">HEALING</a>
+<a class="hover:text-gold-300 transition flex items-center gap-1.5" href="#">
+<span class="">CART</span>
+<span class="w-1.5 h-1.5 rounded-full bg-gold-400"></span>
+</a>
+<a class="hover:text-gold-300 transition hidden sm:block" href="#">PROFILE</a>
+</nav>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- Main Container -->
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24">
+<!-- BEGIN: EmblemAndTitleSection -->
+<section class="text-center relative mb-8" data-purpose="hero-header">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative inline-block mx-auto mb-4">
+<div class="relative w-32 h-32 sm:w-36 sm:h-36 mx-auto flex items-center justify-center">
+<div class="absolute inset-0 rounded-2xl border border-gold-400/30 shadow-gold-glow animate-pulse"></div>
+<img alt="Mars Healing Emblem 火星療癒" class="w-full h-full object-contain rounded-2xl p-1 shadow-2xl relative z-10 transition-transform duration-500 hover:scale-105" src="../assets/soft-power/mars-healing.jpg">
+</div>
+</div>
+<div class="space-y-2">
+<h1 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-wider gold-gradient-text font-serif">
+          火星療癒 MARS HEALING
+        </h1>
+<p class="text-gold-300/80 text-xs sm:text-sm font-light tracking-widest">
+          火星天體神聖能量 · 請領療癒旨令專案登記
+        </p>
+<div class="flex items-center justify-center gap-3 pt-1">
+<span class="h-px w-10 bg-gradient-to-r from-transparent to-gold-500/60"></span>
+<span class="text-gold-400 text-[10px] tracking-widest font-cinzel">DIVINE CODEX ORDINATION</span>
+<span class="h-px w-10 bg-gradient-to-l from-transparent to-gold-500/60"></span>
+</div>
+</div>
+</section>
+<!-- END: EmblemAndTitleSection -->
+<!-- BEGIN: SpecialOfferNoticeBanner -->
+<section class="mb-8" data-purpose="special-offer-section">
+<div class="glass-gold-panel rounded-xl p-4 sm:p-4 mb-4 border-gold-500/40 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-gold-300 via-gold-500 to-gold-700"></div>
+<div class="flex flex-col sm:flex-row items-start sm:items-center gap-2.5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded bg-gold-500/20 text-gold-300 border border-gold-500/30 text-[11px] font-semibold tracking-wider uppercase">
+            重要公告
+          </span>
+<p class="text-xs sm:text-sm text-gray-200 font-light leading-relaxed">
+            【專屬功德金優待方案】2026 年 7 月 17 日前，凡有請領療癒旨令之學員，依功德鑫累計享有以下專屬優待方案：
+          </p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4" id="tier-selection-container">
+<div class="plan-card glass-gold-panel rounded-xl p-5 cursor-pointer transition-all duration-300 hover:border-gold-300/80 relative flex flex-col justify-between border border-gold-500/20" data-tier="1" id="tier-card-1" onclick="selectTier(1)">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-gold-400/20 border border-gold-400 text-gold-300 tracking-wider">頂級特優資格</span>
+<div class="w-4 h-4 rounded-full border border-gray-500 bg-transparent flex items-center justify-center" id="tier-1-indicator">
+<svg class="w-2.5 h-2.5 text-cosmic-950 stroke-[3] hidden" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+</div>
+<div>
+<h3 class="text-sm sm:text-base font-bold text-white mb-1.5 leading-snug">功德鑫已達二十二萬加二萬二以上者</h3>
+<p class="text-[11px] text-gray-400 mb-3 font-light">累計已達 NT$ 242,000 門檻之學員限定</p>
+<div class="bg-cosmic-950/70 rounded-lg p-3 border border-gold-500/20 mb-3">
+<div class="text-[11px] text-gold-300/80 mb-0.5">優待功德金方案</div>
+<div class="text-[11px] text-gray-300 font-light">特優 NT$ 22,000 + NT$ 2,200</div>
+<div class="text-xl font-serif font-bold text-gold-300 mt-1">NT$ 24,200</div>
+</div>
+</div>
+<p class="text-[10px] text-gray-400/80 tracking-wide mt-1">※ 經系統核實累計功德鑫後，由專案導師批核開令。</p>
+</div>
+<div class="plan-card glass-gold-panel rounded-xl p-5 cursor-pointer transition-all duration-300 hover:border-gold-300/80 relative flex flex-col justify-between border border-gold-500/20" data-tier="2" id="tier-card-2" onclick="selectTier(2)">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-gray-800/80 border border-gray-600 text-gray-300 tracking-wider">一般學員優待</span>
+<div class="w-4 h-4 rounded-full border border-gray-500 bg-transparent flex items-center justify-center" id="tier-2-indicator">
+<svg class="w-2.5 h-2.5 text-cosmic-950 stroke-[3] hidden" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+</div>
+<div>
+<h3 class="text-sm sm:text-base font-bold text-white mb-1.5 leading-snug">功德鑫尚未達到此額度者</h3>
+<p class="text-[11px] text-gray-400 mb-3 font-light">初次申辦或尚未達 NT$ 242,000 門檻者</p>
+<div class="bg-cosmic-950/70 rounded-lg p-3 border border-gold-500/20 mb-3">
+<div class="text-[11px] text-gold-300/80 mb-0.5">優待功德金方案</div>
+<div class="text-[11px] text-gray-300 font-light">特優 NT$ 36,000 + NT$ 3,600</div>
+<div class="text-xl font-serif font-bold text-gold-300 mt-1">NT$ 39,600</div>
+</div>
+</div>
+<p class="text-[10px] text-gray-400/80 tracking-wide mt-1">※ 享有專屬功德減免，款項全數登錄於天體療癒卷宗。</p>
+</div>
+<div class="plan-card glass-gold-panel rounded-xl p-5 cursor-pointer transition-all duration-300 hover:border-gold-300/80 relative flex flex-col justify-between border selected border-gold-400" data-tier="3" id="tier-card-3" onclick="selectTier(3)">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-gold-500/20 border border-gold-400/60 text-gold-300 tracking-wider">新晉受訓學員</span>
+<div class="w-4 h-4 rounded-full border-2 border-gold-300 bg-gold-400 flex items-center justify-center" id="tier-3-indicator">
+<svg class="w-2.5 h-2.5 text-cosmic-950 stroke-[3]" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+</div>
+<div>
+<h3 class="text-sm sm:text-base font-bold text-white mb-1.5 leading-snug">尚未是學員（新學員訓練）</h3>
+<p class="text-[11px] text-gray-400 mb-3 font-light leading-relaxed">目前身份為會員、善信、靈修學員，觀賞視頻後欲受訓者</p>
+<div class="bg-cosmic-950/70 rounded-lg p-3 border border-gold-500/20 mb-3">
+<div class="text-[11px] text-gold-300/80 mb-0.5">專案訓練功德金</div>
+<div class="text-[11px] text-gray-300 font-light">金額 NT$ 220,000 + NT$ 22,000</div>
+<div class="text-xl font-serif font-bold text-gold-300 mt-1">NT$ 242,000</div>
+</div>
+</div>
+<p class="text-[10px] text-gray-400/80 tracking-wide mt-1">※ 含完整火星能量授令受訓、專屬法本疏文與導引證書。</p>
+</div>
+</div>
+</section>
+<!-- END: SpecialOfferNoticeBanner -->
+<!-- BEGIN: RegistrationAndPaymentGrid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<!-- Form Column (Left: 7 cols) -->
+<section class="lg:col-span-7 space-y-6" data-purpose="registration-form">
+<div class="glass-gold-panel rounded-xl p-5 sm:p-6">
+<div class="flex items-center space-x-3 pb-4 border-b border-gold-500/20 mb-5">
+<div class="w-7 h-7 rounded-lg bg-gold-500/20 flex items-center justify-center border border-gold-400/40 text-gold-300">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h2 class="text-base sm:text-lg font-bold text-white tracking-wide">學員基本資料與請領登記</h2>
+<p class="text-[11px] text-gold-300/60 font-light mt-0.5">請務必填寫真實資料以供天體神聖旨令文疏奏稟</p>
+</div>
+</div>
+<form class="space-y-4" id="healing-registration-form" onsubmit="event.preventDefault();">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="sm:col-span-2">
+<label class="block text-xs font-semibold text-gray-300 mb-1 tracking-wider">
+                  代表人姓名 <span class="text-gold-400">*</span>
+</label>
+<input class="w-full bg-cosmic-950/80 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-gray-100 placeholder-gray-500 gold-input-focus transition duration-200" id="field-rep-name" placeholder="請輸入全名" required="" type="text">
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-300 mb-1 tracking-wider">
+                  虛歲 <span class="text-gold-400">*</span>
+</label>
+<div class="relative">
+<input class="w-full bg-cosmic-950/80 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-gray-100 placeholder-gray-500 gold-input-focus transition duration-200" id="field-age" max="150" min="1" placeholder="歲" required="" type="number">
+<span class="absolute right-3 top-2 text-xs text-gray-400">歲</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-semibold text-gray-300 mb-1 tracking-wider">
+                聯絡電話 <span class="text-gold-400">*</span>
+</label>
+<input class="w-full bg-cosmic-950/80 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-gray-100 placeholder-gray-500 gold-input-focus transition duration-200" id="field-phone" placeholder="例如：0912-345-678" required="" type="tel">
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-300 mb-1 tracking-wider">
+                職業 <span class="text-gold-400">*</span>
+</label>
+<input class="w-full bg-cosmic-950/80 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-gray-100 placeholder-gray-500 gold-input-focus transition duration-200" id="field-occupation" placeholder="請填寫現職 / 行業" required="" type="text">
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-300 mb-1 tracking-wider">
+                通訊地址 <span class="text-gold-400">*</span>
+</label>
+<input class="w-full bg-cosmic-950/80 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-gray-100 placeholder-gray-500 gold-input-focus transition duration-200" id="field-address" placeholder="請輸入完整收件 / 聯絡地址" required="" type="text">
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-300 mb-1 tracking-wider">
+                代理人姓名 <span class="text-gray-400 font-normal">（若無代理人請填無）</span>
+</label>
+<input class="w-full bg-cosmic-950/80 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-gray-100 placeholder-gray-500 gold-input-focus transition duration-200" id="field-agent-name" placeholder="若無代理人請填無" type="text">
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-300 mb-1 tracking-wider" for="field-photo">
+                個人身分/正面近照上傳 <span class="text-gold-400">*</span>
+</label>
+<input id="field-photo" class="sr-only" accept="image/jpeg,image/png" required type="file">
+<label id="photo-upload-trigger" for="field-photo" class="border border-dashed border-gold-500/40 rounded-lg p-3 text-center bg-cosmic-950/50 hover:border-gold-400 transition cursor-pointer flex flex-col items-center justify-center gap-1.5" tabindex="0">
+<svg class="w-5 h-5 text-gold-400/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+<div id="photo-upload-title" class="text-xs text-gold-300 font-medium">點擊上傳個人正面清晰大頭 2 吋照片</div>
+<div id="photo-upload-help" class="text-[10px] text-gray-500 font-light">供火星能量文疏稟報辨識使用（支援 JPG、PNG，檔案小於 5MB）</div>
+<img id="photo-preview" class="hidden mt-2 w-24 h-24 rounded-lg object-cover border border-gold-400/60" alt="已選擇的個人照片預覽">
+</label>
+<p id="photo-upload-error" class="hidden mt-1 text-[10px] text-red-300" role="alert"></p>
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-300 mb-1 tracking-wider">
+                請領療癒旨令案號 / 備註
+              </label>
+<textarea class="w-full bg-cosmic-950/80 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-gray-100 placeholder-gray-500 gold-input-focus transition duration-200 resize-none" id="field-notes" placeholder="請填寫旨令案號或靈性備註事項..." rows="2"></textarea>
+</div>
+</form>
+</div>
+<div class="glass-gold-panel rounded-xl p-5 sm:p-6">
+<div class="flex items-center space-x-3 pb-3.5 border-b border-gold-500/20 mb-4">
+<div class="w-7 h-7 rounded-lg bg-gold-500/20 flex items-center justify-center border border-gold-400/40 text-gold-300">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h2 class="text-sm sm:text-base font-bold text-white tracking-wide">付款方式 PAYMENT METHOD</h2>
+<p class="text-[11px] text-gold-300/60 font-light mt-0.5">請依指示將款項匯入以下官方天體指定信託專戶</p>
+</div>
+</div>
+<div class="rounded-lg border border-gold-400/70 bg-gradient-to-r from-gold-500/10 to-cosmic-900/60 p-3 mb-4 flex items-center justify-between">
+<div class="flex items-center space-x-2.5">
+<div class="w-2 h-2 rounded-full bg-gold-400 shadow-gold-glow"></div>
+<span class="text-xs sm:text-sm font-semibold text-gold-200">銀行轉帳 Bank Transfer</span>
+</div>
+<div class="w-4 h-4 rounded-full bg-gold-400 flex items-center justify-center text-cosmic-950">
+<svg class="w-2.5 h-2.5 stroke-[3]" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+</div>
+<div class="bg-cosmic-950/80 rounded-lg p-3.5 border border-gold-500/20 space-y-2.5 font-mono text-xs">
+<div>
+<div class="text-[10px] text-gray-400 tracking-wider font-sans">銀行名稱 BANK NAME</div>
+<div class="text-xs sm:text-sm font-semibold text-gray-200 mt-0.5">渣打銀行 (052) Standard Chartered</div>
+</div>
+<div class="border-t border-gold-500/10 pt-2">
+<div class="text-[10px] text-gray-400 tracking-wider font-sans">分行別 BRANCH NAME</div>
+<div class="text-xs sm:text-sm font-semibold text-gray-200 mt-0.5">大直分行 Dazhi Branch</div>
+</div>
+<div class="border-t border-gold-500/10 pt-2">
+<div class="text-[10px] text-gray-400 tracking-wider font-sans">匯款帳號 ACCOUNT NUMBER</div>
+<div class="text-sm sm:text-base font-bold text-gold-300 tracking-wider mt-0.5 select-all">No: 12120000002912</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Payment & Checkout Column (Right: 5 cols) -->
+<section class="lg:col-span-5 space-y-5" data-purpose="checkout-panel">
+<div class="glass-gold-panel rounded-xl p-5 sm:p-6 space-y-4 sticky top-24">
+<h3 class="text-xs font-bold text-gold-300 uppercase tracking-widest pb-2.5 border-b border-gold-500/20 flex items-center justify-between">
+<span class="">請領結算明細 SUMMARY</span>
+<span class="text-[10px] text-gold-400/70 font-mono">CODEX-2026</span>
+</h3>
+<div class="space-y-2.5 text-xs">
+<div class="flex justify-between items-center text-gray-300">
+<span class="font-light">所選方案類別</span>
+<span class="font-medium text-gold-200 text-right" id="summary-plan-label">尚未是學員 (新受訓學員訓練)</span>
+</div>
+<div class="flex justify-between items-center text-gray-400">
+<span class="font-light" id="summary-base-title">專案訓練功德金</span>
+<span class="font-mono text-gray-300" id="summary-base-amount">NT$ 220,000</span>
+</div>
+<div class="flex justify-between items-center text-gray-400">
+<span class="font-light" id="summary-extra-title">加許功德金</span>
+<span class="font-mono text-gray-300" id="summary-extra-amount">NT$ 22,000</span>
+</div>
+<div class="pt-3 border-t border-gold-500/20 flex justify-between items-end">
+<div>
+<span class="text-[11px] text-gray-400 block mb-0.5">總計應納功德金 (TOTAL)</span>
+<span class="text-[10px] text-gold-400 font-light" id="summary-tier-note">※ 符合新晉受訓學員標準 / 含完整火星能量授受受訓、專屬法本疏文與靈性引導證書。</span>
+</div>
+<div class="text-2xl font-bold font-serif text-gold-300" id="summary-total-amount">NT$ 242,000</div>
+</div>
+</div>
+<div class="pt-3 border-t border-gold-500/20 space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-gold-200 tracking-wider flex items-center gap-1.5">
+<svg class="w-3 h-3 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+          匯款查核資料登記
+        </span>
+<span class="text-[10px] text-gray-400">ATM / 網銀轉帳</span>
+</div>
+<div>
+<label class="block text-[11px] text-gray-300 mb-1 font-medium tracking-wide">匯款帳號後 5 碼 (Account Last 5 Digits) <span class="text-gold-400">*</span></label>
+<input class="w-full bg-cosmic-950/80 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-gold-200 font-mono placeholder-gray-500 gold-input-focus transition duration-200" id="field-bank-last5" maxlength="5" pattern="[0-9]{5}" placeholder="請填寫轉帳帳號後5碼，便於查核" type="text">
+</div>
+<div>
+<label class="block text-[11px] text-gray-300 mb-1 font-medium tracking-wide">轉帳日期時間 / 備註說明 <span class="text-gray-500 font-normal">(選填)</span></label>
+<input class="w-full bg-cosmic-950/80 border border-gold-500/30 rounded-lg px-3 py-2 text-xs text-gray-200 placeholder-gray-500 gold-input-focus transition duration-200" id="field-transfer-memo" placeholder="例如：已於今日完成轉帳 / 跨行匯款" type="text">
+</div>
+<button class="w-full py-3 rounded-lg font-bold tracking-widest text-cosmic-950 bg-gradient-to-r from-gold-300 via-gold-400 to-gold-500 hover:brightness-110 active:scale-[0.99] transition duration-200 shadow-gold-glow flex items-center justify-center space-x-2 text-xs sm:text-sm cursor-pointer" id="submit-registration" type="button">
+<span class="">確認匯款資料並送出登記</span>
+<svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+<div class="hidden rounded-lg border border-gold-400/60 bg-gold-500/10 p-3 text-center space-y-1.5 animate-pulse" id="submit-success-alert">
+<p class="text-xs font-bold text-gold-200">✨ 登記已受理！功德金與案號核算中</p>
+<p class="text-[10px] text-gray-300 leading-relaxed font-light" id="success-feedback-text">已成功登記請領火星療癒旨令，專案導師將核對匯款帳號後5碼開立疏文。</p>
+</div>
+<p class="text-center text-[10px] text-gray-400 leading-relaxed pt-1">提醒：請於 <span class="text-gold-300 font-semibold">2026 年 7 月 17 日</span> 截止前完成手續與資料確認，確保療癒旨令如期申辦生效。</p>
+</div>
+</div>
+</section>
+</div>
+<!-- END: RegistrationAndPaymentGrid -->
+</main>
+<!-- BEGIN: MainFooter -->
+<footer class="border-t border-gold-500/20 bg-cosmic-950/95 py-10" data-purpose="page-footer">
+<div class="max-w-6xl mx-auto px-6 text-center space-y-4">
+<div class="font-cinzel text-sm tracking-widest text-gold-400">
+        WAVE ART MALL · GALACTIC HEALING CHAMBER
+      </div>
+<p class="text-xs text-gray-500 font-light tracking-wider">
+        © 2026 WAVE ART MALL GLOBAL. 火星天體神聖能量療癒殿堂 版權所有.
+      </p>
+</div>
+</footer>
+<!-- END: MainFooter -->
+<!-- BEGIN: InteractiveScripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabaseClient.js"></script>
+<script data-purpose="tier-selection-logic">
+    // Current selected plan state
+    let selectedTier = 1;
+
+    window.addEventListener('load', () => {
+      document.getElementById('submit-registration')?.addEventListener('click', handleConfirmCheckout);
+    });
+
+    const tierData = {
+      1: {
+        label: "功德鑫已達 24.2 萬特優",
+        baseTitle: "主特優功德金",
+        baseAmount: "NT$ 22,000",
+        extraTitle: "加許功德金",
+        extraAmount: "NT$ 2,200",
+        totalAmount: "NT$ 24,200",
+        note: "※ 符合專屬特優授令標準"
+      },
+      2: {
+        label: "功德鑫尚未達到此額度者",
+        baseTitle: "主特優功德金",
+        baseAmount: "NT$ 36,000",
+        extraTitle: "加許功德金",
+        extraAmount: "NT$ 3,600",
+        totalAmount: "NT$ 39,600",
+        note: "※ 享有專屬功德減免，款項全數登錄於天體療癒卷宗"
+      },
+      3: {
+        label: "尚未是學員 (新受訓學員訓練)",
+        baseTitle: "專案訓練功德金",
+        baseAmount: "NT$ 220,000",
+        extraTitle: "加許功德金",
+        extraAmount: "NT$ 22,000",
+        totalAmount: "NT$ 242,000",
+        note: "※ 符合新晉受訓學員標準 / 含完整火星能量授受受訓、專屬法本疏文與靈性引導證書。"
+      }
+    };
+
+    function selectTier(tierNumber) {
+      selectedTier = tierNumber;
+
+      // Update Card Visuals & Radio Indicators for all 3 cards
+      for (let i = 1; i <= 3; i++) {
+        const card = document.getElementById(`tier-card-${i}`);
+        const indicator = document.getElementById(`tier-1-indicator`.replace('1', i));
+
+        if (!card || !indicator) continue;
+
+        if (i === tierNumber) {
+          card.classList.add('selected', 'border-gold-400');
+          card.classList.remove('border-gold-500/20');
+          indicator.className = "w-4 h-4 rounded-full border-2 border-gold-300 bg-gold-400 flex items-center justify-center";
+          indicator.querySelector('svg').classList.remove('hidden');
+        } else {
+          card.classList.remove('selected', 'border-gold-400');
+          card.classList.add('border-gold-500/20');
+          indicator.className = "w-4 h-4 rounded-full border border-gray-500 bg-transparent flex items-center justify-center";
+          indicator.querySelector('svg').classList.add('hidden');
+        }
+      }
+
+      // Update Summary Details
+      const data = tierData[tierNumber];
+      if (data) {
+        document.getElementById('summary-plan-label').textContent = data.label;
+        document.getElementById('summary-base-title').textContent = data.baseTitle;
+        document.getElementById('summary-base-amount').textContent = data.baseAmount;
+        document.getElementById('summary-extra-title').textContent = data.extraTitle;
+        document.getElementById('summary-extra-amount').textContent = data.extraAmount;
+        document.getElementById('summary-total-amount').textContent = data.totalAmount;
+        document.getElementById('summary-tier-note').textContent = data.note;
+      }
+    }
+
+    const photoInput = document.getElementById('field-photo');
+    const photoPreview = document.getElementById('photo-preview');
+    const photoUploadTitle = document.getElementById('photo-upload-title');
+    const photoUploadHelp = document.getElementById('photo-upload-help');
+    const photoUploadError = document.getElementById('photo-upload-error');
+
+    photoInput.addEventListener('change', () => {
+      const photo = photoInput.files?.[0] ?? null;
+      photoUploadError.classList.add('hidden');
+      photoUploadError.textContent = '';
+
+      if (!photo) {
+        photoPreview.classList.add('hidden');
+        photoPreview.removeAttribute('src');
+        photoUploadTitle.textContent = '點擊上傳個人正面清晰大頭 2 吋照片';
+        photoUploadHelp.textContent = '供火星能量文疏稟報辨識使用（支援 JPG、PNG，檔案小於 5MB）';
+        // clear any previous object URL to avoid memory leaks
+        if (photoPreview.dataset.objectUrl) {
+          URL.revokeObjectURL(photoPreview.dataset.objectUrl);
+          delete photoPreview.dataset.objectUrl;
+        }
+        return;
+      }
+
+      const supportedTypes = ['image/jpeg', 'image/png'];
+      if (!supportedTypes.includes(photo.type) || photo.size > 5 * 1024 * 1024) {
+        photoInput.value = '';
+        photoPreview.classList.add('hidden');
+        photoPreview.removeAttribute('src');
+        photoUploadError.textContent = '請選擇小於 5MB 的 JPG 或 PNG 圖片。';
+        photoUploadError.classList.remove('hidden');
+        return;
+      }
+
+      photoUploadTitle.textContent = `已選擇：${photo.name}`;
+      photoUploadHelp.textContent = '照片已在此頁面預覽；送出登記時會一併檢查。';
+      if (photoPreview.dataset.objectUrl) {
+        URL.revokeObjectURL(photoPreview.dataset.objectUrl);
+      }
+      const objectUrl = URL.createObjectURL(photo);
+      photoPreview.dataset.objectUrl = objectUrl;
+      photoPreview.src = objectUrl;
+      photoPreview.classList.remove('hidden');
+    });
+
+    async function handleConfirmCheckout() {
+      const repName = document.getElementById('field-rep-name').value.trim();
+      const age = document.getElementById('field-age').value.trim();
+      const phone = document.getElementById('field-phone').value.trim();
+      const occupation = document.getElementById('field-occupation').value.trim();
+      const address = document.getElementById('field-address').value.trim();
+      const agentName = document.getElementById('field-agent-name').value.trim();
+      const referenceNote = document.getElementById('field-notes').value.trim();
+      const photo = photoInput.files[0];
+      const bankLast5 = document.getElementById('field-bank-last5').value.trim();
+      const transferMemo = document.getElementById('field-transfer-memo').value.trim();
+      const submitButton = document.getElementById('submit-registration');
+
+      if (!repName || !age || !phone || !occupation || !address) {
+        alert('請完整填寫代表人姓名、虛歲、聯絡電話、職業及通訊地址等必填項目。');
+        return;
+      }
+
+      if (!photo) {
+        alert('請先上傳個人身分或正面近照。');
+        photoInput.focus();
+        return;
+      }
+
+      if (!bankLast5 || !/^\d{5}$/.test(bankLast5)) {
+        alert('請填寫 5 位數字的轉帳匯款帳號末 5 碼，以便系統與專案導師核對款項。');
+        document.getElementById('field-bank-last5').focus();
+        return;
+      }
+
+      const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+      const user = userError ? null : (userData && userData.user ? userData.user : null);
+      if (!user) {
+        localStorage.setItem('wave_redirect_after_login', window.location.href);
+        window.location.href = './auth.html';
+        return;
+      }
+
+      const totalFee = tierData[selectedTier].totalAmount;
+      const planName = tierData[selectedTier].label;
+      const fileExtension = photo.name.split('.').pop().toLowerCase();
+      const photoPath = `${user.id}/${crypto.randomUUID()}.${fileExtension}`;
+      const originalButtonText = submitButton.innerHTML;
+
+      const safeMessage = (error) => {
+        const raw = String(error?.message || '').toLowerCase();
+        if (raw.includes('failed to fetch') || raw.includes('networkerror')) {
+          return '網路連線不穩或被阻擋，請切換 Wi‑Fi/行動網路後再按一次送出。';
+        }
+        if (raw.includes('timeout')) {
+          return '連線逾時，請檢查網路後再送出一次。';
+        }
+        return error?.message || '請稍後再試。';
+      };
+
+      const withRetry = async (fn, retries = 1) => {
+        let lastError = null;
+        for (let attempt = 0; attempt <= retries; attempt += 1) {
+          try {
+            return await fn();
+          } catch (error) {
+            lastError = error;
+            const raw = String(error?.message || '').toLowerCase();
+            const isNetwork = raw.includes('failed to fetch') || raw.includes('networkerror') || raw.includes('timeout');
+            if (!isNetwork || attempt === retries) throw error;
+            await new Promise((resolve) => setTimeout(resolve, 800));
+          }
+        }
+        throw lastError;
+      };
+
+      try {
+        submitButton.disabled = true;
+        submitButton.textContent = '正在安全上傳照片與送出登記...';
+
+        await withRetry(async () => {
+          const { error: uploadError } = await supabaseClient.storage
+            .from('mars-healing-photos')
+            .upload(photoPath, photo, {
+              cacheControl: '3600',
+              contentType: photo.type,
+              upsert: false
+            });
+          if (uploadError) throw uploadError;
+        }, 1);
+
+        const { data: registration, error: registrationError } = await withRetry(async () => {
+          const result = await supabaseClient
+            .from('mars_healing_registrations')
+            .insert({
+              user_id: user.id,
+              plan_tier: selectedTier,
+              plan_label: planName,
+              total_amount: Number(totalFee.replace(/[^0-9]/g, '')),
+              representative_name: repName,
+              age: Number(age),
+              phone,
+              occupation,
+              address,
+              agent_name: agentName || null,
+              photo_path: photoPath,
+              reference_note: referenceNote || null,
+              transfer_last_five: bankLast5,
+              transfer_memo: transferMemo || null
+            })
+            .select('id, created_at')
+            .single();
+
+          if (result.error) throw result.error;
+          return result;
+        }, 1);
+
+        if (registrationError) throw registrationError;
+
+        const successAlert = document.getElementById('submit-success-alert');
+        const successFeedback = document.getElementById('success-feedback-text');
+        successFeedback.textContent = `登記編號：${registration.id}。已安全保存您的登記資料與照片，管理員將依匯款末五碼「${bankLast5}」進行人工核對。`;
+        successAlert.classList.remove('hidden');
+        alert(`登記已送出。\n\n方案：${planName}\n應納功德金：${totalFee}\n\n請依頁面提供的銀行資訊完成轉帳；管理員核對後會進一步處理。`);
+
+        window.location.href = `./mars-healing-success.html?id=${encodeURIComponent(registration.id)}&plan=${encodeURIComponent(planName)}&fee=${encodeURIComponent(totalFee)}`;
+      } catch (error) {
+        console.error('[mars-healing] 建立登記失敗:', error);
+
+        const raw = String(error?.message || '').toLowerCase();
+        const isNetwork = raw.includes('failed to fetch') || raw.includes('networkerror') || raw.includes('timeout');
+        if (isNetwork) {
+          alert('送出失敗：' + safeMessage(error) + '\n\n你可以直接再按一次「送出登記」，系統會自動再試一次。');
+          return;
+        }
+
+        const photoCleanup = await supabaseClient.storage.from('mars-healing-photos').remove([photoPath]);
+        void photoCleanup;
+
+        alert('送出失敗：' + safeMessage(error));
+      } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText;
+      }
+    }
+  </script>
+<!-- END: InteractiveScripts -->
+
+
+</body></html>

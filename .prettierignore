@@ -1,0 +1,27 @@
+node_modules/
+backups/
+頁面輸入指示/
+_legacy_messed_up/
+_local_backup/
+_online_snapshot/
+_online_source/
+_restore_backup/
+_archived/
+_dbg/
+.dbg/
+out/
+docs/
+*.md
+package-lock.json
+
+# Q1②：商城收錢動線 8 頁完全不動（含格式化），待專案後期另行決策
+pages/category.html
+pages/product-detail.html
+pages/cart.html
+pages/checkout.html
+pages/order-confirm.html
+pages/order-history.html
+pages/auth.html
+pages/reset-password.html
+# 首頁為共享入口，隨 H1 基座 / H3 連結圖階段一併處理
+index.html

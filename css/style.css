@@ -1,0 +1,455 @@
+/*
+  =========================================================
+  WAVE ART MALL 共用样式表
+  =========================================================
+  这个档案存放「所有页面共用」的样式，例如：
+  - 玻璃毛玻璃卡片 (glass-card / glass-panel)
+  - 金色画框 (gold-frame / art-frame)
+  - 霓光文字/边框特效
+  - 顶部导览列、底部导览列的固定样式
+  - 讯息提示框 (toast) 样式
+
+  说明给新手：
+  这份 CSS 会被每一个 html 页面用 <link rel="stylesheet" href="../css/style.css"> 引入，
+  这样我们就不用在每个页面重复写同样的样式了。
+*/
+
+/* 基本重置与全站底色，呼应设计稿的暗黑奢华风格 */
+body {
+  background-color: #141314;
+  color: #e5e2e2;
+  font-family: "Manrope", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  overflow-x: hidden;
+}
+
+/* 标题字体统一用 Playfair Display，营造艺术品拍卖行的质感 */
+.font-headline {
+  font-family: "Playfair Display", serif;
+}
+
+/* 毛玻璃卡片：背景半透明 + 模糊，营造出高级感的悬浮卡片效果 */
+.glass-card,
+.glass-panel {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(233, 195, 73, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: #00ffff;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+}
+
+/* 金色画框：用来包住商品图片，模拟真实画框的边界 */
+.gold-frame,
+.art-frame {
+  border: 1px solid #e9c349;
+  padding: 8px;
+  background: #020203;
+  position: relative;
+}
+
+.gold-frame::after,
+.art-frame::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 1px solid rgba(233, 195, 73, 0.4);
+  pointer-events: none;
+}
+
+/* 霓光青色的发光文字/图示效果 */
+.neon-glow {
+  filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.6));
+}
+
+.neon-glow-hover:hover {
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+/* 输入框聚焦时的青色发光效果，呼应結帳頁设计稿 */
+.input-glow:focus {
+  outline: none;
+  border-color: #00ffff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+/* 隐藏卷轴但仍可横向滑动，用在限时抢购的横向清单 */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 背景光斑渐层，营造深空/元宇宙氛围 */
+.gradient-mesh {
+  background:
+    radial-gradient(circle at top left, rgba(138, 43, 226, 0.15), transparent),
+    radial-gradient(circle at bottom right, rgba(0, 255, 255, 0.1), transparent);
+}
+
+/* 全站卷轴样式（金色卷轴滑块，比照设计稿的 custom-scrollbar） */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0b10;
+}
+::-webkit-scrollbar-thumb {
+  background: #e9c349;
+}
+
+/* =========================================================
+   共用导览列样式（Header / BottomNav）
+   ========================================================= */
+
+/* 顶部导览列：固定在最上方，半透明背景 + 模糊，滚动时也能看到内容 */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(20, 19, 20, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(233, 195, 73, 0.2);
+}
+
+/* 购物车数量角标：小圆点显示购物车内商品数量 */
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #00ffff;
+  color: #020203;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* 底部导览列（手机版常见的 App 风格导览） */
+.site-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 72px;
+  z-index: 50;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 16px;
+  background: rgba(14, 14, 14, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(233, 195, 73, 0.3);
+  box-shadow: 0 -4px 20px rgba(138, 43, 226, 0.2);
+}
+
+/* =========================================================
+   讯息提示框 (Toast)：用来显示「加入购物车成功」等简单提示
+   避免使用会打断操作的 alert，改用画面右上角淡出的小提示
+   ========================================================= */
+#toast-container {
+  position: fixed;
+  top: 80px;
+  right: 16px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  min-width: 200px;
+  max-width: 320px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: rgba(20, 19, 20, 0.95);
+  border: 1px solid #e9c349;
+  color: #f9f9f9;
+  font-size: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  animation: toast-in 0.25s ease-out;
+}
+
+.toast.toast-error {
+  border-color: #ffb4ab;
+  color: #ffdad6;
+}
+
+.toast.toast-success {
+  border-color: #00ffff;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 简单的载入中动画：转圈圈 spinner，避免页面看起来卡住 */
+.loading-spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(233, 195, 73, 0.2);
+  border-top-color: #e9c349;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 星星评分显示用的填色样式 */
+.star-filled {
+  color: #e9c349;
+  font-variation-settings: "FILL" 1;
+}
+.star-empty {
+  color: #46464b;
+  font-variation-settings: "FILL" 0;
+}
+
+/* =========================================================
+   第一阶段视觉恢复：以 _local_backup 旧设计为参考
+   说明给新手：下面只处理外观，不会改动 HTML 的 id、业务事件或资料库请求。
+   颜色和边框集中写在这里，五个页面因此可以维持同一套展厅视觉。
+   ========================================================= */
+:root {
+  --gallery-bg: #101014;
+  --gallery-panel: rgba(255, 255, 255, 0.045);
+  --gallery-panel-strong: rgba(255, 255, 255, 0.08);
+  --gallery-gold: #e9c349;
+  --gallery-cyan: #00ffff;
+  --gallery-muted: #a8a6ad;
+  --gallery-pink: #ff8f9f;
+}
+
+html {
+  background: var(--gallery-bg);
+}
+
+body {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(138, 43, 226, 0.12), transparent 34rem),
+    radial-gradient(circle at 90% 22%, rgba(0, 255, 255, 0.06), transparent 28rem),
+    var(--gallery-bg);
+  color: #f4f2ef;
+}
+
+.site-header {
+  height: 68px;
+  padding: 0 clamp(20px, 5vw, 80px);
+  background: rgba(16, 16, 20, 0.86);
+  border-bottom-color: rgba(233, 195, 73, 0.28);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.site-header a:first-child,
+.site-header h1 {
+  text-shadow: 0 0 18px rgba(233, 195, 73, 0.18);
+}
+
+.glass-card,
+.glass-panel {
+  background: var(--gallery-panel);
+  border-color: rgba(233, 195, 73, 0.24);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+  border-radius: 6px;
+}
+
+.glass-card:hover {
+  border-color: rgba(0, 255, 255, 0.8);
+  box-shadow: 0 16px 36px rgba(0, 255, 255, 0.1);
+  transform: translateY(-3px);
+}
+
+.gold-frame,
+.art-frame {
+  border-color: var(--gallery-gold);
+  background: #07070a;
+  padding: 8px;
+}
+
+.gold-frame::after,
+.art-frame::after {
+  border-color: rgba(233, 195, 73, 0.42);
+}
+
+input,
+select,
+textarea {
+  background-color: rgba(7, 7, 10, 0.72) !important;
+  border-color: rgba(233, 195, 73, 0.28) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.input-glow:focus {
+  border-color: var(--gallery-cyan) !important;
+  box-shadow: 0 0 16px rgba(0, 255, 255, 0.18) !important;
+}
+
+/* 首页：恢复旧稿中的首屏节奏，让搜索、分类、促销和推荐有明确层次。 */
+body:has(#flash-sale-list) main {
+  padding-top: 28px;
+}
+
+body:has(#flash-sale-list) main > section:first-child {
+  margin-bottom: 8px;
+}
+
+body:has(#flash-sale-list) main > section:nth-of-type(2) {
+  padding: 18px 0 6px;
+}
+
+body:has(#flash-sale-list) main > section:nth-of-type(3) {
+  padding: 18px;
+  border: 1px solid rgba(233, 195, 73, 0.22);
+  background: rgba(255, 255, 255, 0.025);
+  border-radius: 6px;
+}
+
+body:has(#flash-sale-list) #flash-sale-list > a,
+body:has(#recommend-list) #recommend-list > a {
+  border-radius: 6px;
+}
+
+/* 分类页：保留旧设计的筛选台与金色画框商品陈列感。 */
+body:has(#product-grid) #category-title {
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 22px rgba(233, 195, 73, 0.14);
+}
+
+body:has(#product-grid) #category-tabs a {
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+body:has(#product-grid) #product-grid .glass-card {
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025));
+}
+
+/* 商品详情页：视觉重点放在作品框、价格和右侧操作区。 */
+body:has(#product-content) #product-content > section:first-child {
+  max-width: 1120px;
+  margin-inline: auto;
+}
+
+body:has(#product-content) #product-content > section:first-child .art-frame {
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.38);
+}
+
+body:has(#product-content) #product-description,
+body:has(#product-content) #review-list {
+  color: var(--gallery-muted);
+}
+
+/* 购物车页：旧稿采用清晰的左清单、右摘要结构，避免信息挤在一起。 */
+body:has(#cart-content) main {
+  max-width: 1320px;
+  padding-inline: clamp(20px, 5vw, 80px);
+}
+
+body:has(#cart-content) #cart-content > aside .glass-card {
+  background: linear-gradient(160deg, rgba(233, 195, 73, 0.1), rgba(255, 255, 255, 0.035));
+  border-top: 2px solid var(--gallery-gold);
+}
+
+body:has(#cart-content) #cart-items-list > .glass-card {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+/* 认证页：恢复旧稿的“展览入口”氛围，同时不改变表单 id 和提交逻辑。 */
+body:has(#tabs-bar) {
+  min-height: 100dvh;
+  background:
+    linear-gradient(90deg, rgba(16, 16, 20, 0.82), rgba(16, 16, 20, 0.96)),
+    url("../icons/icon-512.png") center / cover no-repeat,
+    var(--gallery-bg);
+}
+
+body:has(#tabs-bar) main {
+  max-width: 520px;
+}
+
+body:has(#tabs-bar) .glass-card {
+  background: rgba(10, 10, 14, 0.74);
+  border-radius: 4px;
+  border-color: rgba(233, 195, 73, 0.34);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+body:has(#tabs-bar) #tabs-bar {
+  border-bottom-color: rgba(233, 195, 73, 0.28);
+}
+
+body:has(#tabs-bar) .tab-btn.active {
+  color: var(--gallery-gold);
+  border-bottom-color: var(--gallery-gold);
+}
+
+.site-bottom-nav {
+  height: 76px;
+  background: rgba(10, 10, 14, 0.94);
+  border-top-color: rgba(233, 195, 73, 0.36);
+  border-radius: 18px 18px 0 0;
+}
+
+@media (min-width: 768px) {
+  .site-header {
+    padding-inline: 80px;
+  }
+
+  body:has(#product-grid) main,
+  body:has(#product-content) main {
+    padding-top: 42px;
+  }
+}
+
+@media (max-width: 640px) {
+  body:has(#flash-sale-list) main {
+    padding-inline: 20px;
+  }
+
+  body:has(#cart-content) main {
+    padding-inline: 20px;
+  }
+
+  body:has(#tabs-bar) main {
+    padding-block: 40px;
+  }
+}

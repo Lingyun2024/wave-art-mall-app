@@ -1,0 +1,24 @@
+{
+  "scripts": {
+    "lint": "prettier --check pages index.html js css",
+    "check:links": "node tools/check_links.mjs",
+    "check:html": "html-validate \"pages/*.html\" index.html",
+    "test:e2e": "playwright test",
+    "build": "node tools/build_check.mjs",
+    "build:css": "node tools/build_css.mjs",
+    "test:money": "node tools/test_money_guard.mjs",
+    "gates": "npm run lint && npm run check:links && npm run check:html && npm run build && npm run test:money && npm run test:e2e",
+    "check:drift": "node tools/check_deploy_drift.mjs",
+    "metrics": "node tools/metrics.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@playwright/test": "^1.63.0",
+    "html-validate": "^11.15.0",
+    "prettier": "^3.9.6",
+    "tailwindcss": "^3.4.19"
+  }
+}

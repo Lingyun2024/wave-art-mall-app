@@ -1,0 +1,704 @@
+<!doctype html>
+<html class="dark" lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>WAVE ART MALL - 填寫身分資料</title>
+
+    <!-- PWA 設定 -->
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="theme-color" content="#020203" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              secondary: "#e9c349",
+              "on-error": "#690005",
+              "surface-dim": "#141314",
+              "primary-fixed": "#e3e1e9",
+              "primary-container": "#0a0b10",
+              "on-secondary": "#3c2f00",
+              "inverse-surface": "#e5e2e2",
+              "on-secondary-container": "#342800",
+              "on-tertiary-fixed": "#211a14",
+              surface: "#141314",
+              "outline-variant": "#46464b",
+              "galactic-purple": "#8A2BE2",
+              "neon-cyan": "#00FFFF",
+              "tertiary-fixed": "#efe0d5",
+              "inverse-on-surface": "#313030",
+              primary: "#c7c6cd",
+              "surface-container-low": "#1c1b1c",
+              "surface-container-highest": "#353435",
+              "surface-tint": "#c7c6cd",
+              "on-primary-fixed-variant": "#46464c",
+              "on-error-container": "#ffdad6",
+              "on-primary-container": "#797980",
+              "inverse-primary": "#5e5e64",
+              "secondary-fixed-dim": "#e9c349",
+              "on-secondary-container": "#342800",
+              "secondary-fixed": "#ffe088",
+              outline: "#919095",
+              "surface-container-high": "#2a2a2a",
+              "secondary-container": "#af8d11",
+              "on-background": "#e5e2e2",
+              "on-primary-fixed": "#1a1b21",
+              "on-primary": "#2f3036",
+              "starlight-white": "#F9F9F9",
+              "error-container": "#93000a",
+              background: "#141314",
+              "on-surface-variant": "#c7c6cb",
+              "on-surface": "#e5e2e2",
+              "tertiary-container": "#100a05",
+              "primary-fixed-dim": "#c7c6cd",
+              tertiary: "#d2c4b9",
+              "surface-container": "#201f20",
+              "surface-bright": "#3a3939",
+              "surface-container-lowest": "#0e0e0e",
+              "on-tertiary": "#372f27",
+              "on-secondary-fixed-variant": "#574500",
+              "tertiary-fixed-dim": "#d2c4b9",
+              error: "#ffb4ab",
+              "on-tertiary-fixed-variant": "#4e453d",
+              "surface-variant": "#353435",
+              "on-secondary-fixed": "#241a00",
+              "void-black": "#020203",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              gutter: "24px",
+              "container-max": "1440px",
+              unit: "8px",
+              "margin-mobile": "20px",
+              "margin-desktop": "80px",
+            },
+            fontFamily: {
+              "label-sm": ["JetBrains Mono"],
+              "headline-xl": ["Playfair Display"],
+              "headline-lg": ["Playfair Display"],
+              "headline-lg-mobile": ["Playfair Display"],
+              "body-md": ["Manrope"],
+            },
+            fontSize: {
+              "label-sm": [
+                "12px",
+                { lineHeight: "1.0", letterSpacing: "0.1em", fontWeight: "500" },
+              ],
+              "headline-xl": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" },
+              ],
+              "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "600" }],
+              "headline-lg-mobile": ["28px", { lineHeight: "1.3", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      @font-face {
+        font-family: "HolidayCustomGlyph";
+        src: url("../assets/fonts/RosterGlyph-subset.ttf") format("truetype");
+        font-display: swap;
+      }
+
+      body {
+        background-color: #141314;
+        color: #e5e2e2;
+        -webkit-font-smoothing: antialiased;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(233, 195, 73, 0.2);
+      }
+      .art-frame {
+        border: 1px solid #e9c349;
+        padding: 8px;
+        background: #020203;
+      }
+      .glow-cyan:hover {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      }
+      .glow-gold {
+        box-shadow: 0 0 15px rgba(233, 195, 73, 0.2);
+      }
+      .scroll-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .gold-text-gradient {
+        background: linear-gradient(135deg, #e9c349 0%, #ffe088 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .savior-inline-glyphs {
+        font-family: "HolidayCustomGlyph", sans-serif;
+        font-weight: 400;
+        white-space: nowrap;
+      }
+      .form-error {
+        display: none;
+        margin: 0 0 20px;
+        padding: 14px 16px;
+        color: #ffe2e2;
+        background: rgba(190, 36, 36, 0.2);
+        border: 1px solid #f07171;
+        border-radius: 6px;
+        font-weight: 700;
+        line-height: 1.6;
+      }
+      .form-error.is-visible {
+        display: block;
+      }
+      .field-invalid {
+        border-color: #f07171 !important;
+        box-shadow: 0 0 0 2px rgba(240, 113, 113, 0.18);
+      }
+    </style>
+  </head>
+  <body class="font-body-md text-body-md overflow-x-hidden">
+    <!-- 頂部導航欄 - 沒有登入按鈕，只有返回和購物車 -->
+    <nav
+      class="flex justify-between items-center px-margin-mobile h-16 w-full fixed top-0 bg-background/80 backdrop-blur-md text-secondary border-b border-secondary/20 z-50"
+    >
+      <div class="flex items-center gap-4">
+        <span
+          class="material-symbols-outlined cursor-pointer active:opacity-70 transition-all scale-95"
+          onclick="goBack()"
+        >
+          arrow_back
+        </span>
+      </div>
+      <h1
+        id="nav-title"
+        class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-widest text-secondary"
+      >
+        填寫身分資料
+      </h1>
+      <div class="flex items-center gap-4">
+        <span
+          id="nav-cart-icon"
+          class="material-symbols-outlined cursor-pointer active:opacity-70 transition-all scale-95 relative"
+          onclick="window.location.href = 'cart.html'"
+        >
+          shopping_cart
+          <span
+            class="js-cart-badge hidden absolute -top-1 -right-1 bg-error text-on-error text-[10px] leading-none rounded-full px-1 py-0.5"
+          >
+            0
+          </span>
+        </span>
+      </div>
+    </nav>
+
+    <main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+      <!-- 身分標題區 -->
+      <section class="flex flex-col md:flex-row gap-8 mb-12 items-start">
+        <div class="flex flex-col gap-8 w-full">
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <div class="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 relative">
+              <div class="absolute inset-0 bg-secondary/10 blur-2xl rounded-full"></div>
+              <img
+                alt="方案圖示"
+                id="identity-icon"
+                class="w-full h-full object-contain relative z-10 rounded-xl border border-secondary/30"
+                src="../assets/identity/personal.png"
+              />
+            </div>
+            <div class="flex-grow">
+              <h2
+                id="plan-blessing"
+                class="font-headline-lg text-headline-lg md:text-headline-xl text-secondary tracking-widest leading-tight"
+              ></h2>
+            </div>
+          </div>
+          <div class="flex-grow">
+            <h3
+              id="plan-sub"
+              class="font-headline-xl text-headline-lg md:text-headline-xl text-secondary mb-4 leading-tight"
+            ></h3>
+            <div
+              id="plan-tags"
+              class="grid grid-cols-2 md:grid-cols-3 gap-4 font-headline-lg text-primary/80 mb-6 italic"
+            ></div>
+            <p id="plan-note" class="font-body-md text-tertiary leading-relaxed max-w-2xl"></p>
+          </div>
+        </div>
+      </section>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <!-- 左欄：身分詳情表單 -->
+        <div class="lg:col-span-7 space-y-8">
+          <div class="glass-card p-8 rounded-xl">
+            <h3
+              class="font-label-sm text-label-sm uppercase tracking-widest text-neon-cyan mb-8 flex items-center"
+            >
+              <span class="material-symbols-outlined mr-2">person_edit</span>
+              身分詳情
+            </h3>
+            <form id="identity-form" class="space-y-6">
+              <div id="form-error" class="form-error" role="alert" aria-live="assertive"></div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                  <label
+                    class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-tighter"
+                  >
+                    代表人姓名
+                  </label>
+                  <input
+                    id="f-name"
+                    type="text"
+                    class="w-full bg-void-black border border-outline-variant focus:border-neon-cyan focus:ring-0 text-starlight-white px-4 py-3 rounded transition-all"
+                    placeholder="請輸入全名"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-tighter"
+                  >
+                    虛歲
+                  </label>
+                  <input
+                    id="f-age"
+                    type="text"
+                    class="w-full bg-void-black border border-outline-variant focus:border-neon-cyan focus:ring-0 text-starlight-white px-4 py-3 rounded transition-all"
+                    placeholder="例如：78、殁、過世、享年78歲、不詳"
+                  />
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label
+                  class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-tighter"
+                >
+                  電話
+                </label>
+                <input
+                  id="f-phone"
+                  type="tel"
+                  class="w-full bg-void-black border border-outline-variant focus:border-neon-cyan focus:ring-0 text-starlight-white px-4 py-3 rounded transition-all"
+                  placeholder="請輸入電話"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-tighter"
+                >
+                  地址
+                </label>
+                <input
+                  id="f-address"
+                  type="text"
+                  class="w-full bg-void-black border border-outline-variant focus:border-neon-cyan focus:ring-0 text-starlight-white px-4 py-3 rounded transition-all"
+                  placeholder="請輸入地址"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-tighter"
+                >
+                  代理人
+                </label>
+                <input
+                  id="f-agent"
+                  type="text"
+                  class="w-full bg-void-black border border-outline-variant focus:border-neon-cyan focus:ring-0 text-starlight-white px-4 py-3 rounded transition-all"
+                  placeholder="請輸入代理人姓名（若無可留空）"
+                />
+              </div>
+            </form>
+          </div>
+
+          <!-- 付款方式 -->
+          <div class="glass-card p-8 rounded-xl border-l-4 border-secondary">
+            <div class="flex items-center gap-3 mb-6">
+              <span class="material-symbols-outlined text-secondary">account_balance</span>
+              <h3 class="font-headline-lg text-headline-lg text-secondary">付款方式</h3>
+            </div>
+            <div class="bg-surface-container p-6 border border-secondary/20 rounded-lg">
+              <div class="flex justify-between items-center mb-4">
+                <span class="font-label-sm text-label-sm text-secondary">
+                  銀行轉帳 Bank Transfer (已選擇)
+                </span>
+                <span
+                  class="material-symbols-outlined text-secondary"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                >
+                  check_circle
+                </span>
+              </div>
+              <p class="font-label-sm text-label-sm text-on-surface-variant leading-7">
+                為避免公開帳戶遭不當使用，付款帳戶資訊不在網站顯示。請完成填寫後透過官方聯絡方式向承辦人員確認匯款資訊。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右欄：訂單摘要 -->
+        <div class="lg:col-span-5">
+          <div class="glass-card p-8 rounded-xl sticky top-24">
+            <h3 class="font-headline-lg text-headline-lg text-starlight-white mb-8">結帳總計</h3>
+            <div class="space-y-6 mb-8">
+              <div class="flex justify-between items-center">
+                <span class="font-body-md text-body-md text-on-surface-variant" id="summary-label">
+                  身分驗證
+                </span>
+                <span class="font-label-sm text-label-sm text-starlight-white" id="summary-price">
+                  NT$ 0
+                </span>
+              </div>
+              <div
+                class="h-px bg-gradient-to-r from-transparent via-outline-variant/50 to-transparent my-6"
+              ></div>
+              <div class="flex justify-between items-center">
+                <span class="font-headline-lg text-headline-lg text-secondary">總計</span>
+                <span
+                  class="font-headline-lg text-headline-lg gold-text-gradient"
+                  id="summary-total"
+                >
+                  NT$ 0
+                </span>
+              </div>
+            </div>
+
+            <div class="p-4 bg-galactic-purple/10 border border-galactic-purple/30 rounded-lg mb-8">
+              <p class="font-label-sm text-label-sm text-galactic-purple text-center">
+                轉帳後請截圖留存，我們將於確認款項後為您辦理特赦
+              </p>
+            </div>
+
+            <button
+              id="btn-confirm"
+              class="w-full bg-secondary text-void-black font-semibold py-6 rounded-lg active:scale-95 transition-all duration-300 flex items-center justify-center gap-3"
+            >
+              <span class="text-lg">確認結帳 &gt;&gt;</span>
+            </button>
+
+            <p
+              class="mt-6 font-label-sm text-label-sm text-on-surface-variant/40 text-center tracking-[0.2em]"
+            >
+              波動藝術商城 © 2024 玄學融合
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 底部導覽列（手機版） -->
+    <nav
+      class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-void-black/90 backdrop-blur-2xl border-t border-outline-variant/20"
+    >
+      <div class="flex justify-around items-center h-20 px-4 w-full pb-safe">
+        <div class="flex flex-col items-center justify-center text-on-surface-variant/60">
+          <span class="material-symbols-outlined" onclick="goBack()">arrow_back</span>
+          <span class="font-label-sm text-[10px] mt-1">返回</span>
+        </div>
+        <div class="flex flex-col items-center justify-center text-secondary">
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+          >
+            shopping_cart
+          </span>
+          <span class="font-label-sm text-[10px] mt-1">購物車</span>
+        </div>
+        <div class="flex flex-col items-center justify-center text-on-surface-variant/60">
+          <span class="material-symbols-outlined" onclick="window.location.href = '../index.html'">
+            home
+          </span>
+          <span class="font-label-sm text-[10px] mt-1">首頁</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 引入 Supabase 和项目脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabaseClient.js"></script>
+    <script src="../js/nav.js"></script>
+
+    <script>
+      /*
+    =========================================================
+    holiday-form.html —— S3 填寫身分資料 / 結帳頁
+    由 holiday-entry.html 的方案卡片帶入 ?plan=xxx&identity=yyy 進入。
+    依方案動態顯示身分標題與價格，填寫後加入購物車導向 cart.html。
+    =========================================================
+  */
+
+      // 六個方案的定價與顯示資訊（原功德金 / 特優價）
+      const PLANS = {
+        personal: {
+          name: "個人者乎",
+          icon: "../assets/identity/personal.png",
+          orig: 7700,
+          special: 770,
+          sub: "[個人者乎] 代以特赦者並具有其",
+          blessing: "個人者之 冤冤 仇仇 恨恨 殺殺 債債 孽孽 特特 赦赦",
+        },
+        family: {
+          name: "家庭者乎",
+          icon: "../assets/identity/family.png",
+          orig: 33000,
+          special: 11000,
+          sub: "[家庭者乎] 代以特赦者並具有其",
+          blessing: "家庭者之 冤冤 仇仇 恨恨 殺殺 債債 孽孽 特特 赦赦",
+        },
+        business: {
+          name: "事業者乎",
+          icon: "../assets/identity/business.png",
+          orig: 77000,
+          special: 11000,
+          sub: "[事業者乎] 代以特赦者並具有其",
+          blessing: "事業者之 冤冤 仇仇 恨恨 殺殺 債債 孽孽 特特 赦赦",
+        },
+        society: {
+          name: "社會者乎",
+          icon: "../assets/identity/society.png",
+          orig: 77000,
+          special: 11000,
+          sub: "[社會者乎] 代以特赦者並具有其",
+          blessing: "社會之特赦沁身靈 助助 和解 共生 共存 安生 安態",
+        },
+        savior: {
+          name: "救世(主)者乎",
+          icon: "../assets/identity/savior.png",
+          orig: 77000,
+          special: 11000,
+          sub: "[救世(主)者乎] 代以特赦者並具有其",
+          blessing:
+            "救世主(者)之沁身靈特赦 助助其 修行 修練 修圓 精進 超越 突破 A006 A006 A007 A007 煞煞",
+        },
+      };
+
+      const COMMON_TAGS = ["主天之", "主地之", "主人之", "主淵之", "主源之", "主控之"];
+      const COMMON_NOTE = "尤其主道之・主德之者方可 代以特赦之 (切記!! 切記!!)";
+
+      // TODO: 替換為 Supabase products 表中「七七地赦」真實商品 ID
+      const HOLIDAY_PRODUCT_ID = 999;
+
+      function getPlanKey() {
+        const plan = (getQueryParam("plan") || "personal").toLowerCase();
+        return PLANS[plan] ? plan : "personal";
+      }
+
+      function renderPlan() {
+        const key = getPlanKey();
+        const p = PLANS[key];
+
+        document.getElementById("nav-title").textContent = "填寫身分資料 - " + p.name;
+        document.title = "WAVE ART MALL - 填寫身分資料 - " + p.name;
+        const blessingEl = document.getElementById("plan-blessing");
+        if (key === "savior") {
+          blessingEl.innerHTML =
+            '救世主(者)之沁身靈特赦 助助其 修行 修練 修圓 精進 超越 突破 <span class="savior-inline-glyphs">&#xA006;&#xA006;&#xA007;&#xA007;</span> 煞煞';
+        } else {
+          blessingEl.textContent = p.blessing;
+        }
+        document.getElementById("plan-sub").textContent = p.sub;
+
+        // 根據 identity 參數更新圖片
+        const identity = getQueryParam("identity") || key;
+        const iconEl = document.getElementById("identity-icon");
+        if (p.icon.startsWith("../assets/")) {
+          iconEl.src = p.icon;
+        } else {
+          iconEl.src = `../assets/identity/${identity}.png`;
+        }
+
+        const tagsEl = document.getElementById("plan-tags");
+        tagsEl.innerHTML = "";
+        COMMON_TAGS.forEach((t) => {
+          const span = document.createElement("span");
+          span.className = "";
+          span.textContent = t;
+          tagsEl.appendChild(span);
+        });
+        document.getElementById("plan-note").textContent = COMMON_NOTE;
+
+        document.getElementById("summary-label").textContent = "身分驗證（" + p.name + " 特優價）";
+        document.getElementById("summary-price").textContent = formatPrice(p.special);
+        document.getElementById("summary-total").textContent = formatPrice(p.special);
+      }
+
+      function goBack() {
+        window.location.href = "holiday-entry.html";
+      }
+
+      // 確認結帳：驗證表單 → 登入檢查 → 寫入 orders 表 → 導向訂單確認頁
+      async function confirmCheckout(event) {
+        if (event) event.preventDefault();
+
+        const fields = [
+          ["f-name", "代表人姓名"],
+          ["f-age", "虛歲"],
+          ["f-phone", "電話"],
+          ["f-address", "地址"],
+        ];
+        const missing = fields.filter(([id]) => !document.getElementById(id).value.trim());
+        const formError = document.getElementById("form-error");
+        fields.forEach(([id]) => document.getElementById(id).classList.remove("field-invalid"));
+
+        if (missing.length) {
+          const missingLabels = missing.map(([, label]) => label).join("、");
+          formError.textContent = `沒有填寫基本資料，此筆無效。請填寫：${missingLabels}`;
+          formError.classList.add("is-visible");
+          missing.forEach(([id]) => document.getElementById(id).classList.add("field-invalid"));
+          document.getElementById(missing[0][0]).focus();
+          showToast(`沒有填寫基本資料，此筆無效：${missingLabels}`, "error");
+          return;
+        }
+
+        formError.textContent = "";
+        formError.classList.remove("is-visible");
+        const name = document.getElementById("f-name").value.trim();
+        const age = document.getElementById("f-age").value.trim();
+        const phone = document.getElementById("f-phone").value.trim();
+        const address = document.getElementById("f-address").value.trim();
+
+        // 地赦下單需登入且 Email 已驗證，才能寫入 orders 表
+        const user = await requireLogin("holiday-form.html" + window.location.search);
+        if (!user) return;
+
+        const key = getPlanKey();
+        const p = PLANS[key];
+        const identity = getQueryParam("identity") || key;
+        const agent = document.getElementById("f-agent").value.trim();
+
+        const basePayload = {
+          user_id: user.id,
+          status: "待處理",
+          subtotal: p.special,
+          shipping_fee: 0,
+          tax: 0,
+          discount: 0,
+          total_amount: p.special,
+          recipient_name: name,
+          phone: phone,
+          email: user.email,
+          city: "",
+          district: "",
+          street_address: address,
+          payment_method: "bank_transfer",
+          payment_status: "pending",
+          customer_note: `${p.name} 特赦方案｜身分:${identity}｜虛歲:${age}｜代理人:${agent || "無"}`,
+        };
+        const holidayPayload = {
+          ...basePayload,
+          identity_type: identity,
+          age: /^\d+$/.test(age) ? parseInt(age, 10) : null,
+          agent_name: agent || null,
+        };
+
+        try {
+          let newOrder;
+          let orderErr;
+          ({ data: newOrder, error: orderErr } = await supabaseClient
+            .from("orders")
+            .insert(holidayPayload)
+            .select()
+            .single());
+
+          if (orderErr && (orderErr.code === "42703" || orderErr.code === "PGRST204")) {
+            ({ data: newOrder, error: orderErr } = await supabaseClient
+              .from("orders")
+              .insert(basePayload)
+              .select()
+              .single());
+          }
+
+          if (orderErr) throw orderErr;
+
+          // 收集訂單資料供訂單確認頁讀取（含資料庫回傳的真實訂單編號）
+          const orderData = {
+            orderId: newOrder.id,
+            orderNumber: newOrder.order_number,
+            userId: user.id,
+            name: name,
+            age: age,
+            phone: phone,
+            address: address,
+            agent: agent,
+            identity: identity,
+            plan: key,
+            planName: p.name,
+            planData: p,
+            specialPrice: p.special,
+            createdAt: new Date().toISOString(),
+          };
+
+          localStorage.setItem("orderData", JSON.stringify(orderData));
+          window.location.href = "order-confirm.html";
+        } catch (e) {
+          console.error("[confirmCheckout] 建立訂單失敗:", e);
+          showToast("訂單建立失敗：" + (e.message || "請稍後再試"), "error");
+        }
+      }
+
+      document.getElementById("btn-confirm").addEventListener("click", confirmCheckout);
+
+      // 欄位聚焦高亮（與 MD_S2 一致的微互動）
+      document.querySelectorAll("#identity-form input").forEach((input) => {
+        input.addEventListener("focus", () => {
+          const label = input.parentElement.querySelector("label");
+          if (label) label.classList.add("text-neon-cyan");
+        });
+        input.addEventListener("blur", () => {
+          const label = input.parentElement.querySelector("label");
+          if (label) label.classList.remove("text-neon-cyan");
+        });
+      });
+
+      // 页面载入时立即检查登录状态，避免用户填写大量资料后才发现需要登录
+      // 这是基于个资法的要求：所有需要输入个人资料的页面都必须先登录
+      document.addEventListener("DOMContentLoaded", async () => {
+        const user = await requireLogin("holiday-form.html" + window.location.search);
+        if (!user) return; // requireLogin 会自动跳转到登录页面
+        
+        renderPlan();
+      });
+      // 若 DOMContentLoaded 已觸發（腳本置底），仍確保渲染一次
+      if (document.readyState !== "loading") {
+        (async () => {
+          const user = await requireLogin("holiday-form.html" + window.location.search);
+          if (!user) return;
+          renderPlan();
+        })();
+      }
+    </script>
+
+    <!-- PWA Service Worker 註冊（404 已由根目錄 sw.js 補齊） -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("../sw.js").catch((err) => {
+          console.warn("Service Worker 註冊失敗:", err);
+        });
+      }
+    </script>
+  </body>
+</html>

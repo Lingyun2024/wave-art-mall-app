@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>歷史訂單 | WAVE ART MALL</title>
+
+<!-- PWA 設定（讓網站可以「加到主畫面」變成手機 App 圖示） -->
+<link rel="manifest" href="../manifest.json" />
+<meta name="theme-color" content="#020203" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/material-symbols.css">
+<script src="../js/tailwind-config.js"></script>
+<link rel="stylesheet" href="../css/style.css" />
+
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+
+  /* 訂單明細預設直接展開，客戶一進頁面就能看到買了什麼。 */
+  .order-detail-panel {
+    max-height: 1000px;
+    overflow: hidden;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  /* 订单卡片恢复为备份页的细金边玻璃面板，避免动态表格变成普通白底表格。 */
+  #order-list > .glass-card {
+    background: rgba(20, 19, 20, 0.62);
+    border-color: rgba(233, 195, 73, 0.22);
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.22);
+  }
+  #order-list > .glass-card:hover {
+    border-color: rgba(0, 255, 255, 0.55);
+    box-shadow: 0 0 24px rgba(0, 255, 255, 0.1);
+  }
+  .order-filter-btn {
+    min-height: 40px;
+    transition: all 0.2s ease;
+  }
+  .order-filter-btn:hover {
+    border-color: #00FFFF;
+    color: #00FFFF;
+  }
+
+  .order-filter-btn.active {
+    background: #e9c349;
+    color: #020203;
+    border-color: #e9c349;
+    font-weight: 700;
+  }
+
+  /* ===== 表格樣式 ===== */
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: rgba(2, 2, 3, 0.18);
+  }
+
+  .order-table th {
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: #e9c349;
+    border-bottom: 1px solid rgba(233, 195, 73, 0.2);
+    white-space: nowrap;
+  }
+
+  .order-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(233, 195, 73, 0.08);
+    vertical-align: middle;
+    color: #c5c5c5;
+  }
+
+  .order-table tr:hover td {
+    background: rgba(233, 195, 73, 0.03);
+  }
+
+  /* 手機版：表格改成卡片堆疊 */
+  @media (max-width: 640px) {
+    .order-table,
+    .order-table thead,
+    .order-table tbody,
+    .order-table th,
+    .order-table td,
+    .order-table tr {
+      display: block;
+    }
+
+    .order-table thead {
+      display: none;
+    }
+
+    .order-table tr {
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(233, 195, 73, 0.15);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .order-table td {
+      padding: 4px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: none;
+    }
+
+    .order-table td::before {
+      content: attr(data-label);
+      font-size: 11px;
+      color: #888;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .order-table td > span,
+    .order-table td > div,
+    .order-table td > a,
+    .order-table td > button {
+      text-align: right;
+      width: 100%;
+    }
+  }
+
+  /* 匯款資訊區塊 */
+  .transfer-box {
+    background: rgba(2, 2, 3, 0.6);
+    border: 1px solid rgba(233, 195, 73, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+
+  .transfer-box .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(233, 195, 73, 0.08);
+  }
+
+  .transfer-box .info-row:last-child {
+    border-bottom: none;
+  }
+
+  /* 儲存按鈕 */
+  .save-note-btn {
+    background: #e9c349;
+    color: #020203;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .save-note-btn:hover {
+    box-shadow: 0 0 12px rgba(233, 195, 73, 0.3);
+  }
+
+  .save-note-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+</style>
+</head>
+<body class="min-h-screen pb-24 pt-16">
+
+<header class="site-header">
+  <div class="flex items-center gap-4">
+    <button onclick="history.back()" class="text-secondary active:scale-95 transition-transform">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <a href="../index.html" class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-widest text-secondary hidden md:block">WAVE ART MALL</a>
+  </div>
+  <div class="flex items-center gap-4">
+    <a id="nav-auth-link" href="auth.html" class="font-label-sm text-[11px] uppercase tracking-widest text-secondary hover:text-neon-cyan transition-colors">登入</a>
+    <a href="cart.html" class="relative text-starlight-white hover:text-secondary transition-colors">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span class="js-cart-badge cart-badge hidden">0</span>
+    </a>
+  </div>
+</header>
+
+<main class="pt-8 px-4 max-w-[1100px] mx-auto">
+  <div class="mb-10">
+    <h1 class="font-headline-xl text-headline-xl text-secondary mb-2">歷史訂單</h1>
+    <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Order History</p>
+    <a id="my-roster-link" href="my-roster.html" class="hidden mt-4 inline-block border border-secondary/40 text-secondary text-sm font-bold px-4 py-2 rounded hover:shadow-[0_0_15px_rgba(233,195,73,0.4)] transition-all">七七地赦 · 我的登記明細（可列印）</a>
+    <a href="mars-healing-history.html" class="mt-4 ml-2 inline-flex items-center gap-2 border border-secondary/40 text-secondary text-sm font-bold px-4 py-2 rounded hover:shadow-[0_0_15px_rgba(233,195,73,0.4)] transition-all">
+      <span class="material-symbols-outlined text-base">healing</span>
+      火星療癒 · 我的登記
+    </a>
+  </div>
+
+  <!-- 未登入時顯示的區塊 -->
+  <div id="guest-block" class="hidden text-center text-on-surface-variant py-24 space-y-4">
+    <span class="material-symbols-outlined text-6xl text-secondary/40">lock</span>
+    <p>請先登入才能查看您的歷史訂單</p>
+    <a href="auth.html" class="inline-block bg-secondary text-void-black font-bold px-6 py-3 rounded hover:shadow-[0_0_15px_rgba(233,195,73,0.4)] transition-all">前往登入</a>
+  </div>
+
+  <!-- 載入中 -->
+  <div id="loading-block" class="text-center text-on-surface-variant py-16">
+    <span class="loading-spinner"></span>
+    <p class="mt-4">正在載入訂單紀錄...</p>
+  </div>
+
+  <!-- 沒有任何訂單 -->
+  <div id="empty-block" class="hidden text-center text-on-surface-variant py-24 space-y-4">
+    <span class="material-symbols-outlined text-6xl text-secondary/40">receipt_long</span>
+    <p>您目前尚無任何訂單紀錄</p>
+    <a href="../index.html" class="inline-block bg-secondary text-void-black font-bold px-6 py-3 rounded hover:shadow-[0_0_15px_rgba(233,195,73,0.4)] transition-all">開始選購</a>
+  </div>
+
+  <!-- 篩選按鍵 -->
+  <div id="order-filter-tabs" class="hidden grid grid-cols-2 sm:flex gap-2 mb-6">
+    <button class="order-filter-btn px-4 py-2 rounded border border-secondary/40 text-sm text-secondary" data-filter="all">全部</button>
+    <button class="order-filter-btn px-4 py-2 rounded border border-secondary/40 text-sm text-secondary" data-filter="pending">待付款</button>
+    <button class="order-filter-btn px-4 py-2 rounded border border-secondary/40 text-sm text-secondary" data-filter="shipped">待收貨</button>
+    <button class="order-filter-btn px-4 py-2 rounded border border-secondary/40 text-sm text-secondary" data-filter="completed">訂單已完成</button>
+  </div>
+
+  <!-- 篩選後無結果 -->
+  <div id="filtered-empty-block" class="hidden text-center text-on-surface-variant py-14 space-y-3">
+    <span class="material-symbols-outlined text-5xl text-secondary/40">receipt_long</span>
+    <p>這個分類目前沒有訂單。</p>
+  </div>
+
+  <!-- ===== 訂單表格 ===== -->
+  <div id="order-list" class="space-y-4"></div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabaseClient.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+  /*
+    =========================================================
+    歷史訂單頁 - 表格格式版本
+    =========================================================
+    這段程式碼負責：
+    1. 確認使用者已登入
+    2. 從 orders 表取出這個使用者的所有訂單
+    3. 用表格方式呈現每筆訂單的摘要
+    4. 點擊展開可以看到商品明細、收件資料、匯款資訊
+    5. 待付款訂單可以取消、填寫帳號後五碼
+    6. 已完成訂單可以去評價
+  */
+
+  // 訂單狀態對應的顏色標籤
+  const STATUS_COLOR_MAP = {
+    "待付款": "bg-secondary/20 text-secondary",
+    "待處理": "bg-secondary/20 text-secondary",
+    "已出貨": "bg-neon-cyan/20 text-neon-cyan",
+    "已完成": "bg-green-500/20 text-green-400",
+    "已取消": "bg-red-500/20 text-red-400",
+  };
+
+  // 狀態對應的中文顯示名稱
+  const STATUS_LABEL_MAP = {
+    "待處理": "待付款",
+    "待付款": "待付款",
+    "已出貨": "待收貨",
+    "已完成": "已完成",
+    "已取消": "已取消",
+  };
+
+  // 取得目前篩選條件（從網址 ?filter=... 讀取）
+  const requestedFilter = new URLSearchParams(window.location.search).get("filter");
+  let currentOrderFilter = ["all", "pending", "shipped", "completed"].includes(requestedFilter) ? requestedFilter : "all";
+  let customerOrders = [];
+
+  // 記錄哪些訂單的商品明細已經載入過，避免重複查資料庫
+  const loadedOrderDetails = new Set();
+
+  // 初始化頁面：先檢查是否登入，再抓訂單
+  async function initOrderHistoryPage() {
+    const guestBlock = document.getElementById("guest-block");
+    const loadingBlock = document.getElementById("loading-block");
+    const emptyBlock = document.getElementById("empty-block");
+
+    const user = await getCurrentUser();
+    if (!user) {
+      loadingBlock.classList.add("hidden");
+      guestBlock.classList.remove("hidden");
+      return;
+    }
+
+    document.getElementById("my-roster-link").classList.remove("hidden");
+
+    try {
+      // 從 orders 表拿這個使用者的所有訂單，最新的排最前面
+      const { data, error } = await supabaseClient
+        .from("orders")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      loadingBlock.classList.add("hidden");
+
+      if (!data || data.length === 0) {
+        emptyBlock.classList.remove("hidden");
+        return;
+      }
+
+      renderOrderTable(data);
+    } catch (err) {
+      console.error("[initOrderHistoryPage] 拿訂單紀錄失敗:", err);
+      loadingBlock.classList.add("hidden");
+      showToast("訂單載入失敗，請重新整理頁面", "error");
+    }
+  }
+
+  // 判斷一筆訂單是否符合目前的篩選條件
+  function matchesOrderFilter(order) {
+    const status = order.status || "待處理";
+    if (currentOrderFilter === "all") return true;
+    if (currentOrderFilter === "pending") return status === "待處理" || status === "待付款";
+    if (currentOrderFilter === "shipped") return status === "已出貨";
+    return status === "已完成";
+  }
+
+  // 渲染訂單表格
+  function renderOrderTable(orders) {
+    customerOrders = orders;
+    const container = document.getElementById("order-list");
+    const tabs = document.getElementById("order-filter-tabs");
+    const filteredEmpty = document.getElementById("filtered-empty-block");
+    const filteredOrders = orders.filter(matchesOrderFilter);
+
+    tabs.classList.remove("hidden");
+    document.querySelectorAll(".order-filter-btn").forEach((button) => {
+      button.classList.toggle("active", button.dataset.filter === currentOrderFilter);
+    });
+
+    if (filteredOrders.length === 0) {
+      container.innerHTML = "";
+      filteredEmpty.classList.remove("hidden");
+      return;
+    }
+    filteredEmpty.classList.add("hidden");
+
+    container.innerHTML = filteredOrders.map((order) => {
+      const dateStr = new Date(order.created_at).toLocaleString("zh-TW");
+      const statusLabel = STATUS_LABEL_MAP[order.status] || order.status || "待處理";
+      const statusColor = STATUS_COLOR_MAP[order.status] || "bg-surface-container text-on-surface-variant";
+      const isPending = (order.status === "待處理" || order.status === "待付款");
+      const isCancelled = (order.status === "已取消");
+      const itemCount = order.item_count || 0;
+
+      return `
+        <div class="glass-card rounded-lg overflow-hidden" id="order-card-${order.id}">
+          <!-- 表格本體 -->
+          <table class="order-table">
+            <thead>
+              <tr>
+                <th>訂單編號</th>
+                <th>日期</th>
+                <th>狀態</th>
+                <th>單位</th>
+                <th>單價</th>
+                <th>總金額</th>
+                <th>收件人</th>
+                <th>商品</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="訂單編號">
+                  <span class="font-mono text-xs text-on-surface-variant">#${order.id}</span>
+                </td>
+                <td data-label="日期">${dateStr}</td>
+                <td data-label="狀態">
+                  <span class="status-badge ${statusColor}">${escapeHtml(statusLabel)}</span>
+                </td>
+                <td data-label="單位">
+                  <span class="text-sm text-on-surface-variant">載入中...</span>
+                </td>
+                <td data-label="單價">
+                  <span class="text-sm text-on-surface-variant">載入中...</span>
+                </td>
+                <td data-label="總金額">
+                  <span class="text-secondary font-bold">${formatPrice(order.total_amount)}</span>
+                </td>
+                <td data-label="收件人">
+                  <span class="text-sm">${escapeHtml(order.recipient_name || '-')}</span>
+                </td>
+                <td data-label="商品">
+                  <span class="text-sm text-on-surface-variant">${itemCount} 項商品</span>
+                </td>
+                <td data-label="操作">
+                  <button class="toggle-detail-btn text-xs text-neon-cyan hover:text-white underline transition-colors" data-order-id="${order.id}">
+                    展開明細
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 展開後的明細區塊（預設隱藏） -->
+          <div class="order-detail-panel hidden px-6 pb-6" id="order-detail-${order.id}">
+            <div class="border-t border-secondary/20 pt-4 space-y-4">
+
+              <!-- 已取消提示：讓客戶一眼就能看到訂單已取消，不用只靠會消失的提示訊息 -->
+              ${isCancelled ? `
+                <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded px-3 py-2">
+                  <span class="text-red-400 text-sm">⛔</span>
+                  <span class="text-red-400 text-sm font-bold">此訂單已取消</span>
+                </div>
+              ` : ''}
+
+              <!-- 收件資料 -->
+              <div>
+                <p class="text-xs text-secondary mb-2 tracking-wider">收件資料</p>
+                <div class="text-xs text-on-surface-variant space-y-1">
+                  <p>收件人：<span class="text-starlight-white">${escapeHtml(order.recipient_name || '-')}</span></p>
+                  <p>電話：<span class="text-starlight-white">${escapeHtml(order.phone || '-')}</span></p>
+                  <p>地址：<span class="text-starlight-white">${escapeHtml([order.city, order.district, order.street_address].filter(Boolean).join('') || '-')}</span></p>
+                  <p>付款方式：<span class="text-starlight-white">${escapeHtml(order.payment_method || '-')}</span></p>
+                </div>
+              </div>
+
+              <!-- 商品明細 -->
+              <div>
+                <p class="text-xs text-secondary mb-2 tracking-wider">商品明細</p>
+                <div id="order-items-${order.id}" class="space-y-3">
+                  <p class="text-xs text-on-surface-variant">載入中...</p>
+                </div>
+              </div>
+
+              <!-- 總計 -->
+              <div class="pt-3 border-t border-secondary/20 flex items-center justify-between">
+                <span class="font-label-sm text-sm text-on-surface-variant tracking-widest">本筆訂單總計</span>
+                <span class="font-headline-lg text-xl text-secondary">${formatPrice(order.total_amount)}</span>
+              </div>
+
+              <!-- 匯款資訊區塊（僅待付款訂單顯示） -->
+              ${isPending ? `
+                <div class="transfer-box">
+                  <p class="text-xs text-secondary mb-3 tracking-widest">匯款資訊</p>
+                  <div class="info-row">
+                    <span class="text-on-surface-variant">匯款資訊</span>
+                    <span class="text-starlight-white">請向官方人員確認</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="text-on-surface-variant">安全提醒</span>
+                    <span class="text-starlight-white">網站不公開收款帳戶</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="text-on-surface-variant">應匯總金額</span>
+                    <span class="text-secondary font-bold">${formatPrice(order.total_amount)}</span>
+                  </div>
+                  <div class="mt-3 pt-3 border-t border-secondary/15">
+                    <label class="block text-xs text-on-surface-variant mb-1" for="transfer-note-${order.id}">備註欄：請填寫帳號後五碼</label>
+                    <div class="flex gap-2">
+                      <input id="transfer-note-${order.id}" maxlength="5" inputmode="numeric" placeholder="後五碼" value="${escapeHtml(order.transfer_note || '')}" class="flex-1 bg-surface-container border border-secondary/30 rounded px-3 py-2 text-sm text-starlight-white focus:outline-none focus:border-neon-cyan" />
+                      <button class="save-note-btn" onclick="saveTransferNote('${order.id}')">儲存</button>
+                    </div>
+                  </div>
+                </div>
+              ` : ''}
+
+              <!-- 底部操作列 -->
+              <div class="pt-2 flex items-center justify-between gap-4">
+                ${isPending ? `
+                  <button id="cancel-order-${order.id}" onclick="cancelPendingOrder('${order.id}')" class="text-xs text-red-400 hover:text-red-300 underline transition-colors">取消訂單</button>
+                ` : '<span></span>'}
+                ${isCancelled ? `
+                  <span class="text-xs text-on-surface-variant">已取消，無法評價</span>
+                ` : `
+                  <a href="review.html?order_id=${order.id}" class="text-neon-cyan text-xs underline">前往評價此訂單商品</a>
+                `}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    // 綁定「展開明細」按鈕
+    document.querySelectorAll(".toggle-detail-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        toggleOrderDetail(button.dataset.orderId);
+      });
+    });
+
+    // 自動載入所有訂單的商品明細（表格裡先顯示「N 項商品」，點展開才顯示詳細品名）
+    filteredOrders.forEach((order) => {
+      if (!loadedOrderDetails.has(order.id)) {
+        loadedOrderDetails.add(order.id);
+        loadOrderItems(order.id);
+      }
+    });
+  }
+
+  // 展開 / 收合訂單明細
+  function toggleOrderDetail(orderId) {
+    const panel = document.getElementById(`order-detail-${orderId}`);
+    const btn = document.querySelector(`.toggle-detail-btn[data-order-id="${orderId}"]`);
+    if (!panel || !btn) return;
+
+    const isOpen = !panel.classList.contains("hidden");
+    if (isOpen) {
+      panel.classList.add("hidden");
+      btn.textContent = "展開明細";
+    } else {
+      panel.classList.remove("hidden");
+      btn.textContent = "收起明細";
+      if (!loadedOrderDetails.has(orderId)) {
+        loadedOrderDetails.add(orderId);
+        loadOrderItems(orderId);
+      }
+    }
+  }
+
+  // 從 order_items 表取出這筆訂單的商品
+  async function loadOrderItems(orderId) {
+    const container = document.getElementById(`order-items-${orderId}`);
+    if (!container) return;
+
+    try {
+      const { data, error } = await supabaseClient
+        .from("order_items")
+        .select("*")
+        .eq("order_id", orderId);
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        container.innerHTML = `<p class="text-xs text-on-surface-variant">此訂單無商品明細</p>`;
+        return;
+      }
+
+      // 計算總數量和平均單價（用來顯示在表格的「單位」「單價」欄位）
+      const totalQty = data.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      const totalPrice = data.reduce((sum, item) => sum + (item.unit_price || 0) * (item.quantity || 0), 0);
+      const avgUnitPrice = totalQty > 0 ? Math.round(totalPrice / totalQty) : 0;
+
+      // 更新表格裡的「單位」和「單價」欄位（如果這兩個 td 存在的話）
+      const orderCard = document.getElementById(`order-card-${orderId}`);
+      if (orderCard) {
+        const qtyCell = orderCard.querySelector('td[data-label="單位"]');
+        const priceCell = orderCard.querySelector('td[data-label="單價"]');
+        if (qtyCell) qtyCell.innerHTML = `<span class="text-sm">${totalQty}</span>`;
+        if (priceCell) priceCell.innerHTML = `<span class="text-sm">${formatPrice(avgUnitPrice)}</span>`;
+      }
+
+      container.innerHTML = data.map((item) => `
+        <div class="flex items-center gap-3">
+          <img class="w-12 h-12 object-cover rounded border border-secondary/20" src="${escapeHtml(item.product_image || '')}" onerror="this.src='https://placehold.co/100x100/141314/e9c349?text=WAVE'" />
+          <div class="flex-grow">
+            <p class="text-sm text-starlight-white">${escapeHtml(item.product_name)}</p>
+            <p class="text-xs text-on-surface-variant">單價 ${formatPrice(item.unit_price)} x ${item.quantity}</p>
+          </div>
+        </div>
+      `).join("");
+    } catch (err) {
+      console.error("[loadOrderItems] 拿商品明細失敗:", err);
+      container.innerHTML = `<p class="text-xs text-error">商品明細載入失敗</p>`;
+    }
+  }
+
+  // 取消待付款訂單（只能取消自己的訂單，且只能取消待付款狀態）
+  async function cancelPendingOrder(orderId) {
+    const order = customerOrders.find((item) => item.id === orderId);
+    if (!order || !["待處理", "待付款"].includes(order.status || "待處理")) {
+      showToast("此訂單目前無法取消", "error");
+      return;
+    }
+    if (!window.confirm("確定要取消這筆訂單嗎？取消後無法恢復。")) return;
+
+    const button = document.getElementById(`cancel-order-${orderId}`);
+    button.disabled = true;
+    button.textContent = "取消中...";
+    try {
+      const user = await getCurrentUser();
+      if (!user) throw new Error("請先登入");
+
+      // 同時限制只能改自己的訂單、且狀態必須是待付款。
+      // .select().single() 很重要：若資料庫權限（RLS）阻擋更新、
+      // 或訂單狀態已變更，Supabase 不會再被當成「取消成功」。
+      const { data: updatedOrder, error } = await supabaseClient
+        .from("orders")
+        .update({ status: "已取消" })
+        .eq("id", orderId)
+        .eq("user_id", user.id)
+        .in("status", ["待處理", "待付款"])
+        .select("id, status")
+        .single();
+
+      if (error || !updatedOrder || updatedOrder.status !== "已取消") {
+        throw error || new Error("資料庫沒有更新這筆訂單");
+      }
+
+      // 只有資料庫明確回傳「已取消」，畫面才從待付款分類移除。
+      order.status = updatedOrder.status;
+      showToast("訂單已取消，已從待付款清單移除");
+      renderOrderTable(customerOrders);
+    } catch (err) {
+      console.error("[cancelPendingOrder] 取消訂單失敗:", err);
+      showToast("取消訂單失敗：" + (err.message || "請稍後再試"), "error");
+      button.disabled = false;
+      button.textContent = "取消訂單";
+    }
+  }
+
+  // ===== 儲存「帳號後五碼」備註 =====
+  // 【重要修改】填一次就同步到這個客戶所有待付款訂單，不用每筆都重複填。
+  // 新訂單也會自動帶入之前儲存過的後五碼。
+  async function saveTransferNote(orderId) {
+    const input = document.getElementById(`transfer-note-${orderId}`);
+    if (!input) return;
+
+    const note = input.value.trim();
+    if (note.length !== 5) {
+      showToast("請填寫完整的五個數字", "error");
+      return;
+    }
+
+    const button = input.nextElementSibling;
+    const originalText = button.textContent;
+    button.disabled = true;
+    button.textContent = "儲存中...";
+
+    try {
+      const user = await getCurrentUser();
+      if (!user) throw new Error("請先登入");
+
+      // 同步到這個客戶所有「待處理」或「待付款」的訂單
+      const { error } = await supabaseClient
+        .from("orders")
+        .update({ transfer_note: note })
+        .eq("user_id", user.id)
+        .in("status", ["待處理", "待付款"]);
+
+      if (error) throw error;
+
+      // 同步更新記憶體中所有待付款訂單的 transfer_note，畫面上所有輸入框都會自動更新
+      customerOrders.forEach((order) => {
+        if (order.status === "待處理" || order.status === "待付款") {
+          order.transfer_note = note;
+          const otherInput = document.getElementById(`transfer-note-${order.id}`);
+          if (otherInput && otherInput !== input) {
+            otherInput.value = note;
+          }
+        }
+      });
+
+      showToast("已儲存帳號後五碼，並同步到所有待付款訂單");
+    } catch (err) {
+      console.error("[saveTransferNote] 儲存帳號後五碼失敗:", err);
+      showToast("儲存失敗，請稍後再試", "error");
+    } finally {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
+  }
+
+  // 篩選按鍵點擊事件
+  document.getElementById("order-filter-tabs").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-filter]");
+    if (!button) return;
+    currentOrderFilter = button.dataset.filter;
+    renderOrderTable(customerOrders);
+  });
+
+  // 頁面載入時執行
+  document.addEventListener("DOMContentLoaded", initOrderHistoryPage);
+</script>
+
+<!-- Service Worker 註冊（離線快取、可安裝成 App） -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch((err) => {
+      console.warn("Service Worker 註冊失敗：", err);
+    });
+  }
+</script>
+</body>
+</html>

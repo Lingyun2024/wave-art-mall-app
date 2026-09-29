@@ -1,0 +1,519 @@
+﻿<!doctype html>
+<html class="dark" lang="zh-Hant" style="">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>WAVE ART MALL - 療癒</title>
+    <!-- 社群分享預覽設定（LINE / Facebook） -->
+    <meta name="description" content="WAVE ART MALL 療癒系列——以藝術與能量療癒為核心的精選收藏。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="WAVE ART MALL" />
+    <meta property="og:title" content="WAVE ART MALL - 療癒" />
+    <meta
+      property="og:description"
+      content="WAVE ART MALL 療癒系列——以藝術與能量療癒為核心的精選收藏。"
+    />
+    <meta property="og:image" content="https://wave-art-mall.vercel.app/icons/icon-512.png" />
+    <meta
+      property="og:url"
+      content="https://wave-art-mall.vercel.app/pages/soft-power-healing.html"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Playfair+Display:wght@400;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-on-surface": "#313030",
+              "outline-variant": "#46464b",
+              "secondary-fixed-dim": "#e9c349",
+              "secondary-container": "#af8d11",
+              "on-primary-fixed-variant": "#46464c",
+              "surface-tint": "#c7c6cd",
+              "on-surface-variant": "#c7c6cb",
+              "on-tertiary": "#372f27",
+              "surface-container-high": "#2a2a2a",
+              "secondary-fixed": "#ffe088",
+              secondary: "#e9c349",
+              "on-secondary-fixed-variant": "#574500",
+              background: "#141314",
+              "primary-fixed-dim": "#c7c6cd",
+              "void-black": "#020203",
+              "tertiary-container": "#100a05",
+              "on-primary-container": "#797980",
+              surface: "#141314",
+              "on-error-container": "#ffdad6",
+              "surface-variant": "#353435",
+              "on-secondary-container": "#342800",
+              error: "#ffb4ab",
+              "error-container": "#93000a",
+              "neon-cyan": "#00FFFF",
+              outline: "#919095",
+              "surface-container": "#201f20",
+              "inverse-primary": "#5e5e64",
+              "primary-container": "#0a0b10",
+              "primary-fixed": "#e3e1e9",
+              "tertiary-fixed": "#efe0d5",
+              "on-tertiary-container": "#83786f",
+              "surface-container-highest": "#353435",
+              "surface-container-lowest": "#0e0e0e",
+              "on-primary": "#2f3036",
+              tertiary: "#d2c4b9",
+              "on-surface": "#e5e2e2",
+              "on-primary-fixed": "#1a1b21",
+              "on-tertiary-fixed": "#211a14",
+              "tertiary-fixed-dim": "#d2c4b9",
+              "surface-bright": "#3a3939",
+              "surface-dim": "#141314",
+              "on-secondary-fixed": "#241a00",
+              "galactic-purple": "#8A2BE2",
+              "on-background": "#e5e2e2",
+              "on-error": "#690005",
+              "on-tertiary-fixed-variant": "#4e453d",
+              "inverse-surface": "#e5e2e2",
+              "starlight-white": "#F9F9F9",
+              "surface-container-low": "#1c1b1c",
+              "on-secondary": "#3c2f00",
+              primary: "#c7c6cd",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              unit: "8px",
+              "margin-mobile": "20px",
+              "container-max": "1440px",
+              "margin-desktop": "80px",
+              gutter: "24px",
+            },
+            fontFamily: {
+              "body-md": ["Manrope", "sans-serif"],
+              "label-sm": ["JetBrains Mono", "monospace"],
+              "headline-lg-mobile": ["Playfair Display", "serif"],
+              "headline-lg": ["Playfair Display", "serif"],
+              "headline-xl": ["Playfair Display", "serif"],
+            },
+            fontSize: {
+              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+              "label-sm": [
+                "12px",
+                { lineHeight: "1.0", letterSpacing: "0.1em", fontWeight: "500" },
+              ],
+              "headline-lg-mobile": ["28px", { lineHeight: "1.3", fontWeight: "600" }],
+              "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "600" }],
+              "headline-xl": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: theme("colors.primary-container");
+        color: theme("colors.on-surface");
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+      }
+
+      .gold-gradient-border {
+        position: relative;
+      }
+
+      .gold-gradient-border::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.2) 0%,
+          rgba(233, 195, 73, 0.4) 100%
+        );
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+
+      .glass-panel {
+        background: rgba(20, 19, 20, 0.25);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+
+      .neon-glow-hover:hover {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      }
+
+      .galactic-glow-hover:hover {
+        box-shadow: 0 0 30px rgba(138, 43, 226, 0.4);
+      }
+
+      .bg-gradient-radial {
+        background-image: radial-gradient(circle at center, var(--tw-gradient-stops));
+      }
+
+      /* Subtle atmospheric dust particles */
+      .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        background-image:
+          radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0)),
+          radial-gradient(1px 1px at 40px 70px, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0)),
+          radial-gradient(1px 1px at 50px 160px, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0)),
+          radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0)),
+          radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0));
+        background-repeat: repeat;
+        background-size: 200px 200px;
+        animation: drift 100s linear infinite;
+      }
+
+      @keyframes drift {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(-200px);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-primary-container relative">
+    <!-- Atmospheric Background Gradients -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+      <div
+        class="absolute top-0 left-0 w-[800px] h-[800px] bg-galactic-purple/10 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2"
+      ></div>
+      <div
+        class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[100px] translate-x-1/3 translate-y-1/3"
+      ></div>
+    </div>
+    <div class="particles"></div>
+    <!-- TopAppBar -->
+    <header
+      class="bg-background/80 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-secondary/20 shadow-[0_0_20px_rgba(0,255,255,0.1)]"
+    >
+      <div
+        class="flex justify-between items-center px-margin-mobile h-16 w-full max-w-container-max mx-auto"
+      >
+        <a
+          href="./soft-power.html"
+          aria-label="返回軟實力頁面"
+          class="text-secondary hover:text-neon-cyan transition-colors duration-300"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h1
+          class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-secondary font-bold uppercase md:font-headline-lg md:text-headline-lg md:font-extrabold"
+        >
+          WAVE ART MALL
+        </h1>
+        <div class="flex items-center gap-gutter">
+          <nav class="hidden md:flex gap-6 mr-8 font-label-sm text-label-sm">
+            <a
+              class="text-on-surface-variant hover:text-neon-cyan transition-colors duration-300"
+              href="#"
+            >
+              藝廊
+            </a>
+            <a
+              class="text-secondary font-bold hover:text-neon-cyan transition-colors duration-300 border-b-2 border-secondary pb-1"
+              href="#"
+            >
+              療癒
+            </a>
+            <a
+              class="text-on-surface-variant hover:text-neon-cyan transition-colors duration-300"
+              href="#"
+            >
+              拍賣
+            </a>
+            <a
+              class="text-on-surface-variant hover:text-neon-cyan transition-colors duration-300"
+              href="#"
+            >
+              個人
+            </a>
+          </nav>
+          <button
+            class="text-on-surface-variant hover:text-neon-cyan transition-colors duration-300 active:scale-95 transition-transform"
+            aria-label="購物袋"
+          >
+            <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main
+      class="flex-grow pt-[100px] pb-margin-desktop px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full relative z-10"
+    >
+      <!-- Top Preview Window / Hero Section -->
+      <section class="mb-16 md:mb-24">
+        <div
+          class="relative w-full aspect-[16/10] md:aspect-[21/9] rounded-xl overflow-hidden glass-panel gold-gradient-border shadow-2xl"
+        >
+          <div class="absolute inset-0 bg-void-black/40 z-10"></div>
+          <img
+            alt="療癒主視覺預覽"
+            class="absolute inset-0 w-full h-full object-contain opacity-80"
+            src="../assets/soft-power/healing-hero.jpg"
+          />
+          <div
+            class="absolute inset-0 z-20 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-t from-void-black/80 via-transparent to-transparent"
+          >
+            <span
+              class="material-symbols-outlined text-[64px] text-secondary mb-4 drop-shadow-lg"
+              style="
+                font-variation-settings:
+                  &quot;FILL&quot; 0,
+                  &quot;wght&quot; 200;
+              "
+            >
+              play_circle
+            </span>
+            <h2 class="font-headline-xl text-headline-xl text-starlight-white mb-2 drop-shadow-md">
+              探索療癒藝術
+            </h2>
+            <p
+              class="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto drop-shadow"
+            >
+              沉浸於精選的影音體驗，找回內在平衡並提升心靈能量。
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- Section Header -->
+      <div class="text-center mb-16 md:mb-24 flex flex-col items-center justify-center">
+        <h2
+          class="font-headline-xl text-headline-xl text-secondary mb-4 tracking-tight drop-shadow-[0_0_10px_rgba(233,195,73,0.3)]"
+        >
+          療癒
+        </h2>
+        <div class="flex items-center gap-4">
+          <div class="h-px w-12 bg-gradient-to-r from-transparent to-secondary/50"></div>
+          <p class="font-label-sm text-label-sm text-outline-variant uppercase tracking-[0.2em]">
+            療癒分類選擇
+          </p>
+          <div class="h-px w-12 bg-gradient-to-l from-transparent to-secondary/50"></div>
+        </div>
+      </div>
+      <!-- 2x2 Bento Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-5xl mx-auto">
+        <!-- Card 1: Light Healing -->
+        <a
+          class="group relative block min-h-[360px] aspect-auto md:aspect-[4/3] rounded-lg overflow-hidden glass-panel gold-gradient-border galactic-glow-hover transition-all duration-500 hover:-translate-y-2"
+          href="#"
+        >
+          <div
+            class="absolute inset-0 bg-void-black/80 group-hover:bg-void-black/60 transition-colors duration-500 z-10"
+          ></div>
+          <div class="absolute inset-4 border border-secondary/20 z-20 pointer-events-none"></div>
+          <img
+            alt="光療主視覺"
+            class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity duration-700 group-hover:scale-105 ease-out"
+            src="../assets/soft-power/light-healing.jpg"
+          />
+          <div
+            class="absolute inset-0 z-30 flex flex-col items-center justify-center p-8 text-center"
+          >
+            <div
+              class="w-32 h-32 md:w-48 md:h-48 rounded-full border-2 border-secondary/50 flex items-center justify-center mb-6 md:mb-8 group-hover:border-neon-cyan group-hover:shadow-[0_0_40px_rgba(0,255,255,0.6)] transition-all duration-500 backdrop-blur-sm bg-background/40 shadow-[0_0_30px_rgba(233,195,73,0.4)]"
+            >
+              <img
+                src="../assets/soft-power/light-healing.jpg"
+                alt="光療 - 28星宿圖示"
+                class="w-full h-full object-contain p-2 rounded-full drop-shadow-[0_0_15px_rgba(233,195,73,0.8)] drop-shadow-[0_0_20px_rgba(233,195,73,0.9)]"
+              />
+            </div>
+            <h3 class="font-headline-lg text-headline-lg text-starlight-white mb-2">光療</h3>
+            <p class="font-label-sm text-label-sm text-secondary/80 uppercase tracking-widest">
+              光療
+            </p>
+            <div
+              class="mt-8 h-px w-0 group-hover:w-24 bg-neon-cyan transition-all duration-500"
+            ></div>
+          </div>
+        </a>
+        <!-- Card 2: Firmament Healing -->
+        <a
+          class="group relative block min-h-[360px] aspect-auto md:aspect-[4/3] rounded-lg overflow-hidden glass-panel gold-gradient-border galactic-glow-hover transition-all duration-500 hover:-translate-y-2 md:mt-12"
+          href="#"
+        >
+          <div
+            class="absolute inset-0 bg-void-black/80 group-hover:bg-void-black/60 transition-colors duration-500 z-10"
+          ></div>
+          <div class="absolute inset-4 border border-secondary/20 z-20 pointer-events-none"></div>
+          <img
+            alt="Firmament Healing"
+            class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity duration-700 group-hover:scale-105 ease-out"
+            src="../assets/soft-power/firmament-healing.jpg"
+          />
+          <div
+            class="absolute inset-0 z-30 flex flex-col items-center justify-center p-8 text-center"
+          >
+            <div
+              class="w-48 h-48 rounded-full border-2 border-secondary/50 flex items-center justify-center mb-8 group-hover:border-galactic-purple group-hover:shadow-[0_0_40px_rgba(138,43,226,0.7)] transition-all duration-500 backdrop-blur-sm bg-background/40 shadow-[0_0_30px_rgba(233,195,73,0.4)]"
+            >
+              <img
+                src="../assets/soft-power/firmament-healing.jpg"
+                alt="蒼穹療癒 - 萬星萬宿圖示"
+                class="w-full h-full object-contain p-2 rounded-full drop-shadow-[0_0_15px_rgba(233,195,73,0.8)] drop-shadow-[0_0_20px_rgba(233,195,73,0.9)]"
+              />
+            </div>
+            <h3 class="font-headline-lg text-headline-lg text-starlight-white mb-2">蒼穹療癒</h3>
+            <p class="font-label-sm text-label-sm text-secondary/80 uppercase tracking-widest">
+              Firmament Healing
+            </p>
+            <div
+              class="mt-8 h-px w-0 group-hover:w-24 bg-galactic-purple transition-all duration-500"
+            ></div>
+          </div>
+        </a>
+        <!-- Card 3: Phytoncide Healing -->
+        <a
+          class="group relative block min-h-[360px] aspect-auto md:aspect-[4/3] rounded-lg overflow-hidden glass-panel gold-gradient-border galactic-glow-hover transition-all duration-500 hover:-translate-y-2"
+          href="#"
+        >
+          <div
+            class="absolute inset-0 bg-void-black/80 group-hover:bg-void-black/60 transition-colors duration-500 z-10"
+          ></div>
+          <div class="absolute inset-4 border border-secondary/20 z-20 pointer-events-none"></div>
+          <img
+            alt="Phytoncide Healing"
+            class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity duration-700 group-hover:scale-105 ease-out"
+            src="../assets/soft-power/phytoncide-healing.jpg"
+          />
+          <div
+            class="absolute inset-0 z-30 flex flex-col items-center justify-center p-8 text-center"
+          >
+            <div
+              class="w-48 h-48 rounded-full border-2 border-secondary/50 flex items-center justify-center mb-8 group-hover:border-[#98fb98] group-hover:shadow-[0_0_40px_rgba(152,251,152,0.6)] transition-all duration-500 backdrop-blur-sm bg-background/40 shadow-[0_0_30px_rgba(233,195,73,0.4)]"
+            >
+              <img
+                src="../assets/soft-power/phytoncide-healing.jpg"
+                alt="芬多精療癒"
+                class="w-full h-full object-contain p-2 rounded-full drop-shadow-[0_0_15px_rgba(233,195,73,0.8)] drop-shadow-[0_0_20px_rgba(233,195,73,0.9)]"
+              />
+            </div>
+            <h3 class="font-headline-lg text-headline-lg text-starlight-white mb-2">芬多精療癒</h3>
+            <p class="font-label-sm text-label-sm text-secondary/80 uppercase tracking-widest">
+              芬多精療癒
+            </p>
+            <div
+              class="mt-8 h-px w-0 group-hover:w-24 bg-[#98fb98] transition-all duration-500"
+            ></div>
+          </div>
+        </a>
+        <!-- Card 4: Mars Healing -->
+        <a
+          class="group relative block min-h-[360px] aspect-auto md:aspect-[4/3] rounded-lg overflow-hidden glass-panel gold-gradient-border galactic-glow-hover transition-all duration-500 hover:-translate-y-2 md:mt-12"
+          href="./mars-healing-intro.html"
+          aria-label="進入火星療癒專案說明"
+        >
+          <div
+            class="absolute inset-0 bg-void-black/80 group-hover:bg-void-black/60 transition-colors duration-500 z-10"
+          ></div>
+          <div class="absolute inset-4 border border-secondary/20 z-20 pointer-events-none"></div>
+          <img
+            alt="火星療癒主視覺"
+            class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity duration-700 group-hover:scale-105 ease-out"
+            src="../assets/soft-power/mars-healing.jpg"
+          />
+          <div
+            class="absolute inset-0 z-30 flex flex-col items-center justify-center p-8 text-center"
+          >
+            <div
+              class="w-32 h-32 md:w-48 md:h-48 rounded-full border-2 border-secondary/50 flex items-center justify-center mb-6 md:mb-8 group-hover:border-[#ff6b6b] group-hover:shadow-[0_0_40px_rgba(255,107,107,0.6)] transition-all duration-500 backdrop-blur-sm bg-background/40 shadow-[0_0_30px_rgba(233,195,73,0.4)]"
+            >
+              <img
+                src="../assets/soft-power/mars-healing.jpg"
+                alt="火星療癒 - 火星與衛星圖示"
+                class="w-full h-full object-contain p-2 rounded-full drop-shadow-[0_0_15px_rgba(233,195,73,0.8)] drop-shadow-[0_0_20px_rgba(233,195,73,0.9)]"
+              />
+            </div>
+            <h3 class="font-headline-lg text-headline-lg text-starlight-white mb-2">火星療癒</h3>
+            <p class="font-label-sm text-label-sm text-secondary/80 uppercase tracking-widest">
+              Mars Healing
+            </p>
+            <div
+              class="mt-8 h-px w-0 group-hover:w-24 bg-[#ff6b6b] transition-all duration-500"
+            ></div>
+          </div>
+        </a>
+      </div>
+    </main>
+    <!-- BottomNavBar (Mobile Only) -->
+    <nav
+      class="bg-surface-container-lowest/90 backdrop-blur-xl fixed bottom-0 w-full z-50 shadow-[0_-10px_30px_rgba(138,43,226,0.15)] md:hidden"
+    >
+      <div class="flex justify-around items-center h-20 px-4 pb-safe">
+        <a
+          class="flex flex-col items-center justify-center text-outline-variant opacity-60 hover:text-neon-cyan transition-all active:scale-90 duration-200"
+          href="#"
+        >
+          <span class="material-symbols-outlined mb-1 text-[24px]" data-icon="grid_view">
+            grid_view
+          </span>
+          <span class="font-label-sm text-label-sm text-[10px]">藝廊</span>
+        </a>
+        <a
+          class="flex flex-col items-center justify-center text-secondary font-bold hover:text-neon-cyan transition-all active:scale-90 duration-200"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined mb-1 text-[24px]"
+            data-icon="auto_awesome"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+          >
+            auto_awesome
+          </span>
+          <span class="font-label-sm text-label-sm text-[10px]">HEALING</span>
+        </a>
+        <a
+          class="flex flex-col items-center justify-center text-outline-variant opacity-60 hover:text-neon-cyan transition-all active:scale-90 duration-200"
+          href="#"
+        >
+          <span class="material-symbols-outlined mb-1 text-[24px]" data-icon="gavel">gavel</span>
+          <span class="font-label-sm text-label-sm text-[10px]">AUCTION</span>
+        </a>
+        <a
+          class="flex flex-col items-center justify-center text-outline-variant opacity-60 hover:text-neon-cyan transition-all active:scale-90 duration-200"
+          href="#"
+        >
+          <span class="material-symbols-outlined mb-1 text-[24px]" data-icon="person">person</span>
+          <span class="font-label-sm text-label-sm text-[10px]">個人</span>
+        </a>
+      </div>
+    </nav>
+    <script>
+      // Optional JS for subtle interactions could go here.
+      // Tailwind handles most hover/active states effectively.
+    </script>
+  </body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ä¸ä¸å°èµ¦ç®¡ççµæ¡ç¸½è¡¨ | WAVE ART MALL</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabaseClient.js"></script>
+  <style>
+    :root { --ink:#171717; --paper:#fff; --screen:#151515; --panel:#222; --gold:#e9c349; --muted:#aaa; --danger:#d86d6d; --ok:#71c995; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--screen); color:#f4f4f4; font-family:"Microsoft JhengHei","PingFang TC",sans-serif; }
+    button { font:inherit; cursor:pointer; }
+    .app-bar { min-height:64px; display:flex; align-items:center; gap:12px; padding:10px max(20px,calc((100vw - 1440px)/2)); background:#0d0d0d; border-bottom:1px solid #444; }
+    .app-title { margin:0 auto 0 0; color:var(--gold); font-size:18px; font-weight:700; letter-spacing:.12em; }
+    .button { min-height:40px; padding:0 14px; border:1px solid #656565; border-radius:4px; color:#f4f4f4; background:transparent; }
+    .button.primary { color:#111; background:var(--gold); border-color:var(--gold); font-weight:700; }
+    .shell { max-width:1500px; margin:0 auto; padding:28px 20px 56px; }
+    .status { margin:0 0 18px; color:#ccc; font-size:14px; }
+    .notice { max-width:720px; margin:80px auto; padding:28px; text-align:center; background:var(--panel); border:1px solid #777; }
+    .notice h1 { margin:0 0 8px; color:var(--gold); font-size:24px; }
+    .section { margin:0 0 24px; padding:20px; background:var(--panel); border:1px solid #444; border-left:4px solid var(--gold); }
+    .section h2 { margin:0 0 16px; color:var(--gold); font-size:18px; letter-spacing:.08em; }
+    .meta { display:flex; flex-wrap:wrap; gap:8px 24px; color:#ccc; font-size:13px; }
+    .stats { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; }
+    .stat { min-height:94px; padding:14px; background:#191919; border:1px solid #4c4c4c; }
+    .stat span { display:block; color:var(--muted); font-size:12px; }
+    .stat strong { display:block; margin-top:10px; color:var(--gold); font-size:25px; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; background:#191919; font-size:13px; }
+    th,td { padding:10px 11px; border:1px solid #4a4a4a; text-align:left; vertical-align:middle; }
+    th { color:var(--gold); background:#101010; white-space:nowrap; }
+    td.amount { text-align:right; white-space:nowrap; }
+    .ok { color:var(--ok); }
+    .danger { color:var(--danger); }
+    .empty { color:var(--muted); text-align:center; padding:20px; }
+    .print-note { color:#bbb; font-size:12px; }
+    @media (max-width:900px) { .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .app-bar { padding:10px 14px; } .app-title { font-size:14px; } .button { padding:0 9px; } }
+    @media print {
+      @page { size:A4 portrait; margin:12mm; }
+      body { background:#fff; color:#111; }
+      .app-bar,.status,.screen-only,.notice { display:none !important; }
+      .shell { max-width:none; padding:0; }
+      .section { padding:0 0 14px; margin:0 0 18px; background:#fff; border:0; border-bottom:1px solid #222; }
+      .section h2 { color:#111; font-size:16px; }
+      .stats { grid-template-columns:repeat(5,1fr); gap:6px; }
+      .stat { min-height:70px; padding:7px; background:#fff; border:1px solid #555; }
+      .stat span { color:#444; font-size:10px; }
+      .stat strong { margin-top:5px; color:#111; font-size:17px; }
+      table { background:#fff; font-size:10px; }
+      th { color:#111; background:#eee; }
+      th,td { padding:5px 6px; border-color:#555; }
+      .section.page-break { break-before:page; }
+      .print-note { color:#333; }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-bar screen-only">
+    <button class="button" type="button" onclick="window.location.href='admin-roster.html'">è¿ååå</button>
+    <h1 class="app-title">ä¸ä¸å°èµ¦ Â· ç®¡ççµæ¡ç¸½è¡¨</h1>
+    <button class="button" type="button" onclick="loadSummary()">éæ°è¼å¥</button>
+    <button class="button primary" type="button" onclick="window.print()">åå° / å¦å­ PDF</button>
+  </header>
+  <main class="shell">
+    <p id="status" class="status">æ­£å¨ç¢ºèªç®¡çå¡æ¬éèè®åå ±åè³æ...</p>
+    <section id="no-permission" class="notice" hidden>
+      <h1>ç¡æ¬éå­å</h1>
+      <p>æ¬é åä¾ææ¬ç®¡çå¡æ¥çèè¼¸åºç¸½å¬å¸äº¤ä»å ±è¡¨ã</p>
+    </section>
+    <div id="report" hidden>
+      <section class="section">
+        <h2>æ¬2026ï¼ä¸åï¼å¹´åº¦ä¸ä¸å°èµ¦æ¥ç®¡ççµæ¡ç¸½è¡¨</h2>
+        <div class="meta"><span>æ¿è¾¦å®ä½ï¼å¤§ç´åæ</span><span>è£½è¡¨æ¥æï¼<strong id="report-date"></strong></span><span>è³æç­æ¸ï¼<strong id="report-count"></strong></span></div>
+      </section>
+      <section class="section">
+        <h2>ä¸ãç¸½è¦½</h2>
+        <div id="overview" class="stats"></div>
+      </section>
+      <section class="section page-break">
+        <h2>äºãä»£çç»è¨äººå½ç¸½</h2>
+        <div class="table-wrap"><table><thead><tr><th>ä»£çç»è¨äºº</th><th>ç­æ¸</th><th>éé¡</th><th>å·²ä»æ¬¾</th><th>å¯¦ä»ç¸½é¡</th></tr></thead><tbody id="agent-summary"></tbody></table></div>
+      </section>
+      <section class="section page-break">
+        <h2>ä¸ãç°å¸¸èå¾è¾¦</h2>
+        <div class="table-wrap"><table><thead><tr><th>è¨å®ç·¨è</th><th>ä»£è¡¨äºº</th><th>åé¡</th><th>èçåè¨»</th></tr></thead><tbody id="issue-list"></tbody></table></div>
+      </section>
+    </div>
+  </main>
+  <script>
+    const ADMIN_EMAILS = ['2022lingyun@gmail.com'];
+    const PLAN_COLUMNS = [
+      { key:'personal', label:'åäººèä¹' },
+      { key:'family', label:'å®¶åº­èä¹' },
+      { key:'business', label:'äºæ¥­èä¹' },
+      { key:'society', label:'ç¤¾æèä¹' },
+      { key:'savior', label:'æä¸(ä¸»)èä¹' }
+    ];
+    const SELF_GROUP = 'èªè¡ç»è¨';
+    const SELF_GROUP_DEFAULT_AGENT = 'é­æ­£é';
+    const SELF_GROUP_EXCEPTION_NAME = 'è¬å¹¸æ±';
+    const PAYMENT_LABELS = { bank_transfer:'éè¡è½å¸³', credit_card:'ä¿¡ç¨å¡', line_pay:'LINE Pay' };
+    const STATUS_LABELS = { pending:'å·²ä»æ¬¾', å¾èç:'å·²ä»æ¬¾', paid:'å·²ä»æ¬¾', confirmed:'å·²ä»æ¬¾', processing:'å·²ä»æ¬¾', shipped:'å·²ä»æ¬¾', delivered:'å·²ä»æ¬¾', å·²å®æ:'å·²ä»æ¬¾', å·²åæ¶:'å·²ä»æ¬¾' };
+    const SPECIAL_PAID_AGENTS = new Set(['é»éå', 'çå­¸æ', 'é­æ­£é', 'èä¿è¯', 'è¬èæ¨º', 'é³å¹¸å®¹']);
+    const NO_DISCOUNT_AGENTS = new Set(['é¡çè­']);
+    async function init() {
+      const user = await getCurrentUser();
+      if (!user) { window.location.href = getPathTo('pages/auth.html'); return; }
+      if (!ADMIN_EMAILS.includes(user.email)) { document.getElementById('status').hidden = true; document.getElementById('no-permission').hidden = false; return; }
+      await loadSummary();
+    }
+    async function loadSummary() {
+      const status = document.getElementById('status');
+      status.hidden = false;
+      status.textContent = 'æ­£å¨è®åä¸ä¸å°èµ¦å ±åè³æ...';
+      const { data, error } = await supabaseClient.from('orders').select('*').or('identity_type.not.is.null,customer_note.ilike.%ç¹èµ¦æ¹æ¡%').neq('status','å·²åæ¶').order('created_at',{ascending:true});
+      if (error) { status.textContent = 'è®åç¸½è¡¨å¤±æï¼' + error.message; return; }
+      renderReport(data || []);
+      status.textContent = `å·²è¼å¥ ${data.length} ç­ææå ±åè³æã`;
+    }
+    function renderReport(rows) {
+      document.getElementById('report').hidden = false;
+      document.getElementById('report-date').textContent = new Date().toLocaleDateString('zh-TW');
+      document.getElementById('report-count').textContent = rows.length;
+      const paid = rows;
+      const pending = [];
+      const total = sum(rows);
+      const paidTotal = sumPaid(rows);
+      document.getElementById('overview').innerHTML = [stat('ææç»è¨',rows.length),stat('ç¸½éé¡',money(total)),stat('å¯¦ä»ç¸½é¡',money(paidTotal)),stat('å·²ä»æ¬¾',paid.length),stat('ä»£çäººæ¸',new Set(rows.map(agent)).size)].join('');
+      renderAgents(rows);
+      renderIssues(rows);
+    }
+    function renderPlan(rows, paid, pending) {
+      const html = PLAN_COLUMNS.map(plan => { const own=rows.filter(row=>identity(row)===plan.key); return `<tr><td>${plan.label}</td><td>${own.length}</td><td class="amount">${money(sum(own))}</td><td>${own.filter(row=>isPaid(row)).length}</td><td>${money(sumPaid(own))}</td></tr>`; }).join('');
+      document.getElementById('plan-summary').innerHTML = html + `<tr><th>åè¨</th><th>${rows.length}</th><th class="amount">${money(sum(rows))}</th><th>${rows.filter(row=>isPaid(row)).length}</th><th>${money(sumPaid(rows))}</th></tr>`;
+    }
+    function renderAgents(rows) {
+      const groups = new Map();
+      rows.forEach(row => { const name=agent(row); if(!groups.has(name))groups.set(name,[]); groups.get(name).push(row); });
+      const html = Array.from(groups.entries())
+        .sort(([nameA],[nameB]) => nameA.localeCompare(nameB,'zh-Hant'))
+        .map(([name,own]) => {
+          const accountSuffixes = [...new Set(own.map(row => String(row.transfer_note || '').trim()).filter(Boolean))];
+          const accountLabel = accountSuffixes.length ? `ï¼å¾äºç¢¼ï¼${escapeHtml(accountSuffixes.join('ã'))}ï¼` : '';
+          return `<tr><td>${escapeHtml(name)}${accountLabel}</td><td>${own.length}</td><td class="amount">${money(sum(own))}</td><td>${own.filter(row=>isPaid(row)).length}</td><td>${money(sumPaid(own))}</td></tr>`;
+        })
+        .join('');
+      const total = rows.length;
+      const totalAmount = sum(rows);
+      document.getElementById('agent-summary').innerHTML = (html || '<tr><td colspan="5" class="empty">ç®åæ²æå ±åè³æ</td></tr>') + `<tr><td>åè¨</td><td>${total}</td><td class="amount">${money(totalAmount)}</td><td>${rows.filter(row=>isPaid(row)).length}</td><td class="amount">${money(sumPaid(rows))}</td></tr>`;
+    }
+    function sumPaid(rows) {
+      const totalsByAgent = new Map();
+      rows.forEach(row => {
+        const name = agent(row);
+        totalsByAgent.set(name, (totalsByAgent.get(name) || 0) + (Number(row.total_amount) || 0));
+      });
+      let total = 0;
+      totalsByAgent.forEach((agentTotal, name) => {
+        if (NO_DISCOUNT_AGENTS.has(name)) {
+          total += agentTotal;
+          return;
+        }
+        total += SPECIAL_PAID_AGENTS.has(name) ? Math.round(agentTotal * 0.9) : agentTotal;
+      });
+      return total;
+    }
+    function renderIssues(rows) {
+      const issues=[];
+      rows.forEach(row => { const missing=[]; if(!row.recipient_name)missing.push('ä»£è¡¨äººå§å'); if(!row.phone)missing.push('é»è©±'); if(!row.street_address)missing.push('å°å'); if(!row.identity_type && !legacy(row.customer_note).identity)missing.push('æ¹æ¡'); if(missing.length)issues.push(`<tr><td>${escapeHtml(row.order_number || row.id || '-')}</td><td>${escapeHtml(row.recipient_name || '-')}</td><td class="danger">${escapeHtml(missing.join('ã'))}</td><td>${escapeHtml(row.admin_note || 'å¾æ¿è¾¦ç¢ºèª')}</td></tr>`); });
+      document.getElementById('issue-list').innerHTML = issues.join('') || '<tr><td colspan="4" class="empty ok">ç®åæ²æå¾è¾¦ç°å¸¸è³æ</td></tr>';
+    }
+    function renderDetails(rows) {
+      const totalAmount = sum(rows);
+      const paidTotalAmount = rows.reduce((total,row)=>total+agentPaidAmount(row),0);
+      const items = rows.map((row,index) => `<tr><td>${index+1}</td><td>${date(row.created_at)}</td><td>${escapeHtml(row.recipient_name || '-')}</td><td>${escapeHtml(planLabel(identity(row)))}</td><td class="amount">${money(row.total_amount)}</td><td>${escapeHtml(agent(row))}</td></tr>`).join('');
+      document.getElementById('detail-list').innerHTML = items + `<tr><th colspan="4">ç¸½éé¡</th><th class="amount">${money(totalAmount)}</th><th>å¯¦ä»ç¸½éé¡ ${money(paidTotalAmount)}</th></tr>`;
+    }
+    function identity(row) { return row.identity_type || legacy(row.customer_note).identity || ''; }
+    function agent(row) {
+      const explicitAgent = (row.agent_name || legacy(row.customer_note).agent || '').trim();
+      if (explicitAgent && explicitAgent !== 'ç¡') return explicitAgent;
+      const recipientName = (row.recipient_name || '').trim();
+      if (recipientName === SELF_GROUP_EXCEPTION_NAME) return SELF_GROUP_DEFAULT_AGENT;
+      return SELF_GROUP_DEFAULT_AGENT;
+    }
+    function agentPaidAmount(row) {
+      const value = Number(row.total_amount) || 0;
+      if (!value) return 0;
+      const agentName = agent(row);
+      if (NO_DISCOUNT_AGENTS.has(agentName)) return value;
+      return SPECIAL_PAID_AGENTS.has(agentName) ? value * 0.9 : value;
+    }
+    function legacy(note) { const content=note || ''; return { identity:(content.match(/èº«å:([^ï½]+)/)||[])[1]||'', agent:(content.match(/ä»£çäºº:([^ï½]+)/)||[])[1]||'' }; }
+    function planLabel(key) { return (PLAN_COLUMNS.find(plan=>plan.key===key)||{}).label || key || '-'; }
+    function isPaid(row) { return true; }
+    function status(row) { return 'å·²ä»æ¬¾'; }
+    function sum(rows) { return rows.reduce((total,row)=>total+(Number(row.total_amount)||0),0); }
+    function money(value) { return 'NT$' + Number(value||0).toLocaleString('zh-TW'); }
+    function date(value) { const d=new Date(value); return Number.isNaN(d.getTime()) ? '-' : `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`; }
+    function stat(label,value) { return `<div class="stat"><span>${label}</span><strong>${value}</strong></div>`; }
+    function escapeHtml(value) { return String(value ?? '').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char])); }
+  </script>
+</body>
+</html>

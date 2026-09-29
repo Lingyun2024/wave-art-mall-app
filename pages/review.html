@@ -1,0 +1,439 @@
+<!doctype html>
+<html class="dark" lang="zh-Hant" data-page-node-id="cAPI6bssKibbbc2VnCIB0x">
+  <head data-page-node-id="nYbT03CoGnFtUATAom9o8V">
+    <meta charset="utf-8" data-page-node-id="Di2h79sACFSz88gEJVW7TG" />
+    <meta
+      content="width=device-width, initial-scale=1.0"
+      name="viewport"
+      data-page-node-id="S8BmYM2eLxXiK6XWS920u4"
+    />
+    <title>評價訂單 | WAVE ART MALL</title>
+    <meta
+      name="description"
+      content="為您在 WAVE ART MALL 購買的商品留下星級評價與使用心得。"
+      data-page-node-id="fKHcVWvB4zgfDR0Ggdz4wU"
+    />
+    <meta name="robots" content="noindex" data-page-node-id="cEo7h8cIVT1zU0qZaty7f8" />
+
+    <link rel="manifest" href="../manifest.json" data-page-node-id="TOCulzNN7FOT6e6LPjHf5T" />
+    <meta name="theme-color" content="#020203" data-page-node-id="oYLCaHqEkvxCK1AnOTNU2y" />
+    <meta
+      name="apple-mobile-web-app-capable"
+      content="yes"
+      data-page-node-id="SVw1xBkq9LKn5HOum4d0JW"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="../icons/icon-192.png"
+      data-page-node-id="QSzM38K594BSLkQLGDq7fR"
+    />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+      data-page-node-id="nuBbkeDv0rpULrKgMuw6UZ"
+    />
+    <link
+      rel="stylesheet"
+      href="../css/material-symbols.css"
+      data-page-node-id="jFBe7NRQfUYie2pktdEGny"
+    />
+    <script src="../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../css/style.css" data-page-node-id="pimafuNBMcKoFvFJ06CnIS" />
+
+    <style>
+      /* 星等選擇器：五顆可點擊的星，滑過或選取時填滿 */
+      .star-picker {
+        display: flex;
+        gap: 4px;
+      }
+      .star-picker button {
+        background: none;
+        border: 0;
+        padding: 2px;
+        cursor: pointer;
+        line-height: 0;
+        transition: transform 0.15s ease;
+      }
+      .star-picker button:hover {
+        transform: scale(1.12);
+      }
+      .star-picker button:disabled {
+        cursor: default;
+      }
+      .star-picker button:disabled:hover {
+        transform: none;
+      }
+      .star-picker .material-symbols-outlined {
+        font-size: 26px;
+      }
+
+      .review-card {
+        transition: border-color 0.2s ease;
+      }
+      .review-card.is-done {
+        border-color: rgba(233, 195, 73, 0.45);
+      }
+      .done-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        letter-spacing: 0.04em;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen pb-24 pt-16" data-page-node-id="i1SqmQORwJLnrzD2V5vZbC">
+    <header class="site-header" data-page-node-id="RE4tgUOqanLcvSiemCHTly">
+      <div class="flex items-center gap-4" data-page-node-id="BR2S8O9z17BoiTFq4gFwnT">
+        <button
+          onclick="history.back()"
+          class="text-secondary active:scale-95 transition-transform"
+          aria-label="返回上一頁"
+          data-page-node-id="cwXRfUzD5v3g3n7xCUEBQs"
+        >
+          <span class="material-symbols-outlined" data-page-node-id="b4GeZ2wHK4kKGqi8ucOUSZ">
+            arrow_back
+          </span>
+        </button>
+        <a
+          href="../index.html"
+          class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-widest text-secondary hidden md:block"
+          data-page-node-id="E2VsyBR9JriC0vTk2iHsTv"
+        >
+          WAVE ART MALL
+        </a>
+      </div>
+      <div class="flex items-center gap-4" data-page-node-id="JD9JO2ph3W8i44hvLTdLJs">
+        <a
+          id="nav-auth-link"
+          href="auth.html"
+          class="font-label-sm text-[11px] uppercase tracking-widest text-secondary hover:text-neon-cyan transition-colors"
+          data-page-node-id="WTwXnQkizrU6UZuqJBCCRr"
+        >
+          登入
+        </a>
+        <a
+          href="cart.html"
+          class="relative text-starlight-white hover:text-secondary transition-colors"
+          aria-label="購物車"
+          data-page-node-id="E9G7RQz2txz6nGLUTLGepS"
+        >
+          <span class="material-symbols-outlined" data-page-node-id="SHod3DcZUsLANWzft6KdVY">
+            shopping_cart
+          </span>
+          <span class="js-cart-badge cart-badge hidden" data-page-node-id="6RPIjDzKmNVB3Em4aGZodg">
+            0
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main
+      class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-8"
+      data-page-node-id="2azozeYJ5InTlwggraw1t8"
+    >
+      <h1
+        class="font-headline text-headline-lg text-secondary mb-2"
+        data-page-node-id="i4MgG4lTciFrsJFkyG4AEV"
+      >
+        評價訂單
+      </h1>
+      <p
+        id="order-meta"
+        class="font-label-sm text-[11px] uppercase tracking-widest text-on-surface-variant mb-8"
+        data-page-node-id="JirsTRmig6F3RtNzTAUVzB"
+      >
+        載入中…
+      </p>
+
+      <div
+        id="loading"
+        class="flex items-center gap-3 text-on-surface-variant text-sm"
+        data-page-node-id="KUz1BMdZTNUPFk8fBVI0vd"
+      >
+        <span class="loading-spinner" data-page-node-id="8JRcbsjPllvZZhE8rCGh2L"></span>
+        <span data-page-node-id="wu3Oq1BNprkmk1KXngYMxx">正在讀取訂單商品…</span>
+      </div>
+
+      <p
+        id="page-message"
+        class="hidden text-sm text-on-surface-variant"
+        data-page-node-id="IZVOih6dcrx1kYsASvnFAz"
+      ></p>
+
+      <div id="review-list" class="space-y-4" data-page-node-id="CSTKV70KOJ3jqnDgAxJIXA"></div>
+
+      <div class="mt-10" data-page-node-id="eOPlhrupqjTV2w0C6dbNkn">
+        <a
+          href="order-history.html"
+          class="font-label-sm text-[11px] uppercase tracking-widest text-neon-cyan hover:text-secondary transition-colors"
+          data-page-node-id="D6eWMYxuaurogeIUvEpPCB"
+        >
+          ← 回到歷史訂單
+        </a>
+      </div>
+    </main>
+
+    <div id="toast" class="toast hidden" data-page-node-id="WezWOko0GeLXFAalYpmu9x"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabaseClient.js"></script>
+    <script src="../js/nav.js"></script>
+    <script>
+      /*
+    =========================================================
+    訂單評價頁
+    =========================================================
+    這一段負責：
+    1. 從網址取出 order_id（由 order-history.html 帶入）
+    2. 確認已登入，沒登入就先記住回跳位置再導向登入頁
+    3. 讀取該訂單的 order_items，列出每一件商品
+    4. 讀取自己已对该訂單留下的評價，已評過的商品直接顯示結果
+    5. 送出評價到 reviews 表（product_id / user_id / order_id / rating / comment）
+
+    資料表結構（實測線上）：
+      reviews(id, product_id, user_id, order_id, rating, comment, created_at)
+    =========================================================
+  */
+
+      const orderId = new URLSearchParams(window.location.search).get("order_id");
+      let currentUser = null;
+      let orderItems = [];
+      const reviewedMap = new Map();
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(
+          /[&<>'"]/g,
+          (char) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              "'": "&#39;",
+              '"': "&quot;",
+            })[char]
+        );
+      }
+
+      function showToast(message, type) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.className = "toast " + (type === "error" ? "toast-error" : "toast-success");
+        window.setTimeout(() => {
+          toast.className = "toast hidden";
+        }, 3200);
+      }
+
+      function showMessage(text) {
+        document.getElementById("loading").classList.add("hidden");
+        const box = document.getElementById("page-message");
+        box.textContent = text;
+        box.classList.remove("hidden");
+      }
+
+      function starsHtml(rating, disabled) {
+        let html = '<div class="star-picker" data-rating="' + rating + '">';
+        for (let value = 1; value <= 5; value++) {
+          const filled = value <= rating ? "filled star-filled" : "star-empty";
+          html +=
+            '<button type="button" data-value="' +
+            value +
+            '"' +
+            (disabled ? " disabled" : "") +
+            ' aria-label="' +
+            value +
+            ' 星"><span class="material-symbols-outlined ' +
+            filled +
+            '">star</span></button>';
+        }
+        return html + "</div>";
+      }
+
+      function renderItems() {
+        const list = document.getElementById("review-list");
+        document.getElementById("loading").classList.add("hidden");
+
+        if (!orderItems.length) {
+          showMessage("這筆訂單沒有可評價的商品。");
+          return;
+        }
+
+        list.innerHTML = orderItems
+          .map((item, index) => {
+            const existing = reviewedMap.get(item.product_id);
+            const isDone = Boolean(existing);
+            const image = item.product_image_url
+              ? '<img src="' +
+                escapeHtml(item.product_image_url) +
+                '" alt="" class="w-16 h-16 object-cover rounded-lg border border-outline-variant/40" />'
+              : '<span class="material-symbols-outlined text-outline text-3xl">image</span>';
+
+            return (
+              '<div class="review-card glass-card p-5 rounded-lg' +
+              (isDone ? " is-done" : "") +
+              '" data-index="' +
+              index +
+              '">' +
+              '<div class="flex gap-4">' +
+              '<div class="shrink-0">' +
+              image +
+              "</div>" +
+              '<div class="flex-1 min-w-0">' +
+              '<p class="text-starlight-white text-sm mb-1 truncate">' +
+              escapeHtml(item.product_name || "商品") +
+              "</p>" +
+              '<p class="font-label-sm text-[11px] text-on-surface-variant mb-3">數量 ' +
+              escapeHtml(item.quantity) +
+              "</p>" +
+              (isDone
+                ? '<div class="flex items-center gap-3">' +
+                  starsHtml(existing.rating, true) +
+                  '<span class="done-badge bg-secondary/15 text-secondary">已評價</span>' +
+                  "</div>" +
+                  (existing.comment
+                    ? '<p class="text-xs text-on-surface-variant mt-3 whitespace-pre-wrap">' +
+                      escapeHtml(existing.comment) +
+                      "</p>"
+                    : "")
+                : starsHtml(0, false) +
+                  '<textarea rows="3" maxlength="500" class="review-comment w-full mt-3 bg-transparent border border-outline-variant/50 rounded-lg p-3 text-sm text-on-surface placeholder:text-outline focus:border-neon-cyan focus:outline-none" placeholder="分享您的使用心得（選填，500 字內）"></textarea>' +
+                  '<div class="flex items-center justify-end gap-3 mt-3">' +
+                  '<button type="button" class="submit-review font-label-sm text-[11px] uppercase tracking-widest px-4 py-2 rounded border border-neon-cyan/60 text-neon-cyan hover:bg-neon-cyan/10 transition-colors">送出評價</button>' +
+                  "</div>") +
+              "</div></div></div>"
+            );
+          })
+          .join("");
+      }
+
+      function setRating(picker, value) {
+        picker.dataset.rating = String(value);
+        picker.querySelectorAll("button").forEach((btn) => {
+          const star = btn.querySelector(".material-symbols-outlined");
+          const on = Number(btn.dataset.value) <= value;
+          star.className =
+            "material-symbols-outlined " + (on ? "filled star-filled" : "star-empty");
+        });
+      }
+
+      async function submitReview(card) {
+        const index = Number(card.dataset.index);
+        const item = orderItems[index];
+        const picker = card.querySelector(".star-picker");
+        const rating = Number(picker.dataset.rating || 0);
+        const commentEl = card.querySelector(".review-comment");
+        const comment = commentEl ? commentEl.value.trim() : "";
+
+        if (rating < 1) {
+          showToast("請先選擇 1 到 5 顆星", "error");
+          return;
+        }
+
+        const button = card.querySelector(".submit-review");
+        button.disabled = true;
+        button.textContent = "送出中…";
+
+        const { error } = await supabaseClient.from("reviews").insert({
+          product_id: item.product_id,
+          user_id: currentUser.id,
+          order_id: orderId,
+          rating: rating,
+          comment: comment || null,
+        });
+
+        if (error) {
+          console.error("[submitReview] 送出評價失敗:", error);
+          showToast("評價送出失敗，請稍後再試", "error");
+          button.disabled = false;
+          button.textContent = "送出評價";
+          return;
+        }
+
+        reviewedMap.set(item.product_id, { rating: rating, comment: comment });
+        showToast("感謝您的評價！");
+        renderItems();
+      }
+
+      document.addEventListener("click", (event) => {
+        const starBtn = event.target.closest(".star-picker button");
+        if (starBtn && !starBtn.disabled) {
+          setRating(starBtn.closest(".star-picker"), Number(starBtn.dataset.value));
+          return;
+        }
+        const submitBtn = event.target.closest(".submit-review");
+        if (submitBtn) {
+          submitReview(submitBtn.closest(".review-card"));
+        }
+      });
+
+      async function initReviewPage() {
+        if (!orderId) {
+          showMessage("缺少訂單編號，請從「歷史訂單」進入本頁。");
+          return;
+        }
+
+        currentUser = await getCurrentUser();
+        if (!currentUser) {
+          localStorage.setItem("wave_redirect_after_login", window.location.href);
+          window.location.href = "auth.html";
+          return;
+        }
+
+        const { data: order, error: orderError } = await supabaseClient
+          .from("orders")
+          .select("id, order_number, status, created_at")
+          .eq("id", orderId)
+          .single();
+
+        if (orderError || !order) {
+          showMessage("找不到這筆訂單，或您沒有檢視權限。");
+          return;
+        }
+
+        if (order.status === "已取消") {
+          showMessage("此訂單已取消，無法評價。");
+          return;
+        }
+
+        document.getElementById("order-meta").textContent =
+          "訂單編號 " + (order.order_number || order.id.slice(0, 8));
+
+        const { data: items, error: itemsError } = await supabaseClient
+          .from("order_items")
+          .select("product_id, product_name, product_image_url, quantity")
+          .eq("order_id", orderId);
+
+        if (itemsError) {
+          showMessage("讀取訂單商品失敗：" + itemsError.message);
+          return;
+        }
+
+        orderItems = items || [];
+
+        const { data: mine } = await supabaseClient
+          .from("reviews")
+          .select("product_id, rating, comment")
+          .eq("order_id", orderId)
+          .eq("user_id", currentUser.id);
+
+        (mine || []).forEach((row) => reviewedMap.set(row.product_id, row));
+
+        renderItems();
+      }
+
+      document.addEventListener("DOMContentLoaded", initReviewPage);
+    </script>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js").catch((err) => {
+          console.warn("Service Worker 註冊失敗：", err);
+        });
+      }
+    </script>
+  </body>
+</html>

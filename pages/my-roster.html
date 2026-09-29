@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的七七地赦登記明細 | WAVE ART MALL</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      @font-face {
+        font-family: "RosterCustomGlyph";
+        src: url("../assets/fonts/RosterGlyph-subset.ttf") format("truetype");
+        font-display: swap;
+      }
+
+      :root {
+        --ink: #111;
+        --paper: #fff;
+        --screen: #171717;
+        --screen-panel: #292929;
+        --accent: #e9c349;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background: var(--screen);
+        color: #f5f5f5;
+        font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .app-bar {
+        min-height: 64px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px max(20px, calc((100vw - 1440px) / 2));
+        background: #0d0d0d;
+        border-bottom: 1px solid #444;
+      }
+
+      .app-title {
+        margin: 0 auto 0 0;
+        color: var(--accent);
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+      }
+
+      .icon-button,
+      .action-button {
+        border: 1px solid #656565;
+        color: #f5f5f5;
+        background: transparent;
+        border-radius: 4px;
+        cursor: pointer;
+        min-height: 40px;
+        padding: 0 14px;
+      }
+
+      .action-button.primary {
+        color: #121212;
+        background: var(--accent);
+        border-color: var(--accent);
+        font-weight: 700;
+      }
+
+      .page-shell {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 28px 20px 48px;
+      }
+
+      .status-line {
+        margin: 0 0 16px;
+        color: #cfcfcf;
+        font-size: 14px;
+      }
+
+      .notice {
+        max-width: 720px;
+        margin: 80px auto;
+        padding: 28px;
+        border: 1px solid #7b7b7b;
+        background: var(--screen-panel);
+        text-align: center;
+      }
+
+      .notice h1 {
+        margin: 0 0 8px;
+        color: var(--accent);
+        font-size: 24px;
+      }
+      .notice p {
+        margin: 0;
+        color: #d4d4d4;
+      }
+      .notice a {
+        color: var(--accent);
+      }
+
+      .roster-pages {
+        display: grid;
+        gap: 28px;
+      }
+
+      .roster-page {
+        width: 100%;
+        background: var(--paper);
+        color: var(--ink);
+        padding: 14px 16px 12px;
+        box-shadow: 0 12px 42px rgba(0, 0, 0, 0.38);
+      }
+
+      .roster-header {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: end;
+        min-height: 40px;
+        margin-bottom: 6px;
+      }
+
+      .roster-header h1 {
+        grid-column: 2;
+        margin: 0;
+        font-size: clamp(18px, 2vw, 28px);
+        letter-spacing: 0.03em;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .roster-header .branch {
+        grid-column: 3;
+        justify-self: end;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .roster-subline {
+        margin: 0 0 8px;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        border-bottom: 1.4px solid var(--ink);
+        padding-bottom: 4px;
+      }
+
+      .roster-table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        border: 1.4px solid var(--ink);
+        font-size: 11px;
+      }
+
+      .roster-table th,
+      .roster-table td {
+        border: 1px solid var(--ink);
+        padding: 3px 4px;
+        text-align: center;
+        vertical-align: middle;
+        overflow-wrap: anywhere;
+      }
+
+      .roster-table thead th {
+        font-weight: 700;
+      }
+      .roster-table .vertical {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        letter-spacing: 2px;
+      }
+      .roster-table .amount-head {
+        font-size: 10px;
+        line-height: 1.25;
+      }
+      .roster-table .amount-head strong {
+        display: block;
+        margin-top: 2px;
+        font-size: 11px;
+      }
+      .roster-table .row-number {
+        height: 46px;
+      }
+      .roster-table .amount-cell {
+        font-weight: 700;
+      }
+      .roster-table .total-label {
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+      }
+      .roster-table .total-value {
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      .roster-footnote {
+        margin: 5px 0 0 68px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .roster-motto {
+        margin: 16px 0 0;
+        text-align: center;
+        font-size: clamp(14px, 1.8vw, 22px);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+      }
+
+      .custom-glyph {
+        font-family: "RosterCustomGlyph", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      .plum-mark {
+        width: 1.45em;
+        height: 1.45em;
+        display: inline-block;
+        vertical-align: -0.33em;
+        margin-right: 0.14em;
+      }
+
+      .page-label {
+        margin: 8px 0 0;
+        color: #bdbdbd;
+        font-size: 12px;
+        text-align: right;
+      }
+
+      @media (max-width: 880px) {
+        .page-shell {
+          padding: 16px 0 32px;
+          overflow-x: auto;
+        }
+        .roster-page {
+          width: 1120px;
+          margin: 0 auto;
+        }
+        .app-bar {
+          padding: 10px 14px;
+        }
+        .app-title {
+          font-size: 14px;
+        }
+        .action-button {
+          padding: 0 9px;
+        }
+      }
+
+      @page {
+        size: A4 landscape;
+        margin: 7mm;
+      }
+
+      @media print {
+        body {
+          background: #fff;
+          color: #111;
+        }
+        .app-bar,
+        .status-line,
+        .page-label {
+          display: none !important;
+        }
+        .page-shell {
+          max-width: none;
+          padding: 0;
+        }
+        .roster-pages {
+          display: block;
+        }
+        .roster-page {
+          width: 100%;
+          min-height: 190mm;
+          padding: 0;
+          box-shadow: none;
+          break-after: page;
+        }
+        .roster-page:last-child {
+          break-after: auto;
+        }
+        .roster-table {
+          font-size: 9px;
+        }
+        .roster-table th,
+        .roster-table td {
+          padding: 2px 3px;
+        }
+        .roster-table .row-number {
+          height: 13mm;
+        }
+        .roster-header h1 {
+          font-size: 20px;
+        }
+        .roster-footnote {
+          font-size: 10px;
+        }
+        .roster-motto {
+          margin-top: 8px;
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-bar">
+      <button
+        class="icon-button"
+        type="button"
+        onclick="window.location.href = 'order-history.html'"
+      >
+        返回訂單紀錄
+      </button>
+      <h1 class="app-title">七七地赦 · 我的登記明細</h1>
+      <button class="action-button" type="button" onclick="loadMyRoster()">重新載入</button>
+      <button class="action-button primary" type="button" onclick="window.print()">
+        列印 / 另存 PDF
+      </button>
+    </header>
+
+    <main class="page-shell">
+      <p id="status-line" class="status-line">正在讀取您的報名資料...</p>
+      <section id="no-permission" class="notice" hidden>
+        <h1>請先登入</h1>
+        <p>
+          登入後即可查看並列印您自己的登記明細。
+          <br />
+          <a href="auth.html">前往登入</a>
+        </p>
+      </section>
+      <section id="empty-block" class="notice" hidden>
+        <h1>尚無報名資料</h1>
+        <p>您目前沒有任何七七地赦方案的報名紀錄。</p>
+      </section>
+      <section id="roster-body" class="roster-pages" hidden></section>
+    </main>
+
+    <script src="../js/supabaseClient.js"></script>
+    <script>
+      const PAGE_SIZE = 10;
+      const PLAN_COLUMNS = [
+        { key: "personal", label: "個人者乎", original: 7700, special: 770 },
+        { key: "family", label: "家庭者乎", original: 33000, special: 11000 },
+        { key: "business", label: "事業者乎", original: 77000, special: 11000 },
+        { key: "society", label: "社會者乎", original: 77000, special: 11000 },
+        { key: "savior", label: "救世(主)者乎", original: 77000, special: 11000 },
+      ];
+      const SELF_GROUP = "自行登記";
+      const SELF_GROUP_DEFAULT_AGENT = "魏正隆";
+      const SELF_GROUP_EXCEPTION_NAME = "謝幸汝";
+
+      function resolveAgentName(order, legacy) {
+        const explicitAgent = (order.agent_name || legacy.agent || "").trim();
+        if (explicitAgent && explicitAgent !== "無") return explicitAgent;
+        const recipientName = (order.recipient_name || "").trim();
+        if (recipientName === SELF_GROUP_EXCEPTION_NAME) return SELF_GROUP_DEFAULT_AGENT;
+        return SELF_GROUP_DEFAULT_AGENT;
+      }
+
+      document.addEventListener("DOMContentLoaded", initMyRoster);
+
+      async function initMyRoster() {
+        const user = await getCurrentUser();
+        if (!user) {
+          document.getElementById("status-line").hidden = true;
+          document.getElementById("no-permission").hidden = false;
+          return;
+        }
+        await loadMyRoster();
+      }
+
+      async function loadMyRoster() {
+        const statusLine = document.getElementById("status-line");
+        statusLine.hidden = false;
+        statusLine.textContent = "正在讀取您的報名資料...";
+
+        const user = await getCurrentUser();
+        if (!user) {
+          statusLine.hidden = true;
+          document.getElementById("no-permission").hidden = false;
+          return;
+        }
+
+        // 只讀取「自己名下」的特赦報名訂單
+        const { data, error } = await supabaseClient
+          .from("orders")
+          .select("*")
+          .eq("user_id", user.id)
+          .or("identity_type.not.is.null,customer_note.ilike.%特赦方案%")
+          .neq("status", "已取消")
+          .order("created_at", { ascending: true });
+
+        if (error) {
+          statusLine.textContent = "讀取失敗：" + error.message;
+          return;
+        }
+
+        const rows = data || [];
+        if (rows.length === 0) {
+          statusLine.hidden = true;
+          document.getElementById("empty-block").hidden = false;
+          return;
+        }
+
+        renderRoster(rows);
+        statusLine.textContent = `您共有 ${rows.length} 筆報名資料（每頁固定列出 ${PAGE_SIZE} 筆）。`;
+      }
+
+      function renderRoster(rows) {
+        const container = document.getElementById("roster-body");
+        container.hidden = false;
+        container.innerHTML = "";
+        const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+
+        for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
+          const pageRows = rows.slice(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE);
+          const cumulativeRows = rows.slice(0, (pageIndex + 1) * PAGE_SIZE);
+          container.appendChild(createRosterPage(pageRows, cumulativeRows, pageIndex, rows.length));
+        }
+      }
+
+      function createRosterPage(rows, cumulativeRows, pageIndex, totalRows) {
+        const page = document.createElement("article");
+        page.className = "roster-page";
+        const pageStart = pageIndex * PAGE_SIZE;
+        const rowsHtml = Array.from({ length: PAGE_SIZE }, (_, rowIndex) =>
+          createRow(rows[rowIndex], pageStart + rowIndex + 1)
+        ).join("");
+        const cumulativeTotal = cumulativeRows.reduce(
+          (total, order) => total + (Number(order.total_amount) || 0),
+          0
+        );
+
+        page.innerHTML = `
+        <div class="roster-header">
+          <h1>本2026(丙午)年度七七地赦日執執登記名冊</h1>
+          <span class="branch">大直分會</span>
+        </div>
+        <p class="roster-subline">個人登記明細（共 ${totalRows} 筆）</p>
+        <table class="roster-table">
+          <colgroup>
+            <col style="width:3%"><col style="width:4%"><col style="width:8%"><col style="width:4%"><col style="width:7%"><col style="width:29%">
+            <col style="width:6.33%"><col style="width:6.33%"><col style="width:6.33%"><col style="width:6.33%"><col style="width:6.33%"><col style="width:6.33%"><col style="width:7%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th rowspan="2" class="vertical">總號</th>
+              <th rowspan="2">日期</th>
+              <th rowspan="2">代表人姓名</th>
+              <th rowspan="2">虛歲</th>
+              <th rowspan="2">電話</th>
+              <th rowspan="2">地址</th>
+              ${PLAN_COLUMNS.map((plan) => `<th class="amount-head">${plan.label}<br>原${formatCurrency(plan.original)}</th>`).join("")}
+              <th rowspan="2" class="vertical">代理登記人</th>
+            </tr>
+            <tr>
+              ${PLAN_COLUMNS.map((plan) => `<th class="amount-head"><strong>特優${formatCurrency(plan.special)}</strong></th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+            <tr>
+              <td colspan="6" class="total-label">累計總金額</td>
+              <td colspan="${PLAN_COLUMNS.length + 1}" class="total-value">${formatCurrency(cumulativeTotal)}</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="roster-footnote">※ 登記期限：即日起至農曆七月七日（國曆 8/19）中午 12 時止</p>
+        <p class="roster-motto"><svg class="plum-mark" viewBox="0 0 100 100" aria-label="梅花" role="img"><g fill="white" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"><path d="M48 48C40 38 39 24 46 16C52 10 59 14 60 22L59 39C59 46 55 50 48 48Z"/><path d="M46 49C35 41 20 42 14 50C9 58 15 66 24 66L41 61C47 59 50 54 46 49Z"/><path d="M55 49C65 41 80 42 86 50C91 58 85 66 76 66L59 61C53 59 50 54 55 49Z"/><path d="M47 57C37 60 28 73 32 83C36 91 46 91 51 82L56 66C58 59 53 55 47 57Z"/><path d="M53 57C63 60 72 73 68 83C64 91 54 91 49 82L44 66C42 59 47 55 53 57Z"/></g><circle cx="50" cy="53" r="10" fill="currentColor"/><path d="M45 64C48 58 52 58 55 64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="6"/></svg>本<span class="custom-glyph">&#xA00A;&#xA00A;</span>懿懿・<span class="custom-glyph">&#xA00A;&#xA00A;</span>懿懿活佛本尊．活佛本殿勒監 勒封</p>
+        <p class="page-label">第 ${pageIndex + 1} 頁 / 共 ${Math.max(1, Math.ceil(totalRows / PAGE_SIZE))} 頁</p>
+      `;
+        return page;
+      }
+
+      function createRow(order, number) {
+        if (!order) {
+          return `<tr class="row-number"><td>${number}</td>${"<td></td>".repeat(12)}</tr>`;
+        }
+
+        const legacy = getLegacyIdentityData(order.customer_note);
+        const identity = order.identity_type || legacy.identity;
+        const age = order.age != null ? order.age : legacy.age;
+        const agent = resolveAgentName(order, legacy);
+        const createdDate = formatDate(order.created_at);
+        const planCells = PLAN_COLUMNS.map((plan) => {
+          const amount =
+            plan.key === identity ? formatCurrency(Number(order.total_amount) || plan.special) : "";
+          return `<td class="amount-cell">${amount}</td>`;
+        }).join("");
+
+        return `
+        <tr class="row-number">
+          <td>${number}</td>
+          <td>${escapeHtml(createdDate)}</td>
+          <td>${escapeHtml(order.recipient_name || "-")}</td>
+          <td>${age != null ? escapeHtml(String(age)) : "-"}</td>
+          <td>${escapeHtml(order.phone || "-")}</td>
+          <td>${escapeHtml(order.street_address || "-")}</td>
+          ${planCells}
+          <td>${escapeHtml(agent || "")}</td>
+        </tr>
+      `;
+      }
+
+      function getLegacyIdentityData(note) {
+        const content = note || "";
+        const identity = (content.match(/身分:([^｜]+)/) || [])[1] || "";
+        const ageText = (content.match(/虛歲:(\d+)/) || [])[1];
+        const agent = (content.match(/代理人:([^｜]+)/) || [])[1] || "";
+        return { identity, age: ageText ? Number(ageText) : null, agent };
+      }
+
+      function formatCurrency(value) {
+        return "$" + Number(value || 0).toLocaleString("zh-TW");
+      }
+
+      function formatDate(value) {
+        if (!value) return "";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+        return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}`;
+      }
+    </script>
+  </body>
+</html>

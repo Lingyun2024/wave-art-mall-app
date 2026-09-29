@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>結帳 | WAVE ART MALL</title>
+
+<!-- ============================================
+     PWA 設定（讓網站可以「加到主畫面」變成手機 App 圖示）
+     ============================================ -->
+<link rel="manifest" href="../manifest.json" />
+<meta name="theme-color" content="#020203" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+<script src="../js/tailwind-config.js"></script>
+<link rel="stylesheet" href="../css/style.css" />
+
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+  /* 付款方式选项被选中时的样式 */
+  .payment-option input:checked + div {
+    border-color: #00FFFF;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    background: rgba(0, 255, 255, 0.05);
+  }
+</style>
+</head>
+<body class="min-h-screen pb-24 pt-16">
+
+<header class="site-header">
+  <div class="flex items-center gap-4">
+    <button onclick="history.back()" class="text-secondary active:scale-95 transition-transform">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <a href="../index.html" class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-widest text-secondary hidden md:block">WAVE ART MALL</a>
+  </div>
+  <div class="flex items-center gap-4">
+    <a id="nav-auth-link" href="auth.html" class="font-label-sm text-[11px] uppercase tracking-widest text-secondary hover:text-neon-cyan transition-colors">登入</a>
+  </div>
+</header>
+
+<main class="pt-8 px-4 max-w-[1200px] mx-auto">
+  <div class="mb-10">
+    <h1 class="font-headline-xl text-headline-xl text-secondary mb-2">結帳程序</h1>
+    <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Checkout</p>
+  </div>
+
+  <!-- 未登入提示 -->
+  <div id="guest-block" class="hidden text-center text-on-surface-variant py-24 space-y-4">
+    <span class="material-symbols-outlined text-6xl text-secondary/40">lock</span>
+    <p>請先登入才能進行結帳</p>
+    <a href="auth.html" class="inline-block bg-secondary text-void-black font-bold px-6 py-3 rounded hover:shadow-[0_0_15px_rgba(233,195,73,0.4)] transition-all">前往登入</a>
+  </div>
+
+  <!-- 购物车为空提示 -->
+  <div id="empty-block" class="hidden text-center text-on-surface-variant py-24 space-y-4">
+    <span class="material-symbols-outlined text-6xl text-secondary/40">shopping_cart</span>
+    <p>購物車是空的，無法結帳</p>
+    <a href="../index.html" class="inline-block bg-secondary text-void-black font-bold px-6 py-3 rounded hover:shadow-[0_0_15px_rgba(233,195,73,0.4)] transition-all">回首頁選購</a>
+  </div>
+
+  <!-- 载入中 -->
+  <div id="loading-block" class="text-center text-on-surface-variant py-16">
+    <span class="loading-spinner"></span>
+    <p class="mt-4">正在載入購物車資料...</p>
+  </div>
+
+  <!-- 结帐主体表单 -->
+  <form id="checkout-form" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <div class="lg:col-span-2 space-y-8">
+      <!-- 收件资讯 -->
+      <div class="glass-card p-8 rounded-lg space-y-6">
+        <h3 class="font-headline-lg text-headline-lg border-b border-secondary/20 pb-4">收件資訊</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="font-label-sm text-xs text-on-surface-variant uppercase block mb-2">收件人姓名</label>
+            <input required id="receiver-name" type="text" class="w-full bg-void-black border border-secondary/30 rounded px-4 py-3 text-starlight-white input-glow" placeholder="請輸入姓名" />
+          </div>
+          <div>
+            <label class="font-label-sm text-xs text-on-surface-variant uppercase block mb-2">聯絡電話</label>
+            <input required id="receiver-phone" type="tel" class="w-full bg-void-black border border-secondary/30 rounded px-4 py-3 text-starlight-white input-glow" placeholder="請輸入手機號碼" />
+          </div>
+        </div>
+        <div>
+          <label class="font-label-sm text-xs text-on-surface-variant uppercase block mb-2">收件地址</label>
+          <input required id="receiver-address" type="text" class="w-full bg-void-black border border-secondary/30 rounded px-4 py-3 text-starlight-white input-glow" placeholder="請輸入完整收件地址" />
+        </div>
+      </div>
+
+      <!-- 付款方式 -->
+      <div class="glass-card p-8 rounded-lg space-y-6">
+        <h3 class="font-headline-lg text-headline-lg border-b border-secondary/20 pb-4">付款方式</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <label class="payment-option cursor-pointer">
+            <input type="radio" name="payment_method" value="信用卡" class="hidden" checked />
+            <div class="border border-secondary/30 rounded-lg p-4 flex flex-col items-center gap-2 transition-all">
+              <span class="material-symbols-outlined text-secondary">credit_card</span>
+              <span class="font-label-sm text-xs">信用卡</span>
+            </div>
+          </label>
+          <label class="payment-option cursor-pointer">
+            <input type="radio" name="payment_method" value="貨到付款" class="hidden" />
+            <div class="border border-secondary/30 rounded-lg p-4 flex flex-col items-center gap-2 transition-all">
+              <span class="material-symbols-outlined text-secondary">local_shipping</span>
+              <span class="font-label-sm text-xs">貨到付款</span>
+            </div>
+          </label>
+          <label class="payment-option cursor-pointer">
+            <input type="radio" name="payment_method" value="銀行轉帳" class="hidden" />
+            <div class="border border-secondary/30 rounded-lg p-4 flex flex-col items-center gap-2 transition-all">
+              <span class="material-symbols-outlined text-secondary">account_balance</span>
+              <span class="font-label-sm text-xs">銀行轉帳</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- 购物车商品摘要（唯读列表） -->
+      <div class="glass-card p-8 rounded-lg space-y-4">
+        <h3 class="font-headline-lg text-headline-lg border-b border-secondary/20 pb-4">商品清單</h3>
+        <div id="order-items-preview" class="space-y-4">
+          <!-- JS 动态插入 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 订单总额侧栏 -->
+    <aside class="lg:col-span-1">
+      <div class="glass-card p-8 sticky top-24 rounded-lg space-y-6">
+        <h3 class="font-headline-lg text-headline-lg border-b border-secondary/20 pb-4">訂單總計</h3>
+        <div class="flex justify-between font-body-md">
+          <span class="text-on-surface-variant">商品小計</span>
+          <span class="text-starlight-white" id="checkout-subtotal">NT$ 0</span>
+        </div>
+        <div class="flex justify-between font-body-md pb-6 border-b border-secondary/20">
+          <span class="text-on-surface-variant">運費</span>
+          <span class="text-starlight-white">NT$ 0</span>
+        </div>
+        <div class="flex justify-between items-end pt-2">
+          <span class="font-label-sm text-secondary uppercase">應付總額</span>
+          <span class="font-headline-xl text-3xl text-secondary" id="checkout-total">NT$ 0</span>
+        </div>
+        <button type="submit" id="btn-submit-order" class="w-full bg-secondary text-void-black font-bold py-4 rounded-none transition-all hover:bg-neon-cyan neon-glow active:scale-[0.98] uppercase tracking-[0.2em] font-label-sm mt-4">
+          確認送出訂單
+        </button>
+      </div>
+    </aside>
+  </form>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabaseClient.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+  /*
+    =========================================================
+    结帐页专属逻辑（整个网站最重要的下单流程）
+    =========================================================
+    这一段负责：
+    1. 确认使用者已登入，并拿到购物车内容显示预览
+    2. 使用者填写收件资讯 + 选择付款方式后按下「确认送出订单」
+    3. 送出后依序执行：
+       a. 在 orders 表新增一笔订单（状态设为 "待处理" 之类）
+       b. 把购物车内容逐一写入 order_items（存快照：商品名称/图片/单价，
+          这样即使之后商品资讯被修改，订单纪录仍保留下单当下的样子）
+       c. 清空这个使用者的 cart_items（因为已经变成正式订单了）
+       d. 导向订单成功页，并带上订单编号
+  */
+
+  let currentUser = null;
+  let cartItemsCache = [];
+
+  // -----------------------------------------------------
+  // 页面启动流程
+  // -----------------------------------------------------
+  async function initCheckoutPage() {
+    const loadingBlock = document.getElementById("loading-block");
+    const guestBlock = document.getElementById("guest-block");
+    const emptyBlock = document.getElementById("empty-block");
+    const form = document.getElementById("checkout-form");
+
+    // 結帳前必須同時符合「已登入」與「已完成 Email 驗證」。
+    // 沒驗證的帳號會由 requireLogin 顯示提醒並導向登入／驗證頁。
+    currentUser = await requireLogin();
+    if (!currentUser) {
+      loadingBlock.classList.add("hidden");
+      guestBlock.classList.remove("hidden");
+      return;
+    }
+
+    try {
+      // 拿购物车内容，同样 join products 拿商品资讯
+      const { data, error } = await supabaseClient
+        .from("cart_items")
+        .select("id, quantity, product_id, products(id, name, price, image_url)")
+        .eq("user_id", currentUser.id);
+
+      if (error) throw error;
+
+      cartItemsCache = data || [];
+      loadingBlock.classList.add("hidden");
+
+      if (cartItemsCache.length === 0) {
+        emptyBlock.classList.remove("hidden");
+        return;
+      }
+
+      form.classList.remove("hidden");
+      renderOrderPreview();
+    } catch (err) {
+      console.error("[initCheckoutPage] 载入购物车资料失败:", err);
+      loadingBlock.classList.add("hidden");
+      showToast("載入結帳資料失敗，請重新整理頁面", "error");
+    }
+  }
+
+  // 画出商品清单预览 + 计算总金额显示在侧栏
+  function renderOrderPreview() {
+    const container = document.getElementById("order-items-preview");
+    let subtotal = 0;
+
+    container.innerHTML = cartItemsCache.map((item) => {
+      const product = item.products || {};
+      const lineTotal = (product.price || 0) * item.quantity;
+      subtotal += lineTotal;
+      return `
+        <div class="flex items-center gap-4">
+          <img class="w-16 h-16 object-cover rounded border border-secondary/20" src="${escapeHtml(product.image_url || '')}" onerror="this.src='https://placehold.co/100x100/141314/e9c349?text=WAVE'" />
+          <div class="flex-grow">
+            <p class="text-sm text-starlight-white">${escapeHtml(product.name || '（商品已下架）')}</p>
+            <p class="text-xs text-on-surface-variant">數量 x ${item.quantity}</p>
+          </div>
+          <div class="text-secondary font-bold text-sm">${formatPrice(lineTotal)}</div>
+        </div>
+      `;
+    }).join("");
+
+    document.getElementById("checkout-subtotal").textContent = formatPrice(subtotal);
+    document.getElementById("checkout-total").textContent = formatPrice(subtotal);
+  }
+
+  // -----------------------------------------------------
+  // 表单送出：建立订单的核心逻辑
+  // -----------------------------------------------------
+  async function handleSubmitOrder(e) {
+    e.preventDefault();
+
+    const submitBtn = document.getElementById("btn-submit-order");
+    const receiverName = document.getElementById("receiver-name").value.trim();
+    const receiverPhone = document.getElementById("receiver-phone").value.trim();
+    const receiverAddress = document.getElementById("receiver-address").value.trim();
+    const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+
+    // 简单的表单验证，避免空白资料送到资料库
+    if (!receiverName || !receiverPhone || !receiverAddress) {
+      showToast("請完整填寫收件資訊", "error");
+      return;
+    }
+
+    // 计算总金额
+    let totalAmount = 0;
+    cartItemsCache.forEach((item) => {
+      totalAmount += (item.products?.price || 0) * item.quantity;
+    });
+
+    // 最後一道前端檢查：即使使用者已在本頁停留一段時間，
+    // 送出當下仍重新確認帳號已登入且 Email 已驗證。
+    const verifiedUser = await requireLogin();
+    if (!verifiedUser) return;
+    currentUser = verifiedUser;
+
+    // 送出期间先把按钮锁住，避免使用者重复点击造成建立多笔重复订单
+    submitBtn.disabled = true;
+    submitBtn.textContent = "訂單處理中...";
+
+    try {
+      // 步骤 a：先在 orders 表建立一笔订单主纪录
+      const { data: orderData, error: orderError } = await supabaseClient
+        .from("orders")
+        .insert({
+          user_id: currentUser.id,
+          status: "待處理",
+          total_amount: totalAmount,
+          receiver_name: receiverName,
+          receiver_phone: receiverPhone,
+          receiver_address: receiverAddress,
+          payment_method: paymentMethod,
+        })
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      const newOrderId = orderData.id;
+
+      // 步骤 b：把购物车内容逐一转成 order_items（存下当下的商品快照资讯）
+      const orderItemsPayload = cartItemsCache.map((item) => ({
+        order_id: newOrderId,
+        product_id: item.product_id,
+        product_name: item.products?.name || "未知商品",
+        product_image: item.products?.image_url || "",
+        unit_price: item.products?.price || 0,
+        quantity: item.quantity,
+      }));
+
+      const { error: itemsError } = await supabaseClient
+        .from("order_items")
+        .insert(orderItemsPayload);
+
+      if (itemsError) throw itemsError;
+
+      // 步骤 c：清空这个使用者的购物车（订单已经建立好了，购物车内容功成身退）
+      const { error: clearCartError } = await supabaseClient
+        .from("cart_items")
+        .delete()
+        .eq("user_id", currentUser.id);
+
+      if (clearCartError) throw clearCartError;
+
+      // 步骤 d：导向订单成功页，并把订单编号带过去显示
+      showToast("訂單建立成功！");
+      window.location.href = `order-success.html?order_id=${newOrderId}`;
+    } catch (err) {
+      console.error("[handleSubmitOrder] 建立订单失败:", err);
+      showToast("訂單建立失敗，請稍後再試", "error");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "確認送出訂單";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initCheckoutPage();
+    document.getElementById("checkout-form").addEventListener("submit", handleSubmitOrder);
+  });
+</script>
+
+<!-- ============================================
+     註冊 Service Worker（讓網站支援離線快取、可安裝成 App）
+     ============================================ -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch((err) => {
+      console.warn("Service Worker 註冊失敗：", err);
+    });
+  }
+</script>
+</body>
+</html>

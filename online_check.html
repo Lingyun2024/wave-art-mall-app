@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>火星療癒旨令表格輸出</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabaseClient.js"></script>
+    <style>
+      :root {
+        font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+        color: #111;
+        background: #e8e8e8;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 14px 20px;
+        background: #181818;
+        color: #fff;
+      }
+      .toolbar h1 {
+        margin: 0 auto 0 0;
+        font-size: 20px;
+      }
+      button,
+      a {
+        border: 1px solid #c7a52a;
+        border-radius: 5px;
+        padding: 8px 14px;
+        color: #c7a52a;
+        background: transparent;
+        text-decoration: none;
+        cursor: pointer;
+        font: inherit;
+      }
+      button.primary {
+        background: #c7a52a;
+        color: #111;
+      }
+      #status {
+        padding: 16px 20px;
+      }
+      .sheet {
+        position: relative;
+        width: 210mm;
+        height: 297mm;
+        margin: 20px auto;
+        overflow: hidden;
+        background: #fff url("../assets/mars-healing/headquarters-report-template.jpg") center /
+          100% 100% no-repeat;
+        page-break-after: always;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+      .branch-name,
+      .report-date {
+        position: absolute;
+        top: 7.65%;
+        color: #b51218;
+        font-size: 12px;
+        font-weight: 700;
+        text-align: center;
+      }
+      .branch-name {
+        left: 65%;
+        width: 13%;
+      }
+      .report-date {
+        left: 80%;
+        width: 8%;
+        font-size: 9px;
+      }
+      .record-block {
+        position: absolute;
+        left: 8.57%;
+        width: 82.86%;
+        height: 36.8%;
+        display: grid;
+        grid-template-columns: 8.8% repeat(5, 1fr);
+        grid-template-rows: minmax(0, 38.5%) 8.2% 8.2% 8.2% 14.5% 7.3% 7.3%;
+        color: #a9000d;
+      }
+      .record-block.first {
+        top: 11.15%;
+      }
+      .record-block.second {
+        top: 52%;
+      }
+      .row-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1mm;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.15;
+        text-align: center;
+        writing-mode: vertical-rl;
+      }
+      .record-cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        padding: 1mm;
+        overflow: hidden;
+        color: #222;
+        font-size: 11px;
+        line-height: 1.25;
+        text-align: center;
+        overflow-wrap: anywhere;
+      }
+      .record-cell.photo-cell {
+        padding: 2mm;
+        overflow: hidden;
+      }
+      .record-cell.photo-cell img {
+        width: 35mm;
+        height: 45mm;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        object-position: center;
+        background: #fff;
+        border-radius: 1mm;
+      }
+      .record-cell.empty {
+        color: transparent;
+      }
+      .no-data {
+        display: grid;
+        place-items: center;
+        color: #a9000d;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      @media print {
+        @page {
+          size: A4;
+          margin: 0;
+        }
+        .toolbar,
+        #status {
+          display: none;
+        }
+        body {
+          background: #fff;
+        }
+        .sheet {
+          width: 210mm;
+          height: 297mm;
+          margin: 0;
+          border: 0;
+          box-shadow: none;
+          break-after: page;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="toolbar">
+      <a href="admin-roster.html">返回管理名冊</a>
+      <h1>火星療癒旨令表格輸出</h1>
+      <button type="button" onclick="loadRegistrations()">重新載入</button>
+      <button class="primary" type="button" onclick="window.print()">列印／另存 PDF</button>
+    </header>
+    <p id="status">正在確認管理員權限...</p>
+    <main id="sheets"></main>
+    <script>
+      const ADMIN_EMAIL = "2022lingyun@gmail.com";
+      const PAGE_SIZE = 10;
+      const BUCKET = "mars-healing-photos";
+
+      document.addEventListener("DOMContentLoaded", loadRegistrations);
+
+      async function loadRegistrations() {
+        const status = document.getElementById("status");
+        const sheets = document.getElementById("sheets");
+        const user = await getCurrentUser();
+        if (!user) {
+          window.location.href = "auth.html";
+          return;
+        }
+        if (user.email !== ADMIN_EMAIL) {
+          status.textContent = "無權限存取。";
+          return;
+        }
+        status.textContent = "正在載入火星療癒登記資料...";
+        const { data, error } = await supabaseClient
+          .from("mars_healing_registrations")
+          .select(
+            "id, representative_name, age, phone, address, occupation, photo_path, created_at, plan_label, payment_status, registration_status"
+          )
+          .eq("registration_status", "approved")
+          .eq("payment_status", "verified")
+          .order("created_at", { ascending: true });
+        if (error) {
+          status.textContent = "資料載入失敗：" + error.message;
+          return;
+        }
+        sheets.innerHTML = "";
+        const rows = data || [];
+        if (!rows.length) {
+          sheets.innerHTML = '<section class="sheet no-data">目前沒有火星療癒登記資料。</section>';
+          status.textContent = "目前沒有資料。";
+          return;
+        }
+        for (let index = 0; index < rows.length; index += PAGE_SIZE) {
+          const pageRows = rows.slice(index, index + PAGE_SIZE);
+          sheets.insertAdjacentHTML("beforeend", renderSheet(pageRows, index / PAGE_SIZE + 1));
+          await loadPhotos(pageRows);
+        }
+        status.textContent = `已載入 ${rows.length} 筆資料，每張表固定 ${PAGE_SIZE} 位客戶。`;
+      }
+
+      function renderSheet(rows, pageNumber) {
+        const reportDate = new Date().toLocaleDateString("zh-TW");
+        const fixedRows = [...rows, ...Array.from({ length: PAGE_SIZE - rows.length }, () => null)];
+        return `<section class="sheet">
+          <div class="branch-name">大直分會</div>
+          <div class="report-date">${escapeHtml(reportDate)}</div>
+          ${renderRecordBlock(fixedRows.slice(0, 5), "first")}
+          ${renderRecordBlock(fixedRows.slice(5, 10), "second")}
+        </section>`;
+      }
+
+      function renderRecordBlock(rows, position) {
+        const labels = ["照片", "姓名", "虛歲", "電話", "地址", "職業", "日期"];
+        const fields = [
+          (row) =>
+            row?.photo_path
+              ? `<div class="record-cell photo-cell" data-photo-id="${escapeHtml(row.id)}">載入中</div>`
+              : '<div class="record-cell empty"></div>',
+          (row) => `<div class="record-cell">${escapeHtml(row?.representative_name)}</div>`,
+          (row) => `<div class="record-cell">${escapeHtml(row?.age)}</div>`,
+          (row) => `<div class="record-cell">${escapeHtml(row?.phone)}</div>`,
+          (row) => `<div class="record-cell">${escapeHtml(row?.address)}</div>`,
+          (row) => `<div class="record-cell">${escapeHtml(row?.occupation)}</div>`,
+          (row) =>
+            `<div class="record-cell">${row ? escapeHtml(new Date(row.created_at).toLocaleDateString("zh-TW")) : ""}</div>`,
+        ];
+        return `<div class="record-block ${position}">
+          ${labels.map((label, rowIndex) => `<div class="row-label">${label}</div>${rows.map((row) => (row ? fields[rowIndex](row) : '<div class="record-cell empty"></div>')).join("")}`).join("")}
+        </div>`;
+      }
+
+      async function loadPhotos(rows) {
+        await Promise.all(
+          rows.map(async (row) => {
+            if (!row.photo_path) return;
+            const { data } = await supabaseClient.storage
+              .from(BUCKET)
+              .createSignedUrl(row.photo_path, 300);
+            const target = document.querySelector(`[data-photo-id="${CSS.escape(row.id)}"]`);
+            if (target && data?.signedUrl)
+              target.outerHTML = `<img class="photo" src="${escapeHtml(data.signedUrl)}" alt="${escapeHtml(row.representative_name)}" />`;
+          })
+        );
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(
+          /[&<>'"]/g,
+          (character) =>
+            ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]
+        );
+      }
+    </script>
+  </body>
+</html>

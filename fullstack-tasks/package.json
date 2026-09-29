@@ -1,0 +1,21 @@
+{
+  "name": "fullstack-tasks",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "全棧範本應用：任務管理（Express + PostgreSQL/PGlite + 多頁 HTML 前端）",
+  "scripts": {
+    "dev": "node scripts/migrate.mjs && node server/index.js",
+    "start": "node server/index.js",
+    "migrate": "node scripts/migrate.mjs",
+    "migrate:down": "node scripts/migrate.mjs --down",
+    "seed": "node scripts/seed.mjs",
+    "test": "node --test tests/unit/*.mjs tests/integration/*.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "gates": "npm run migrate && npm run test && npm run smoke"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "express": "^4.21.2"
+  }
+}

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="api-base" content="" />
+    <title>任務工作台｜全棧範本</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="js/tailwind-config.js"></script>
+    <script src="js/api.js"></script>
+    <style>
+      body { background: #141314; color: #e5e2e2; font-family: Manrope, "Noto Sans TC", sans-serif; }
+      .card { background: #1c1b1c; border: 1px solid #46464b; }
+      .field { background: #201f20; border: 1px solid #46464b; color: #e5e2e2; }
+      .field:focus { outline: none; border-color: #e9c349; }
+      .hidden { display: none !important; }
+    </style>
+  </head>
+
+  <body class="min-h-screen">
+    <!-- 頂部列 -->
+    <header class="border-b border-outline-variant bg-surface-container-low">
+      <div class="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+        <div>
+          <h1 class="font-display text-2xl tracking-wide text-secondary">任務工作台</h1>
+          <p class="text-xs text-on-surface-variant">Express + PostgreSQL + 多頁 HTML 全棧範本</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="user-info" class="text-sm text-on-surface-variant">載入中…</span>
+          <a
+            id="btn-admin"
+            href="admin.html"
+            class="hidden rounded-lg border border-outline-variant px-3 py-2 text-sm hover:border-secondary hover:text-secondary"
+            >管理後台</a
+          >
+          <button
+            id="btn-logout"
+            class="rounded-lg border border-outline-variant px-3 py-2 text-sm hover:border-error hover:text-error"
+          >
+            登出
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-5 py-8">
+      <!-- 統計 -->
+      <section class="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div class="card rounded-xl p-4">
+          <p class="text-xs uppercase tracking-widest text-on-surface-variant">全部</p>
+          <p id="stat-total" class="mt-1 font-display text-3xl">–</p>
+        </div>
+        <div class="card rounded-xl p-4">
+          <p class="text-xs uppercase tracking-widest text-on-surface-variant">待辦</p>
+          <p id="stat-todo" class="mt-1 font-display text-3xl text-neon-cyan">–</p>
+        </div>
+        <div class="card rounded-xl p-4">
+          <p class="text-xs uppercase tracking-widest text-on-surface-variant">進行中</p>
+          <p id="stat-doing" class="mt-1 font-display text-3xl text-secondary">–</p>
+        </div>
+        <div class="card rounded-xl p-4">
+          <p class="text-xs uppercase tracking-widest text-on-surface-variant">已完成</p>
+          <p id="stat-done" class="mt-1 font-display text-3xl text-tertiary">–</p>
+        </div>
+      </section>
+
+      <!-- 新增任務 -->
+      <section class="card mb-8 rounded-xl p-5">
+        <h2 class="mb-4 text-sm uppercase tracking-widest text-on-surface-variant">新增任務</h2>
+        <form id="form-create" class="grid gap-3 md:grid-cols-12">
+          <input
+            id="input-title"
+            class="field rounded-lg px-3 py-2 text-sm md:col-span-5"
+            placeholder="任務標題（必填）"
+            maxlength="120"
+            required
+          />
+          <input
+            id="input-notes"
+            class="field rounded-lg px-3 py-2 text-sm md:col-span-3"
+            placeholder="備註（選填）"
+            maxlength="2000"
+          />
+          <select id="select-status" class="field rounded-lg px-3 py-2 text-sm md:col-span-2">
+            <option value="todo">待辦</option>
+            <option value="doing">進行中</option>
+            <option value="done">已完成</option>
+          </select>
+          <select id="select-priority" class="field rounded-lg px-3 py-2 text-sm md:col-span-1">
+            <option value="1">低</option>
+            <option value="2" selected>中</option>
+            <option value="3">高</option>
+          </select>
+          <input id="input-due" type="date" class="field rounded-lg px-3 py-2 text-sm md:col-span-1" />
+          <div class="md:col-span-12">
+            <button
+              type="submit"
+              id="btn-create"
+              class="rounded-lg bg-secondary px-5 py-2 text-sm font-semibold text-on-secondary hover:bg-secondary-fixed"
+            >
+              新增
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- 篩選 -->
+      <section class="mb-4 flex flex-wrap items-center gap-3">
+        <input
+          id="input-search"
+          class="field w-full rounded-lg px-3 py-2 text-sm md:w-64"
+          placeholder="搜尋標題或備註…"
+        />
+        <select id="select-filter-status" class="field rounded-lg px-3 py-2 text-sm">
+          <option value="">全部狀態</option>
+          <option value="todo">待辦</option>
+          <option value="doing">進行中</option>
+          <option value="done">已完成</option>
+        </select>
+        <select id="select-sort" class="field rounded-lg px-3 py-2 text-sm">
+          <option value="created_desc">最新建立</option>
+          <option value="created_asc">最早建立</option>
+          <option value="due_asc">到期日近到遠</option>
+          <option value="priority_desc">優先度高到低</option>
+          <option value="updated_desc">最近更新</option>
+        </select>
+        <button id="btn-reset" class="rounded-lg border border-outline-variant px-3 py-2 text-sm hover:border-secondary">
+          重設
+        </button>
+        <span id="result-info" class="ml-auto text-xs text-on-surface-variant"></span>
+      </section>
+
+      <!-- 列表 -->
+      <section class="card rounded-xl">
+        <div id="loading-state" class="p-8 text-center text-sm text-on-surface-variant">載入中…</div>
+        <div id="error-state" class="hidden p-8 text-center text-sm text-error"></div>
+        <div id="empty-state" class="hidden p-8 text-center text-sm text-on-surface-variant">
+          還沒有任務，先在上方新增一筆吧。
+        </div>
+        <ul id="task-list" class="hidden divide-y divide-outline-variant"></ul>
+        <div id="pagination" class="hidden items-center justify-between border-t border-outline-variant px-5 py-3 text-sm">
+          <button id="btn-prev" class="rounded-lg border border-outline-variant px-3 py-1 hover:border-secondary">上一頁</button>
+          <span id="page-info" class="text-on-surface-variant"></span>
+          <button id="btn-next" class="rounded-lg border border-outline-variant px-3 py-1 hover:border-secondary">下一頁</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- 編輯浮層 -->
+    <div id="dialog-edit" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/70 px-4">
+      <div class="card w-full max-w-lg rounded-xl p-6">
+        <h3 class="mb-4 text-sm uppercase tracking-widest text-on-surface-variant">編輯任務</h3>
+        <div class="grid gap-3">
+          <input id="edit-title" class="field rounded-lg px-3 py-2 text-sm" maxlength="120" />
+          <textarea id="edit-notes" rows="3" class="field rounded-lg px-3 py-2 text-sm" maxlength="2000"></textarea>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="edit-status" class="field rounded-lg px-3 py-2 text-sm">
+              <option value="todo">待辦</option>
+              <option value="doing">進行中</option>
+              <option value="done">已完成</option>
+            </select>
+            <select id="edit-priority" class="field rounded-lg px-3 py-2 text-sm">
+              <option value="1">低</option>
+              <option value="2">中</option>
+              <option value="3">高</option>
+            </select>
+            <input id="edit-due" type="date" class="field rounded-lg px-3 py-2 text-sm" />
+          </div>
+        </div>
+        <div class="mt-5 flex justify-end gap-3">
+          <button id="btn-cancel-edit" class="rounded-lg border border-outline-variant px-4 py-2 text-sm">取消</button>
+          <button id="btn-save-edit" class="rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-on-secondary">
+            儲存
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var state = { page: 1, pageSize: 10, editingId: null };
+
+        function $(id) {
+          return document.getElementById(id);
+        }
+        function escapeHtml(text) {
+          var div = document.createElement("div");
+          div.textContent = text === null || text === undefined ? "" : String(text);
+          return div.innerHTML;
+        }
+        function show(el, yes) {
+          el.classList.toggle("hidden", !yes);
+        }
+
+        var STATUS_LABEL = { todo: "待辦", doing: "進行中", done: "已完成" };
+        var STATUS_CLASS = {
+          todo: "border-neon-cyan text-neon-cyan",
+          doing: "border-secondary text-secondary",
+          done: "border-tertiary text-tertiary",
+        };
+        var PRIORITY_LABEL = { 1: "低", 2: "中", 3: "高" };
+
+        // ---------- 載入 ----------
+        async function loadTasks() {
+          show($("loading-state"), true);
+          show($("error-state"), false);
+          show($("empty-state"), false);
+          show($("task-list"), false);
+          show($("pagination"), false);
+
+          var r = await API.tasks.list({
+            page: state.page,
+            pageSize: state.pageSize,
+            q: $("input-search").value.trim(),
+            status: $("select-filter-status").value,
+            sort: $("select-sort").value,
+          });
+
+          show($("loading-state"), false);
+          if (!r.ok) {
+            $("error-state").textContent = r.message;
+            show($("error-state"), true);
+            return;
+          }
+
+          var data = r.data;
+          $("stat-total").textContent = data.stats.total;
+          $("stat-todo").textContent = data.stats.todo;
+          $("stat-doing").textContent = data.stats.doing;
+          $("stat-done").textContent = data.stats.done;
+
+          var items = data.items || [];
+          if (items.length === 0) {
+            show($("empty-state"), true);
+            $("result-info").textContent = "共 0 筆";
+            return;
+          }
+
+          $("task-list").innerHTML = items.map(renderItem).join("");
+          show($("task-list"), true);
+
+          var p = data.pagination;
+          $("page-info").textContent = "第 " + p.page + " / " + p.totalPages + " 頁";
+          $("result-info").textContent = "共 " + p.total + " 筆";
+          $("btn-prev").disabled = p.page <= 1;
+          $("btn-next").disabled = p.page >= p.totalPages;
+          $("btn-prev").className =
+            "rounded-lg border border-outline-variant px-3 py-1 " +
+            (p.page <= 1 ? "opacity-40" : "hover:border-secondary");
+          $("btn-next").className =
+            "rounded-lg border border-outline-variant px-3 py-1 " +
+            (p.page >= p.totalPages ? "opacity-40" : "hover:border-secondary");
+          var pg = $("pagination");
+          pg.classList.remove("hidden");
+          pg.classList.add("flex");
+        }
+
+        function renderItem(t) {
+          var due = t.dueDate ? '<span class="text-xs text-on-surface-variant">到期 ' + escapeHtml(t.dueDate) + "</span>" : "";
+          return (
+            '<li class="flex items-start gap-4 px-5 py-4" data-id="' + t.id + '">' +
+            '<div class="min-w-0 flex-1">' +
+            '<p class="truncate text-sm font-medium">' + escapeHtml(t.title) + "</p>" +
+            (t.notes ? '<p class="mt-1 line-clamp-2 text-xs text-on-surface-variant">' + escapeHtml(t.notes) + "</p>" : "") +
+            '<div class="mt-2 flex flex-wrap items-center gap-2">' +
+            '<span class="rounded-full border px-2 py-0.5 text-xs ' + STATUS_CLASS[t.status] + '">' +
+            STATUS_LABEL[t.status] +
+            "</span>" +
+            '<span class="text-xs text-on-surface-variant">優先度 ' + PRIORITY_LABEL[t.priority] + "</span>" +
+            due +
+            "</div></div>" +
+            '<div class="flex shrink-0 gap-2">' +
+            '<button class="js-edit rounded-lg border border-outline-variant px-3 py-1 text-xs hover:border-secondary">編輯</button>' +
+            '<button class="js-delete rounded-lg border border-outline-variant px-3 py-1 text-xs hover:border-error hover:text-error">刪除</button>' +
+            "</div></li>"
+          );
+        }
+
+        // ---------- 事件 ----------
+        $("form-create").addEventListener("submit", async function (e) {
+          e.preventDefault();
+          var title = $("input-title").value.trim();
+          if (!title) {
+            API.toast("請填寫任務標題", "error");
+            return;
+          }
+          var r = await API.tasks.create({
+            title: title,
+            notes: $("input-notes").value.trim() || undefined,
+            status: $("select-status").value,
+            priority: Number($("select-priority").value),
+            dueDate: $("input-due").value || undefined,
+          });
+          if (!r.ok) {
+            API.toast(r.message, "error");
+            return;
+          }
+          $("input-title").value = "";
+          $("input-notes").value = "";
+          $("input-due").value = "";
+          API.toast("已新增任務");
+          state.page = 1;
+          loadTasks();
+        });
+
+        $("task-list").addEventListener("click", async function (e) {
+          var li = e.target.closest("li[data-id]");
+          if (!li) return;
+          var id = li.getAttribute("data-id");
+
+          if (e.target.classList.contains("js-delete")) {
+            if (!confirm("確定要刪除這筆任務嗎？")) return;
+            var d = await API.tasks.remove(id);
+            if (!d.ok) {
+              API.toast(d.message, "error");
+              return;
+            }
+            API.toast("已刪除");
+            loadTasks();
+            return;
+          }
+
+          if (e.target.classList.contains("js-edit")) {
+            var g = await API.request("/api/tasks/" + id);
+            if (!g.ok) {
+              API.toast(g.message, "error");
+              return;
+            }
+            var t = g.data.task;
+            state.editingId = id;
+            $("edit-title").value = t.title;
+            $("edit-notes").value = t.notes || "";
+            $("edit-status").value = t.status;
+            $("edit-priority").value = String(t.priority);
+            $("edit-due").value = t.dueDate || "";
+            var dlg = $("dialog-edit");
+            dlg.classList.remove("hidden");
+            dlg.classList.add("flex");
+          }
+        });
+
+        $("btn-cancel-edit").addEventListener("click", closeEdit);
+        function closeEdit() {
+          var dlg = $("dialog-edit");
+          dlg.classList.add("hidden");
+          dlg.classList.remove("flex");
+          state.editingId = null;
+        }
+
+        $("btn-save-edit").addEventListener("click", async function () {
+          if (!state.editingId) return;
+          var payload = {
+            title: $("edit-title").value.trim(),
+            notes: $("edit-notes").value.trim(),
+            status: $("edit-status").value,
+            priority: Number($("edit-priority").value),
+            dueDate: $("edit-due").value || null,
+          };
+          if (!payload.title) {
+            API.toast("標題不可空白", "error");
+            return;
+          }
+          var r = await API.tasks.update(state.editingId, payload);
+          if (!r.ok) {
+            API.toast(r.message, "error");
+            return;
+          }
+          closeEdit();
+          API.toast("已更新");
+          loadTasks();
+        });
+
+        var searchTimer = null;
+        $("input-search").addEventListener("input", function () {
+          clearTimeout(searchTimer);
+          searchTimer = setTimeout(function () {
+            state.page = 1;
+            loadTasks();
+          }, 300);
+        });
+        $("select-filter-status").addEventListener("change", function () {
+          state.page = 1;
+          loadTasks();
+        });
+        $("select-sort").addEventListener("change", function () {
+          state.page = 1;
+          loadTasks();
+        });
+        $("btn-reset").addEventListener("click", function () {
+          $("input-search").value = "";
+          $("select-filter-status").value = "";
+          $("select-sort").value = "created_desc";
+          state.page = 1;
+          loadTasks();
+        });
+        $("btn-prev").addEventListener("click", function () {
+          if (state.page > 1) {
+            state.page -= 1;
+            loadTasks();
+          }
+        });
+        $("btn-next").addEventListener("click", function () {
+          state.page += 1;
+          loadTasks();
+        });
+
+        $("btn-logout").addEventListener("click", async function () {
+          await API.auth.logout();
+          location.href = "login.html";
+        });
+
+        // ---------- 啟動 ----------
+        (async function boot() {
+          var ok = await API.refreshSession();
+          if (!ok) {
+            API.redirectToLogin("index.html");
+            return;
+          }
+          var me = await API.auth.me();
+          if (!me.ok) {
+            API.redirectToLogin("index.html");
+            return;
+          }
+          var u = me.data.user;
+          $("user-info").textContent = u.displayName + "（" + u.email + "）";
+          if (u.role === "admin") {
+            $("btn-admin").classList.remove("hidden");
+          }
+          loadTasks();
+        })();
+      })();
+    </script>
+  </body>
+</html>

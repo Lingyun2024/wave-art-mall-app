@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>購物車 | WAVE ART MALL</title>
+
+<!-- ============================================
+     PWA 設定（讓網站可以「加到主畫面」變成手機 App 圖示）
+     ============================================ -->
+<link rel="manifest" href="../manifest.json" />
+<meta name="theme-color" content="#020203" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/material-symbols.css">
+<script src="../js/tailwind-config.js"></script>
+<link rel="stylesheet" href="../css/style.css" />
+
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+</style>
+</head>
+<body class="min-h-screen pb-32 pt-16">
+
+<header class="site-header">
+  <div class="flex items-center gap-4">
+    <button onclick="history.back()" class="text-secondary active:scale-95 transition-transform">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <a href="../index.html" class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-widest text-secondary hidden md:block">WAVE ART MALL</a>
+  </div>
+  <div class="flex items-center gap-4">
+    <a id="nav-auth-link" href="auth.html" class="font-label-sm text-[11px] uppercase tracking-widest text-secondary hover:text-neon-cyan transition-colors">登入</a>
+  </div>
+</header>
+
+<main class="pt-8 px-4 max-w-[1440px] mx-auto">
+  <div class="mb-12">
+    <h1 class="font-headline-xl text-headline-xl text-secondary mb-2">您的購物車</h1>
+    <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Shopping Cart</p>
+  </div>
+
+  <!-- 载入中骨架屏 -->
+  <div id="loading-block" class="text-center text-on-surface-variant py-16">
+    <span class="loading-spinner"></span>
+    <p class="mt-4">正在載入購物車...</p>
+  </div>
+
+  <!-- 购物车为空时显示 -->
+  <div id="empty-block" class="hidden text-center text-on-surface-variant py-24 space-y-4">
+    <span class="material-symbols-outlined text-6xl text-secondary/40">shopping_cart</span>
+    <p>您的購物車目前是空的</p>
+    <a href="../index.html" class="inline-block bg-secondary text-void-black font-bold px-6 py-3 rounded hover:shadow-[0_0_15px_rgba(233,195,73,0.4)] transition-all">繼續探索藝術</a>
+  </div>
+
+  <!-- 未登入时显示 -->
+  <div id="guest-block" class="hidden text-center text-on-surface-variant py-24 space-y-4">
+    <span class="material-symbols-outlined text-6xl text-secondary/40">lock</span>
+    <p>請先登入才能查看您的購物車</p>
+    <a href="auth.html" class="inline-block bg-secondary text-void-black font-bold px-6 py-3 rounded hover:shadow-[0_0_15px_rgba(233,195,73,0.4)] transition-all">前往登入</a>
+  </div>
+
+  <!-- 购物车主体内容 -->
+  <div id="cart-content" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <!-- 购物车项目清单 -->
+    <div class="lg:col-span-2 space-y-8" id="cart-items-list">
+      <!-- 每一笔购物车项目会由 JS 动态插入这里 -->
+    </div>
+
+    <!-- 订单摘要侧边栏 -->
+    <aside class="lg:col-span-1">
+      <div class="glass-card p-8 sticky top-24 border-secondary/30 rounded-lg">
+        <h3 class="font-headline-lg text-headline-lg mb-8 border-b border-secondary/20 pb-4">訂單摘要</h3>
+        <div class="space-y-6">
+          <div class="flex justify-between font-body-md">
+            <span class="text-on-surface-variant">小計</span>
+            <span class="text-starlight-white" id="summary-subtotal">NT$ 0</span>
+          </div>
+          <div class="flex justify-between font-body-md pb-6 border-b border-secondary/20">
+            <span class="text-on-surface-variant">商品件數</span>
+            <span class="text-starlight-white" id="summary-count">0 件</span>
+          </div>
+          <div class="flex justify-between items-end pt-4">
+            <span class="font-label-sm text-secondary uppercase">總金額</span>
+            <span class="font-headline-xl text-3xl text-secondary" id="summary-total">NT$ 0</span>
+          </div>
+          <div class="pt-8">
+            <button id="btn-checkout" class="w-full bg-secondary text-void-black font-bold py-4 rounded-none transition-all hover:bg-neon-cyan neon-glow active:scale-[0.98] uppercase tracking-[0.2em] font-label-sm">
+              進入結帳程序
+            </button>
+            <a href="../index.html" class="block text-center w-full mt-4 border border-secondary/50 text-secondary font-bold py-4 rounded-none transition-all hover:bg-secondary/10 active:scale-[0.98] uppercase tracking-[0.2em] font-label-sm">
+              繼續探索藝術
+            </a>
+          </div>
+          <div class="mt-8 flex items-center gap-4 text-on-surface-variant/60">
+            <span class="material-symbols-outlined text-xl">verified_user</span>
+            <p class="text-xs font-label-sm">所有藝術品均附有鏈上認證及實體真品證明書</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabaseClient.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+  /*
+    =========================================================
+    购物车页专属逻辑
+    =========================================================
+    这一段负责：
+    1. 确认使用者是否登入，没登入就显示「请先登入」的画面
+    2. 去 cart_items 表拿目前使用者的购物车内容，并且 join products
+       拿到商品名称、价格、图片（因为 cart_items 只存 product_id）
+    3. 提供加减数量、删除项目的按钮
+    4. 即时计算并显示总金额
+    5. 「去结帐」按钮导向 checkout.html
+  */
+
+  // 用一个全域变数暂存目前的购物车资料，方便增减数量/删除时重新计算总额
+  let cartItemsCache = [];
+
+  // -----------------------------------------------------
+  // 这一段是页面主要的启动流程
+  // -----------------------------------------------------
+  async function initCartPage() {
+    const loadingBlock = document.getElementById("loading-block");
+    const emptyBlock = document.getElementById("empty-block");
+    const guestBlock = document.getElementById("guest-block");
+    const cartContent = document.getElementById("cart-content");
+
+    const user = await getCurrentUser();
+    if (!user) {
+      // 没登入 -> 显示提示登入的画面
+      loadingBlock.classList.add("hidden");
+      guestBlock.classList.remove("hidden");
+      return;
+    }
+
+    await loadCartItems(user.id);
+  }
+
+  // -----------------------------------------------------
+  // 这一段是去资料库拿「购物车项目」，并且顺便拿商品资讯
+  // -----------------------------------------------------
+  async function loadCartItems(userId) {
+    const loadingBlock = document.getElementById("loading-block");
+    const emptyBlock = document.getElementById("empty-block");
+    const cartContent = document.getElementById("cart-content");
+
+    try {
+      // Supabase 的写法：select 里面用 products(...) 代表要 join products 表，
+      // 前提是资料库有设定 cart_items.product_id 参照 products.id 的外键关系
+      const { data, error } = await supabaseClient
+        .from("cart_items")
+        .select("id, quantity, product_id, products(id, name, price, image_urls)")
+        .eq("user_id", userId);
+
+      if (error) throw error;
+
+      cartItemsCache = data || [];
+
+      loadingBlock.classList.add("hidden");
+
+      if (cartItemsCache.length === 0) {
+        emptyBlock.classList.remove("hidden");
+        return;
+      }
+
+      cartContent.classList.remove("hidden");
+      renderCartItems();
+      updateSummary();
+    } catch (err) {
+      console.error("[loadCartItems] 拿购物车资料失败:", err);
+      loadingBlock.classList.add("hidden");
+      showToast("購物車載入失敗，請重新整理頁面", "error");
+    }
+  }
+
+  // 把 cartItemsCache 的资料画成画面上的卡片
+  function renderCartItems() {
+    const container = document.getElementById("cart-items-list");
+    container.innerHTML = cartItemsCache.map((item) => {
+      const product = item.products || {};
+      return `
+        <div class="glass-card p-6 flex flex-col md:flex-row gap-6 items-center transition-all hover:border-secondary/40 rounded-lg" data-cart-item-id="${item.id}">
+          <div class="w-full md:w-48 h-48 gold-frame overflow-hidden flex-shrink-0">
+            <img class="w-full h-full object-cover" src="${escapeHtml(product.image_urls || '')}" alt="${escapeHtml(product.name || '')}" onerror="this.src='https://placehold.co/300x300/141314/e9c349?text=WAVE+ART'" />
+          </div>
+          <div class="flex-grow space-y-2 text-center md:text-left">
+            <h2 class="font-headline-lg text-headline-lg text-starlight-white">${escapeHtml(product.name || '（商品已下架）')}</h2>
+            <p class="font-body-md text-on-surface-variant mt-2">單價：${formatPrice(product.price || 0)}</p>
+          </div>
+          <div class="flex flex-col items-end gap-4">
+            <div class="text-secondary font-headline-lg text-2xl">${formatPrice((product.price || 0) * item.quantity)}</div>
+            <div class="flex items-center border border-secondary/30 rounded-full px-4 py-1">
+              <button class="hover:text-neon-cyan transition-colors" onclick="changeQuantity(${item.id}, -1)"><span class="material-symbols-outlined text-sm">remove</span></button>
+              <span class="mx-4 font-label-sm text-lg">${item.quantity}</span>
+              <button class="hover:text-neon-cyan transition-colors" onclick="changeQuantity(${item.id}, 1)"><span class="material-symbols-outlined text-sm">add</span></button>
+            </div>
+            <button class="text-on-surface-variant/50 hover:text-red-400 transition-colors flex items-center gap-1" onclick="removeCartItem(${item.id})">
+              <span class="material-symbols-outlined text-sm">delete</span>
+              <span class="font-label-sm text-xs">移除作品</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // 更新右侧「订单摘要」的小计/件数/总金额
+  function updateSummary() {
+    let subtotal = 0;
+    let count = 0;
+    cartItemsCache.forEach((item) => {
+      const price = (item.products && item.products.price) || 0;
+      subtotal += price * item.quantity;
+      count += item.quantity;
+    });
+    document.getElementById("summary-subtotal").textContent = formatPrice(subtotal);
+    document.getElementById("summary-count").textContent = count + " 件";
+    document.getElementById("summary-total").textContent = formatPrice(subtotal);
+  }
+
+  // -----------------------------------------------------
+  // 增加/减少购物车项目数量
+  // -----------------------------------------------------
+  async function changeQuantity(cartItemId, delta) {
+    const item = cartItemsCache.find((i) => i.id === cartItemId);
+    if (!item) return;
+
+    const newQuantity = item.quantity + delta;
+    // 数量最少是 1，不能减到 0 以下（要归零请用删除按钮）
+    if (newQuantity < 1) return;
+
+    try {
+      const { error } = await supabaseClient
+        .from("cart_items")
+        .update({ quantity: newQuantity })
+        .eq("id", cartItemId);
+      if (error) throw error;
+
+      // 更新画面上的暂存资料并重新画面
+      item.quantity = newQuantity;
+      renderCartItems();
+      updateSummary();
+      updateCartBadge();
+    } catch (err) {
+      console.error("[changeQuantity] 更新数量失败:", err);
+      showToast("更新數量失敗，請稍後再試", "error");
+    }
+  }
+
+  // -----------------------------------------------------
+  // 从购物车移除某一项商品
+  // -----------------------------------------------------
+  async function removeCartItem(cartItemId) {
+    try {
+      const { error } = await supabaseClient
+        .from("cart_items")
+        .delete()
+        .eq("id", cartItemId);
+      if (error) throw error;
+
+      // 从暂存资料里移掉，重新画面
+      cartItemsCache = cartItemsCache.filter((i) => i.id !== cartItemId);
+      showToast("已移除該作品");
+
+      if (cartItemsCache.length === 0) {
+        document.getElementById("cart-content").classList.add("hidden");
+        document.getElementById("empty-block").classList.remove("hidden");
+      } else {
+        renderCartItems();
+        updateSummary();
+      }
+      updateCartBadge();
+    } catch (err) {
+      console.error("[removeCartItem] 移除商品失败:", err);
+      showToast("移除失敗，請稍後再試", "error");
+    }
+  }
+
+  // -----------------------------------------------------
+  // 「进入结帐程序」按钮：导向结帐页
+  // -----------------------------------------------------
+  document.addEventListener("DOMContentLoaded", () => {
+    initCartPage();
+    document.getElementById("btn-checkout").addEventListener("click", () => {
+      if (cartItemsCache.length === 0) {
+        showToast("購物車是空的，無法結帳", "error");
+        return;
+      }
+      window.location.href = "checkout.html";
+    });
+  });
+</script>
+
+<!-- ============================================
+     註冊 Service Worker（讓網站支援離線快取、可安裝成 App）
+     ============================================ -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch((err) => {
+      console.warn("Service Worker 註冊失敗：", err);
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,532 @@
+﻿<!doctype html>
+<html class="dark" lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>WAVE ART MALL - 選擇特赦身分</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              secondary: "#e9c349",
+              "on-error": "#690005",
+              "surface-dim": "#141314",
+              "primary-fixed": "#e3e1e9",
+              "primary-container": "#0a0b10",
+              "on-secondary": "#3c2f00",
+              "inverse-surface": "#e5e2e2",
+              "on-secondary-container": "#342800",
+              "on-tertiary-fixed": "#211a14",
+              surface: "#141314",
+              "outline-variant": "#46464b",
+              "galactic-purple": "#8A2BE2",
+              "neon-cyan": "#00FFFF",
+              "tertiary-fixed": "#efe0d5",
+              "inverse-on-surface": "#313030",
+              primary: "#c7c6cd",
+              "surface-container-low": "#1c1b1c",
+              "surface-container-highest": "#353435",
+              "surface-tint": "#c7c6cd",
+              "on-primary-fixed-variant": "#46464c",
+              "on-error-container": "#ffdad6",
+              "on-primary-container": "#797980",
+              "inverse-primary": "#5e5e64",
+              "secondary-fixed-dim": "#e9c349",
+              "on-secondary-container": "#342800",
+              "secondary-fixed": "#ffe088",
+              outline: "#919095",
+              "surface-container-high": "#2a2a2a",
+              "secondary-container": "#af8d11",
+              "on-background": "#e5e2e2",
+              "on-primary-fixed": "#1a1b21",
+              "on-primary": "#2f3036",
+              "starlight-white": "#F9F9F9",
+              "error-container": "#93000a",
+              background: "#141314",
+              "on-surface-variant": "#c7c6cb",
+              "on-surface": "#e5e2e2",
+              "tertiary-container": "#100a05",
+              "primary-fixed-dim": "#c7c6cd",
+              tertiary: "#d2c4b9",
+              "surface-container": "#201f20",
+              "surface-bright": "#3a3939",
+              "surface-container-lowest": "#0e0e0e",
+              "on-tertiary": "#372f27",
+              "on-secondary-fixed-variant": "#574500",
+              "tertiary-fixed-dim": "#d2c4b9",
+              error: "#ffb4ab",
+              "on-tertiary-fixed-variant": "#4e453d",
+              "surface-variant": "#353435",
+              "on-secondary-fixed": "#241a00",
+              "void-black": "#020203",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              gutter: "24px",
+              "container-max": "1440px",
+              unit: "8px",
+              "margin-mobile": "20px",
+              "margin-desktop": "80px",
+            },
+            fontFamily: {
+              "label-sm": ["JetBrains Mono"],
+              "headline-xl": ["Playfair Display"],
+              "headline-lg": ["Playfair Display"],
+              "headline-lg-mobile": ["Playfair Display"],
+              "body-md": ["Manrope"],
+            },
+            fontSize: {
+              "label-sm": [
+                "12px",
+                { lineHeight: "1.0", letterSpacing: "0.1em", fontWeight: "500" },
+              ],
+              "headline-xl": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" },
+              ],
+              "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "600" }],
+              "headline-lg-mobile": ["28px", { lineHeight: "1.3", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #141314;
+        color: #e5e2e2;
+        -webkit-font-smoothing: antialiased;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(233, 195, 73, 0.2);
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+  </head>
+  <body class="font-body-md text-body-md overflow-x-hidden">
+    <!-- 頂部導航欄 -->
+    <nav
+      class="flex justify-between items-center px-margin-mobile h-16 w-full fixed top-0 bg-background/80 backdrop-blur-md text-secondary border-b border-secondary/20 z-50"
+    >
+      <div class="flex items-center gap-4">
+        <span
+          class="material-symbols-outlined cursor-pointer active:opacity-70 transition-all scale-95"
+          onclick="window.location.href = 'holiday-entry.html'"
+        >
+          arrow_back
+        </span>
+      </div>
+      <h1
+        class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-widest text-secondary"
+      >
+        WAVE ART MALL
+      </h1>
+      <div class="flex items-center gap-4">
+        <span
+          class="material-symbols-outlined cursor-pointer active:opacity-70 transition-all scale-95"
+          onclick="window.location.href = 'cart.html'"
+        >
+          shopping_cart
+        </span>
+      </div>
+    </nav>
+    <main class="pt-16 pb-32 max-w-[1440px] mx-auto min-h-screen">
+      <!-- 影片輪播區 -->
+      <section class="px-0 md:px-margin-desktop mt-8">
+        <div
+          class="relative group overflow-hidden rounded-lg border border-secondary/30 bg-void-black"
+        >
+          <!-- 點擊才載入的影片輪播：預設只顯示靜態封面 + 播放按鈕 -->
+          <div id="video-slider" class="relative w-full aspect-[1.79] bg-surface-container-low">
+            <img
+              src="../assets/identity/savior.png"
+              alt="七七地赦影片預覽"
+              class="absolute inset-0 w-full h-full object-cover opacity-80"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-void-black/70 to-transparent"></div>
+            <button
+              id="video-play-btn"
+              type="button"
+              class="absolute inset-0 flex flex-col items-center justify-center gap-3 z-20 cursor-pointer"
+              aria-label="播放影片"
+            >
+              <span
+                class="flex items-center justify-center w-20 h-20 rounded-full bg-secondary/90 text-void-black shadow-[0_0_30px_rgba(233,195,73,0.5)] transition-transform hover:scale-110"
+              >
+                <span
+                  class="material-symbols-outlined text-4xl"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                >
+                  play_arrow
+                </span>
+              </span>
+              <span class="font-label-sm text-label-sm text-starlight-white tracking-widest">
+                點擊播放影片
+              </span>
+            </button>
+            <div id="video-stage" class="absolute inset-0 hidden"></div>
+          </div>
+          <!-- 影片導航指示器（載入後顯示）-->
+          <div
+            class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 hidden"
+            id="video-dots"
+          >
+            <div class="w-2 h-2 rounded-full bg-secondary"></div>
+            <div class="w-2 h-2 rounded-full bg-secondary/30"></div>
+            <div class="w-2 h-2 rounded-full bg-secondary/30"></div>
+            <div class="w-2 h-2 rounded-full bg-secondary/30"></div>
+            <div class="w-2 h-2 rounded-full bg-secondary/30"></div>
+          </div>
+          <!-- 左右切換按鈕（載入後顯示）-->
+          <button
+            class="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-void-black/50 text-secondary opacity-0 group-hover:opacity-100 transition-opacity hidden"
+            id="btn-prev"
+          >
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          <button
+            class="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-void-black/50 text-secondary opacity-0 group-hover:opacity-100 transition-opacity hidden"
+            id="btn-next"
+          >
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+          <!-- 音量控制按鈕（載入後顯示）-->
+          <button
+            id="btn-mute-toggle"
+            class="absolute top-4 right-4 p-2 rounded-full bg-void-black/60 text-secondary transition-opacity z-10 hidden"
+          >
+            <span class="material-symbols-outlined" id="mute-icon">volume_up</span>
+          </button>
+        </div>
+      </section>
+      <!-- 選擇身分區域 -->
+      <section
+        class="mt-margin-desktop px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-gutter"
+      >
+        <div class="lg:col-span-8">
+          <div class="space-y-6 animate-in fade-in duration-700">
+            <div class="text-center mb-8">
+              <span
+                class="font-label-sm text-label-sm text-neon-cyan uppercase tracking-widest mb-2 block"
+              >
+                Status Selection
+              </span>
+              <h3 class="font-headline-lg text-headline-lg text-secondary">請選擇您的特赦身分</h3>
+              <p class="text-on-surface-variant/70 mt-2">選擇後將自動加入您的藝術收藏清單</p>
+            </div>
+            <!-- 五個身分選項按鈕 -->
+            <div class="grid grid-cols-1 gap-4">
+              <button
+                class="group flex items-center justify-between p-6 rounded-lg border border-secondary/30 bg-surface-container-low hover:bg-secondary/10 hover:border-secondary transition-all duration-300"
+                onclick="selectIdentity('personal')"
+              >
+                <div class="flex items-center gap-4">
+                  <img
+                    id="select-personal-icon"
+                    alt="個人者乎"
+                    src="../assets/identity/personal.png"
+                    class="w-12 h-12 object-contain rounded-full border border-secondary/40"
+                  />
+                  <span class="text-headline-lg-mobile text-starlight-white">個人者乎</span>
+                </div>
+                <span
+                  class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  arrow_forward_ios
+                </span>
+              </button>
+              <button
+                class="group flex items-center justify-between p-6 rounded-lg border border-secondary/30 bg-surface-container-low hover:bg-secondary/10 hover:border-secondary transition-all duration-300"
+                onclick="selectIdentity('family')"
+              >
+                <div class="flex items-center gap-4">
+                  <img
+                    id="select-family-icon"
+                    alt="家庭者乎"
+                    src="../assets/identity/family.png"
+                    class="w-12 h-12 object-contain rounded-full border border-secondary/40"
+                  />
+                  <span class="text-headline-lg-mobile text-starlight-white">家庭者乎</span>
+                </div>
+                <span
+                  class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  arrow_forward_ios
+                </span>
+              </button>
+              <button
+                class="group flex items-center justify-between p-6 rounded-lg border border-secondary/30 bg-surface-container-low hover:bg-secondary/10 hover:border-secondary transition-all duration-300"
+                onclick="selectIdentity('business')"
+              >
+                <div class="flex items-center gap-4">
+                  <img
+                    id="select-business-icon"
+                    alt="事業者乎"
+                    src="../assets/identity/business.png"
+                    class="w-12 h-12 object-contain rounded-full border border-secondary/40"
+                  />
+                  <span class="text-headline-lg-mobile text-starlight-white">事業者乎</span>
+                </div>
+                <span
+                  class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  arrow_forward_ios
+                </span>
+              </button>
+              <button
+                class="group flex items-center justify-between p-6 rounded-lg border border-secondary/30 bg-surface-container-low hover:bg-secondary/10 hover:border-secondary transition-all duration-300"
+                onclick="selectIdentity('society')"
+              >
+                <div class="flex items-center gap-4">
+                  <img
+                    id="select-society-icon"
+                    alt="社會者乎"
+                    src="../assets/identity/society.png"
+                    class="w-12 h-12 object-contain rounded-full border border-secondary/40"
+                  />
+                  <span class="text-headline-lg-mobile text-starlight-white">社會者乎</span>
+                </div>
+                <span
+                  class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  arrow_forward_ios
+                </span>
+              </button>
+              <button
+                class="group flex items-center justify-between p-6 rounded-lg border border-secondary/30 bg-surface-container-low hover:bg-secondary/10 hover:border-secondary transition-all duration-300"
+                onclick="selectIdentity('savior')"
+              >
+                <div class="flex items-center gap-4">
+                  <img
+                    id="select-savior-icon"
+                    alt="救世者(主)乎"
+                    src="../assets/identity/savior.png"
+                    class="w-12 h-12 object-contain rounded-full border border-secondary/40"
+                  />
+                  <span class="text-headline-lg-mobile text-starlight-white">救世者(主)乎</span>
+                </div>
+                <span
+                  class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  arrow_forward_ios
+                </span>
+              </button>
+            </div>
+            <button
+              class="w-full mt-8 text-on-surface-variant/50 text-sm hover:text-secondary transition-colors"
+              onclick="window.location.href = 'holiday-entry.html'"
+            >
+              返回產品詳情
+            </button>
+          </div>
+        </div>
+        <div class="lg:col-span-4 hidden lg:block">
+          <div class="sticky top-24 space-y-6">
+            <div class="glass-card p-6 rounded-lg border-l-4 border-l-secondary">
+              <h4 class="font-label-sm text-label-sm text-secondary uppercase mb-4">
+                Limited Edition
+              </h4>
+              <p class="text-sm text-on-surface-variant">
+                此藝術禮盒為 Wave Art Mall 限時供應，融合傳統莊園工藝與現代數位美學。
+              </p>
+            </div>
+            <div class="flex flex-col gap-4">
+              <button
+                class="w-full bg-secondary text-void-black font-bold py-4 px-6 rounded hover:shadow-[0_0_20px_rgba(233,195,73,0.4)] transition-all active:scale-[0.98]"
+              >
+                立即珍藏
+              </button>
+              <button
+                class="w-full border border-secondary text-secondary font-bold py-4 px-6 rounded hover:bg-secondary/10 transition-all active:scale-[0.98]"
+              >
+                加入購物車
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 底部固定操作列（手機版）-->
+    <div
+      class="fixed bottom-0 left-0 w-full flex justify-around items-center h-24 px-4 pb-4 z-[60] bg-surface-container-lowest/90 backdrop-blur-xl border-t border-secondary/30 lg:hidden"
+    >
+      <div class="flex w-full gap-3 max-w-md mx-auto">
+        <button
+          class="flex flex-col items-center justify-center px-4 text-secondary active:scale-95 transition-transform"
+        >
+          <span class="material-symbols-outlined">chat</span>
+          <span class="text-[10px] font-bold mt-1">聊聊</span>
+        </button>
+        <button
+          class="flex-1 bg-surface-container-high text-secondary border border-secondary/40 font-bold rounded-lg py-4 px-2 text-center active:scale-95 transition-transform"
+        >
+          加入購物車
+        </button>
+        <button
+          class="flex-[1.5] bg-secondary text-void-black font-bold rounded-lg py-4 px-2 text-center shadow-[0_0_15px_rgba(233,195,73,0.3)] active:scale-95 transition-transform"
+        >
+          直接購買
+        </button>
+      </div>
+    </div>
+
+    <!-- 影片輪播控制 JavaScript（點擊才載入版）-->
+    <script>
+      // 五支影片網址清單：進入頁面時完全不載入，按下播放按鈕後才動態建立 video 並下載。
+      const HOLIDAY_VIDEOS = [
+        "../assets/holiday/holiday-01.mp4",
+        "../assets/holiday/holiday-02.mp4",
+        "../assets/holiday/holiday-03.mp4",
+        "../assets/holiday/holiday-04.mp4",
+        "../assets/holiday/holiday-05.mp4",
+      ];
+
+      (function initVideoCarousel() {
+        const playBtn = document.getElementById("video-play-btn");
+        const stage = document.getElementById("video-stage");
+        const dotsWrap = document.getElementById("video-dots");
+        const btnPrev = document.getElementById("btn-prev");
+        const btnNext = document.getElementById("btn-next");
+        const muteToggle = document.getElementById("btn-mute-toggle");
+        const muteIcon = document.getElementById("mute-icon");
+
+        let slider = null;
+        let videos = [];
+        let dots = [];
+        let currentIndex = 0;
+        window.videoMuted = false; // 預設開啟聲音
+
+        function playCurrentVideo() {
+          videos.forEach((video, index) => {
+            if (index === currentIndex) {
+              video.muted = false;
+              video.defaultMuted = false;
+              video.volume = 1;
+              video
+                .play()
+                .then(() => {
+                  video.muted = window.videoMuted;
+                  video.volume = 1;
+                })
+                .catch(() => {});
+            } else {
+              video.pause();
+            }
+          });
+        }
+
+        function updateDots() {
+          dots.forEach((dot, index) => {
+            dot.classList.toggle("bg-secondary", index === currentIndex);
+            dot.classList.toggle("bg-secondary/30", index !== currentIndex);
+          });
+        }
+
+        function goToSlide(index) {
+          currentIndex = index;
+          slider.style.transform = `translateX(${-currentIndex * 100}%)`;
+          updateDots();
+          playCurrentVideo();
+        }
+
+        function startCarousel() {
+          slider = document.createElement("div");
+          slider.className = "flex transition-transform duration-500 ease-in-out w-full h-full";
+          slider.id = "video-slider-inner";
+
+          HOLIDAY_VIDEOS.forEach((src, i) => {
+            const video = document.createElement("video");
+            video.className = "min-w-full h-full object-cover";
+            video.loop = true;
+            video.playsInline = true;
+            video.controls = true;
+            video.defaultMuted = false;
+            video.muted = window.videoMuted;
+            video.volume = 1;
+            video.preload = i === 0 ? "auto" : "none";
+            const source = document.createElement("source");
+            source.src = src;
+            source.type = "video/mp4";
+            video.appendChild(source);
+            slider.appendChild(video);
+            videos.push(video);
+          });
+
+          stage.appendChild(slider);
+          stage.classList.remove("hidden");
+
+          dotsWrap.classList.remove("hidden");
+          btnPrev.classList.remove("hidden");
+          btnNext.classList.remove("hidden");
+          muteToggle.classList.remove("hidden");
+          dots = dotsWrap.querySelectorAll(":scope > div");
+          muteIcon.textContent = window.videoMuted ? "volume_off" : "volume_up";
+
+          btnNext.addEventListener("click", () => goToSlide((currentIndex + 1) % videos.length));
+          btnPrev.addEventListener("click", () =>
+            goToSlide((currentIndex - 1 + videos.length) % videos.length)
+          );
+
+          goToSlide(0);
+        }
+
+        muteToggle.addEventListener("click", () => {
+          window.videoMuted = !window.videoMuted;
+          videos.forEach((video) => {
+            video.muted = window.videoMuted;
+          });
+          muteIcon.textContent = window.videoMuted ? "volume_off" : "volume_up";
+        });
+
+        playBtn.addEventListener("click", () => {
+          playBtn.classList.add("hidden");
+          startCarousel();
+        });
+      })();
+
+      // 選擇身分後導向填寫資料頁：所選身分即為方案（plan = identity）
+      function selectIdentity(identity) {
+        window.location.href = `holiday-form.html?plan=${identity}&identity=${identity}`;
+      }
+
+      // 圖二進入本頁時不預選任何身分；只有使用者點擊後才進入圖一。
+      // 這樣不會因為舊網址的 ?plan=personal 而錯誤顯示個人者乎。
+
+      // 按鈕微互動效果
+      document.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("mousedown", () => {
+          button.style.transform = "scale(0.96)";
+        });
+        button.addEventListener("mouseup", () => {
+          button.style.transform = "scale(1)";
+        });
+        button.addEventListener("mouseleave", () => {
+          button.style.transform = "scale(1)";
+        });
+      });
+    </script>
+  </body>
+</html>

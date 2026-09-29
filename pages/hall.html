@@ -1,0 +1,544 @@
+﻿<!doctype html>
+
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Galactic Gallery - Hall</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Manrope:wght@200..800&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary": "#3c2f00",
+              "on-background": "#e5e2e2",
+              "on-surface": "#e5e2e2",
+              "on-primary": "#2f3036",
+              "on-error": "#690005",
+              surface: "#141314",
+              "starlight-white": "#F9F9F9",
+              "tertiary-fixed-dim": "#d2c4b9",
+              "surface-container-low": "#1c1b1c",
+              "on-primary-fixed-variant": "#46464c",
+              "surface-container-highest": "#353435",
+              "on-secondary-container": "#342800",
+              "galactic-purple": "#8A2BE2",
+              "on-secondary-fixed-variant": "#574500",
+              "secondary-fixed-dim": "#e9c349",
+              "neon-cyan": "#00FFFF",
+              "surface-tint": "#c7c6cd",
+              "primary-fixed": "#e3e1e9",
+              "on-tertiary-container": "#83786f",
+              "surface-container-lowest": "#0e0e0e",
+              "surface-dim": "#141314",
+              "tertiary-fixed": "#efe0d5",
+              "primary-fixed-dim": "#c7c6cd",
+              "on-tertiary": "#372f27",
+              "primary-container": "#0a0b10",
+              secondary: "#e9c349",
+              "error-container": "#93000a",
+              "surface-bright": "#3a3939",
+              "secondary-fixed": "#ffe088",
+              background: "#141314",
+              "inverse-primary": "#5e5e64",
+              "inverse-surface": "#e5e2e2",
+              "on-tertiary-fixed": "#211a14",
+              tertiary: "#d2c4b9",
+              "outline-variant": "#46464b",
+              "on-surface-variant": "#c7c6cb",
+              "on-secondary-fixed": "#241a00",
+              "surface-variant": "#353435",
+              "inverse-on-surface": "#313030",
+              "tertiary-container": "#100a05",
+              "secondary-container": "#af8d11",
+              error: "#ffb4ab",
+              outline: "#919095",
+              "void-black": "#020203",
+              "on-error-container": "#ffdad6",
+              primary: "#c7c6cd",
+              "surface-container": "#201f20",
+              "on-tertiary-fixed-variant": "#4e453d",
+              "surface-container-high": "#2a2a2a",
+              "on-primary-container": "#797980",
+              "on-primary-fixed": "#1a1b21",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              unit: "8px",
+              gutter: "24px",
+              "container-max": "1440px",
+              "margin-mobile": "20px",
+              "margin-desktop": "80px",
+            },
+            fontFamily: {
+              "headline-lg": ["Playfair Display"],
+              "body-md": ["Manrope"],
+              "headline-xl": ["Playfair Display"],
+              "headline-lg-mobile": ["Playfair Display"],
+              "label-sm": ["JetBrains Mono"],
+            },
+            fontSize: {
+              "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+              "headline-xl": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" },
+              ],
+              "headline-lg-mobile": ["28px", { lineHeight: "1.3", fontWeight: "600" }],
+              "label-sm": [
+                "12px",
+                { lineHeight: "1.0", letterSpacing: "0.1em", fontWeight: "500" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #000000;
+        background-image:
+          radial-gradient(circle at 10% 90%, rgba(138, 43, 226, 0.15) 0%, transparent 40%),
+          radial-gradient(circle at 90% 10%, rgba(0, 255, 255, 0.1) 0%, transparent 40%);
+        background-attachment: fixed;
+        color: #e5e2e2;
+      }
+      .glass-card {
+        background: rgba(20, 19, 20, 0.2);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid transparent;
+        border-image: linear-gradient(
+            to bottom right,
+            rgba(255, 255, 255, 0.2),
+            rgba(233, 195, 73, 0.4)
+          )
+          1;
+      }
+      .glow-hover:hover {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+        border-color: rgba(0, 255, 255, 0.5);
+      }
+      .glow-text-hover:hover {
+        text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+      }
+      .frame-inner {
+        border: 24px solid #020203;
+        border-radius: 0;
+        outline: 1px solid #e9c349;
+        outline-offset: -1px;
+      }
+      .btn-primary {
+        background-color: #e9c349;
+        color: #020203;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+      }
+      .btn-secondary {
+        background-color: transparent;
+        border: 1px solid #e9c349;
+        color: #00ffff;
+        transition: all 0.3s ease;
+      }
+      .btn-secondary:hover {
+        box-shadow: 0 0 10px rgba(138, 43, 226, 0.6);
+        background-color: rgba(138, 43, 226, 0.1);
+      }
+    </style>
+  </head>
+  <body class="font-body-md text-body-md min-h-screen flex flex-col relative overflow-x-hidden">
+    <!-- TopAppBar -->
+    <header
+      class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-secondary/30 shadow-lg shadow-neon-cyan/10"
+    >
+      <div
+        class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-[1440px] mx-auto"
+      >
+        <a
+          href="religion.html"
+          aria-label="返回宗教類別"
+          class="text-secondary dark:text-secondary hover:text-neon-cyan transition-colors duration-300"
+        >
+          <span class="material-symbols-outlined text-3xl">arrow_back</span>
+        </a>
+        <h1
+          class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold tracking-widest text-secondary dark:text-secondary"
+        >
+          GALACTIC GALLERY
+        </h1>
+        <button
+          class="text-secondary dark:text-secondary hover:text-neon-cyan transition-colors duration-300"
+        >
+          <span class="material-symbols-outlined text-3xl">shopping_bag</span>
+        </button>
+      </div>
+      <!-- Desktop Nav Cluster (Hidden on mobile) -->
+      <nav
+        class="hidden md:flex justify-center items-center py-2 space-x-12 border-t border-secondary/10 bg-void-black/50"
+      >
+        <a
+          class="text-on-surface-variant font-label-sm text-label-sm uppercase hover:text-neon-cyan transition-colors duration-300 flex items-center space-x-2"
+          href="#"
+        >
+          <span class="material-symbols-outlined text-lg">castle</span>
+          <span>宮</span>
+        </a>
+        <a
+          class="text-on-surface-variant font-label-sm text-label-sm uppercase hover:text-neon-cyan transition-colors duration-300 flex items-center space-x-2"
+          href="#"
+        >
+          <span class="material-symbols-outlined text-lg">temple_buddhist</span>
+          <span>廟</span>
+        </a>
+        <a
+          class="text-on-surface-variant font-label-sm text-label-sm uppercase hover:text-neon-cyan transition-colors duration-300 flex items-center space-x-2"
+          href="#"
+        >
+          <span class="material-symbols-outlined text-lg">fort</span>
+          <span>寺</span>
+        </a>
+        <a
+          class="text-secondary font-bold font-label-sm text-label-sm uppercase flex items-center space-x-2 border-b-2 border-neon-cyan pb-1 drop-shadow-[0_0_8px_rgba(0,255,255,0.6)]"
+          href="#"
+        >
+          <span class="material-symbols-outlined text-lg">account_balance</span>
+          <span>堂</span>
+        </a>
+      </nav>
+    </header>
+    <!-- Main Content Canvas -->
+    <main
+      class="flex-grow pt-[140px] pb-margin-desktop md:pb-[120px] px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto flex flex-col gap-[80px]"
+    >
+      <!-- Hero Section -->
+      <section
+        class="flex flex-col items-center justify-center text-center mt-[40px] md:mt-[80px] animate-[fadeIn_1s_ease-out]"
+      >
+        <div class="w-32 h-32 md:w-48 md:h-48 mb-8 relative">
+          <div class="absolute inset-0 bg-secondary/20 rounded-full blur-[40px]"></div>
+          <img
+            alt="Hall Icon"
+            class="w-full h-full object-contain relative z-10 drop-shadow-[0_0_15px_rgba(233,195,73,0.5)]"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3uASAdeEHmUNVAtDWWLOaEimWL0-K9-CTMxlyoh9-pSFkZj1UHSg40KnNKSlWF0fqkjhRbbpSnrz7sh-psQ4fKOs_hQ4OiBDNtn_b-tEEPk8BL8XzeQoXrh02abpB6LjKNlzXv9hvz3e7OQfamgwlWCzwsjJn93TykMtjwOzFAiebhCigUJmWodaGQQ74lZ_ltuRNVwTbZxH61KyGYZehX7BTdt1cOf1GFyMLdl_3VmCoeS7mLvHqmvklHTM2jxKr"
+          />
+        </div>
+        <h2 class="font-headline-xl text-headline-xl text-secondary mb-6 tracking-wider">
+          堂 HALL
+        </h2>
+        <p
+          class="max-w-2xl text-on-surface-variant font-body-md text-body-md mb-10 leading-relaxed text-lg"
+        >
+          Step into the grand halls of digital eternity. A curated collection of masterpieces where
+          traditional reverence meets metaverse boundless possibilities.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
+          <button
+            class="btn-primary font-label-sm text-label-sm uppercase px-10 py-4 tracking-widest font-bold w-full sm:w-auto"
+          >
+            CURATED COLLECTION
+          </button>
+          <button
+            class="btn-secondary font-label-sm text-label-sm uppercase px-10 py-4 tracking-widest font-bold w-full sm:w-auto backdrop-blur-sm"
+          >
+            LIVE EXHIBITION
+          </button>
+        </div>
+      </section>
+      <!-- Gallery Grid -->
+      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+        <!-- Art Card 1 -->
+        <article
+          class="glass-card flex flex-col group transition-all duration-500 hover:-translate-y-2 glow-hover cursor-pointer relative overflow-hidden"
+        >
+          <div
+            class="absolute inset-0 bg-galactic-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none"
+          ></div>
+          <div class="p-6 pb-0 flex-grow relative z-10">
+            <div class="flex justify-between items-center mb-4">
+              <span
+                class="font-label-sm text-label-sm uppercase text-neon-cyan tracking-widest bg-neon-cyan/10 px-3 py-1 backdrop-blur-md rounded-sm border border-neon-cyan/30"
+              >
+                EDITION 1/1
+              </span>
+              <span
+                class="material-symbols-outlined text-secondary opacity-50 group-hover:opacity-100 transition-opacity"
+              >
+                favorite
+              </span>
+            </div>
+            <div class="w-full aspect-[4/5] relative mb-6">
+              <div
+                class="absolute inset-0 frame-inner bg-surface-container shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]"
+              >
+                <img
+                  alt="Celestial Sequence Artwork"
+                  class="w-full h-full object-cover"
+                  src="https://lh3.googleusercontent.com/aida/AEtjO1U5knHuqI15E4me7wP1DaBakhMpLc8OZr_YOxQBBTjNdpIviLwwyqmm1rEmBLd9B8WOXwBuKCAmfL5Ae3pW60w0Air8zQaTbfHxwnctHyXCN-IP5aignj_yXhJJXfcAvjULgE8I4hjqjKXeD7gOOn3nM7dpf1oW0LGZkwLyYzVDW1rFd2PyQUYPnoWc7nINUbtQnCkQDH5PV8fEhrGjas-XWkch6Qn4BSizJEeZ0nW3odgDA_UUK5GJhTBtIx4i8a1qCxmlHK6r"
+                />
+              </div>
+            </div>
+            <h3
+              class="font-headline-lg text-[24px] text-starlight-white mb-3 group-hover:text-secondary transition-colors"
+            >
+              Celestial Sequence
+            </h3>
+            <p class="text-on-surface-variant line-clamp-2 mb-6 font-body-md text-sm">
+              An ethereal exploration of digital landscapes, blending ancient motifs with procedural
+              generation techniques to create a timeless void.
+            </p>
+          </div>
+          <div
+            class="p-6 pt-4 border-t border-secondary/20 flex justify-between items-end relative z-10 bg-gradient-to-t from-void-black/80 to-transparent"
+          >
+            <div>
+              <p
+                class="font-label-sm text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider"
+              >
+                Current Value
+              </p>
+              <p class="font-headline-lg text-[20px] text-secondary">2.5 ETH</p>
+            </div>
+            <button
+              class="text-secondary font-label-sm text-label-sm uppercase tracking-widest flex items-center space-x-2 group-hover:text-neon-cyan transition-colors"
+            >
+              <span>EXPLORE</span>
+              <span
+                class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform"
+              >
+                arrow_forward
+              </span>
+            </button>
+          </div>
+        </article>
+        <!-- Art Card 2 -->
+        <article
+          class="glass-card flex flex-col group transition-all duration-500 hover:-translate-y-2 glow-hover cursor-pointer relative overflow-hidden"
+        >
+          <div
+            class="absolute inset-0 bg-galactic-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none"
+          ></div>
+          <div class="p-6 pb-0 flex-grow relative z-10">
+            <div class="flex justify-between items-center mb-4">
+              <span
+                class="font-label-sm text-label-sm uppercase text-starlight-white tracking-widest bg-white/10 px-3 py-1 backdrop-blur-md rounded-sm border border-white/20"
+              >
+                EDITION 5/5
+              </span>
+              <span
+                class="material-symbols-outlined text-secondary opacity-50 group-hover:opacity-100 transition-opacity"
+              >
+                favorite
+              </span>
+            </div>
+            <div class="w-full aspect-[4/5] relative mb-6">
+              <div
+                class="absolute inset-0 frame-inner bg-surface-container shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]"
+              >
+                <img
+                  alt="Neon Sanctuary Artwork"
+                  class="w-full h-full object-cover"
+                  src="https://lh3.googleusercontent.com/aida/AEtjO1Vway-pW8HmQO_l7e7GSsuQlTnFa0BUNLtNj2RPbAfqX_44qT9FP9r_ekZBIlYC3H5PiFvjo50h5E265-MUsHIg-lrZGVYHFKzcZsklUEA0ID6sG5sTxVPjk_hIAz5AHHZdwXOWUxFySNTuka7665xMWqjaMvreQYTcjE3zpXsi953WFnv-z4G1Cai04WQ3D9iFR62Zg-VPmPLYCb2Q-lOmBjn97karQf2AhTNkob9ixnWOjQDp9hFEJtwnOQ14fi-yc2vLNXU"
+                />
+              </div>
+            </div>
+            <h3
+              class="font-headline-lg text-[24px] text-starlight-white mb-3 group-hover:text-secondary transition-colors"
+            >
+              Neon Sanctuary
+            </h3>
+            <p class="text-on-surface-variant line-clamp-2 mb-6 font-body-md text-sm">
+              A quiet corner of the digital realm, where light and data weave intricate patterns
+              reminiscent of traditional stained glass under cyberpunk skies.
+            </p>
+          </div>
+          <div
+            class="p-6 pt-4 border-t border-secondary/20 flex justify-between items-end relative z-10 bg-gradient-to-t from-void-black/80 to-transparent"
+          >
+            <div>
+              <p
+                class="font-label-sm text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider"
+              >
+                Current Value
+              </p>
+              <p class="font-headline-lg text-[20px] text-secondary">3.0 ETH</p>
+            </div>
+            <button
+              class="text-secondary font-label-sm text-label-sm uppercase tracking-widest flex items-center space-x-2 group-hover:text-neon-cyan transition-colors"
+            >
+              <span>EXPLORE</span>
+              <span
+                class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform"
+              >
+                arrow_forward
+              </span>
+            </button>
+          </div>
+        </article>
+        <!-- Art Card 3 -->
+        <article
+          class="glass-card flex flex-col group transition-all duration-500 hover:-translate-y-2 glow-hover cursor-pointer relative overflow-hidden"
+        >
+          <div
+            class="absolute inset-0 bg-galactic-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none"
+          ></div>
+          <div class="p-6 pb-0 flex-grow relative z-10">
+            <div class="flex justify-between items-center mb-4">
+              <span
+                class="font-label-sm text-label-sm uppercase text-galactic-purple tracking-widest bg-galactic-purple/20 px-3 py-1 backdrop-blur-md rounded-sm border border-galactic-purple/30"
+              >
+                EDITION 1/1
+              </span>
+              <span
+                class="material-symbols-outlined text-secondary opacity-50 group-hover:opacity-100 transition-opacity"
+              >
+                favorite
+              </span>
+            </div>
+            <div class="w-full aspect-[4/5] relative mb-6">
+              <div
+                class="absolute inset-0 frame-inner bg-surface-container shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]"
+              >
+                <img
+                  alt="Vault of Eternity Artwork"
+                  class="w-full h-full object-cover"
+                  src="https://lh3.googleusercontent.com/aida/AEtjO1V2bGTGbb5eOJ5rYfKOZOTLcX2qlMBQpapP0Z9Em3SRf7lci4itFmUV-iq0g9FBVdE7_XCMY43HFuzFpSjAgRMEg7rApzCJtu5lyKAw421wIqa4LTEZgO5HcjTYxPk2w6MR7SmAnGiQgwkHk-Jvjy6JzP6prxUSvn5WnhE-VApro7bNc0dG_aiuRws4VavSyW_fXs5MAD2svBDyIhxRdJ-Az-tpVp9tWBZguJ-Ej057HRDDunln0voiiNGwFnqW-xxAbeDxMQ0x"
+                />
+              </div>
+            </div>
+            <h3
+              class="font-headline-lg text-[24px] text-starlight-white mb-3 group-hover:text-secondary transition-colors"
+            >
+              Vault of Eternity
+            </h3>
+            <p class="text-on-surface-variant line-clamp-2 mb-6 font-body-md text-sm">
+              The conceptual heart of the gallery, visualizing the eternal storage of beauty on the
+              blockchain, guarded by geometric sentinels of pure light.
+            </p>
+          </div>
+          <div
+            class="p-6 pt-4 border-t border-secondary/20 flex justify-between items-end relative z-10 bg-gradient-to-t from-void-black/80 to-transparent"
+          >
+            <div>
+              <p
+                class="font-label-sm text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider"
+              >
+                Current Value
+              </p>
+              <p class="font-headline-lg text-[20px] text-secondary">5.5 ETH</p>
+            </div>
+            <button
+              class="text-secondary font-label-sm text-label-sm uppercase tracking-widest flex items-center space-x-2 group-hover:text-neon-cyan transition-colors"
+            >
+              <span>EXPLORE</span>
+              <span
+                class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform"
+              >
+                arrow_forward
+              </span>
+            </button>
+          </div>
+        </article>
+      </section>
+      <!-- Load More (Ghost Button) -->
+      <div class="flex justify-center mt-12">
+        <button
+          class="text-starlight-white font-label-sm text-label-sm uppercase tracking-[0.2em] relative group py-2"
+        >
+          DISCOVER MORE
+          <span
+            class="absolute bottom-0 left-0 w-full h-[1px] bg-secondary/50 transform origin-left scale-x-50 group-hover:scale-x-100 group-hover:bg-neon-cyan transition-all duration-300"
+          ></span>
+        </button>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="w-full bg-void-black/90 border-t border-secondary/20 mt-auto relative z-20 backdrop-blur-xl"
+    >
+      <div
+        class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 flex flex-col md:flex-row justify-between items-center gap-8"
+      >
+        <div class="flex items-center space-x-4">
+          <span class="font-headline-lg text-secondary text-2xl tracking-widest font-bold">GG</span>
+          <div class="h-6 w-px bg-secondary/30"></div>
+          <span class="text-on-surface-variant font-label-sm text-xs tracking-widest">
+            © 2024 GALACTIC GALLERY
+          </span>
+        </div>
+        <div class="flex space-x-8">
+          <a
+            class="text-on-surface-variant hover:text-secondary font-label-sm text-label-sm uppercase tracking-widest transition-colors"
+            href="#"
+          >
+            MANIFESTO
+          </a>
+          <a
+            class="text-on-surface-variant hover:text-secondary font-label-sm text-label-sm uppercase tracking-widest transition-colors"
+            href="#"
+          >
+            VAULT
+          </a>
+          <a
+            class="text-on-surface-variant hover:text-secondary font-label-sm text-label-sm uppercase tracking-widest transition-colors"
+            href="#"
+          >
+            CONTACT
+          </a>
+        </div>
+      </div>
+    </footer>
+    <!-- BottomNavBar (Mobile Only) -->
+    <nav
+      class="md:hidden fixed bottom-0 w-full z-50 rounded-t-[24px] bg-void-black/90 dark:bg-void-black/90 backdrop-blur-xl border-t border-secondary/20 shadow-[0_-4px_20px_rgba(0,255,255,0.15)] flex justify-around items-center px-4 py-3 pb-6"
+    >
+      <a
+        class="flex flex-col items-center justify-center text-on-tertiary-container hover:text-secondary transition-all duration-300"
+        href="#"
+      >
+        <span class="material-symbols-outlined mb-1">castle</span>
+        <span class="font-label-sm text-[10px] uppercase">宮</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-on-tertiary-container hover:text-secondary transition-all duration-300"
+        href="#"
+      >
+        <span class="material-symbols-outlined mb-1">temple_buddhist</span>
+        <span class="font-label-sm text-[10px] uppercase">廟</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-on-tertiary-container hover:text-secondary transition-all duration-300"
+        href="#"
+      >
+        <span class="material-symbols-outlined mb-1">fort</span>
+        <span class="font-label-sm text-[10px] uppercase">寺</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-neon-cyan drop-shadow-[0_0_8px_rgba(0,255,255,0.6)] transform scale-110"
+        href="#"
+      >
+        <span
+          class="material-symbols-outlined mb-1"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+        >
+          account_balance
+        </span>
+        <span class="font-label-sm text-[10px] uppercase font-bold">堂</span>
+      </a>
+    </nav>
+  </body>
+</html>

@@ -1,0 +1,450 @@
+﻿<!doctype html>
+
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Galactic Gallery - 寺 Monastery</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&amp;family=Manrope:wght@400&amp;family=Playfair+Display:wght@600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              error: "#ffb4ab",
+              "on-primary-container": "#797980",
+              "surface-container-low": "#1c1b1c",
+              "secondary-fixed": "#ffe088",
+              "on-primary-fixed-variant": "#46464c",
+              "primary-fixed": "#e3e1e9",
+              "starlight-white": "#F9F9F9",
+              "galactic-purple": "#8A2BE2",
+              "on-tertiary": "#372f27",
+              "error-container": "#93000a",
+              "on-error-container": "#ffdad6",
+              "on-surface-variant": "#c7c6cb",
+              "on-error": "#690005",
+              outline: "#919095",
+              "surface-dim": "#141314",
+              "secondary-container": "#af8d11",
+              "surface-tint": "#c7c6cd",
+              secondary: "#e9c349",
+              "surface-container": "#201f20",
+              "on-background": "#e5e2e2",
+              background: "#000000" /* Override for this specific page */,
+              "outline-variant": "#46464b",
+              "on-secondary-fixed": "#241a00",
+              "on-primary": "#2f3036",
+              "tertiary-container": "#100a05",
+              surface: "#141314",
+              "primary-container": "#0a0b10",
+              "surface-variant": "#353435",
+              "primary-fixed-dim": "#c7c6cd",
+              "surface-container-high": "#2a2a2a",
+              "tertiary-fixed": "#efe0d5",
+              "on-tertiary-container": "#83786f",
+              "inverse-primary": "#5e5e64",
+              "on-tertiary-fixed-variant": "#4e453d",
+              "on-secondary": "#3c2f00",
+              "neon-cyan": "#00FFFF",
+              "on-tertiary-fixed": "#211a14",
+              "inverse-surface": "#e5e2e2",
+              "on-secondary-fixed-variant": "#574500",
+              "void-black": "#020203",
+              "surface-container-lowest": "#0e0e0e",
+              "on-secondary-container": "#342800",
+              "on-surface": "#e5e2e2",
+              "surface-container-highest": "#353435",
+              tertiary: "#d2c4b9",
+              "on-primary-fixed": "#1a1b21",
+              "inverse-on-surface": "#313030",
+              "surface-bright": "#3a3939",
+              "tertiary-fixed-dim": "#d2c4b9",
+              "secondary-fixed-dim": "#e9c349",
+              primary: "#c7c6cd",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              "margin-desktop": "80px",
+              gutter: "24px",
+              "container-max": "1440px",
+              "margin-mobile": "20px",
+              unit: "8px",
+            },
+            fontFamily: {
+              "body-md": ["Manrope"],
+              "headline-lg-mobile": ["Playfair Display"],
+              "headline-lg": ["Playfair Display"],
+              "headline-xl": ["Playfair Display"],
+              "label-sm": ["JetBrains Mono"],
+            },
+            fontSize: {
+              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+              "headline-lg-mobile": ["28px", { lineHeight: "1.3", fontWeight: "600" }],
+              "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "600" }],
+              "headline-xl": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" },
+              ],
+              "label-sm": [
+                "12px",
+                { lineHeight: "1.0", letterSpacing: "0.1em", fontWeight: "500" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #000000; /* Ensuring pure black background as requested */
+        color: theme("colors.on-background");
+        font-family: theme("fontFamily.body-md");
+      }
+
+      .gold-gradient {
+        background: linear-gradient(
+          to bottom right,
+          rgba(233, 195, 73, 0.4),
+          rgba(255, 255, 255, 0.2)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .gold-border {
+        border: 1px solid transparent;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(233, 195, 73, 0.4))
+          border-box;
+        -webkit-mask:
+          linear-gradient(#fff 0 0) padding-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+      }
+
+      .glow-hover:hover {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+        border-color: theme("colors.neon-cyan");
+      }
+
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(233, 195, 73, 0.2);
+      }
+
+      /* Specific glow for the main emblem */
+      .emblem-glow {
+        filter: drop-shadow(0 0 40px rgba(233, 195, 73, 0.6));
+      }
+    </style>
+  </head>
+  <body class="antialiased min-h-screen flex flex-col items-center">
+    <!-- TopAppBar (Web Desktop Version) -->
+    <header
+      class="hidden md:flex justify-between items-center w-full px-margin-desktop py-4 bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-secondary/30 shadow-lg shadow-neon-cyan/10 docked full-width top-0 z-50 sticky"
+    >
+      <a
+        href="religion.html"
+        aria-label="返回宗教類別"
+        class="text-secondary dark:text-secondary hover:text-neon-cyan transition-colors duration-300 transform hover:scale-95 duration-200"
+      >
+        <span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+      </a>
+      <div
+        class="font-headline-lg font-bold tracking-widest text-secondary dark:text-secondary text-center flex-grow"
+      >
+        GALACTIC GALLERY
+      </div>
+      <nav class="flex gap-gutter absolute left-1/2 -translate-x-1/2">
+        <a
+          class="text-on-surface-variant font-label-sm text-label-sm uppercase hover:text-neon-cyan transition-colors duration-300 px-4 py-2"
+          href="#"
+        >
+          宮
+        </a>
+        <a
+          class="text-on-surface-variant font-label-sm text-label-sm uppercase hover:text-neon-cyan transition-colors duration-300 px-4 py-2"
+          href="#"
+        >
+          廟
+        </a>
+        <a
+          class="text-secondary font-bold font-label-sm text-label-sm uppercase hover:text-neon-cyan transition-colors duration-300 px-4 py-2 flex flex-col items-center"
+          href="#"
+        >
+          寺
+          <div
+            class="h-0.5 w-full bg-neon-cyan mt-1 rounded shadow-[0_0_8px_rgba(0,255,255,0.6)]"
+          ></div>
+        </a>
+        <a
+          class="text-on-surface-variant font-label-sm text-label-sm uppercase hover:text-neon-cyan transition-colors duration-300 px-4 py-2"
+          href="#"
+        >
+          堂
+        </a>
+      </nav>
+      <button
+        class="text-secondary dark:text-secondary hover:text-neon-cyan transition-colors duration-300 transform hover:scale-95 duration-200"
+      >
+        <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+      </button>
+    </header>
+    <!-- Main Content -->
+    <main class="w-full max-w-container-max px-margin-desktop flex flex-col items-center pb-32">
+      <!-- Hero Header Section -->
+      <section class="w-full flex flex-col items-center justify-center mt-24 mb-32">
+        <div class="relative w-[175px] h-[183px] mb-8 emblem-glow">
+          <img
+            alt="Buddhist Emblem"
+            class="w-full h-full object-contain"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5DBYjO6ouTmvyuD4pJswVcpo8WIBLfEOwfKuvoNRt839Vcy1phMiQWnZLfswJIeb2KSLSwGh9blK3W-FwnEKYeQU222ztE49pfAISZJ0nsnDUMS9JAwRdhizTXrO0lelSqlexv5fnN5hEbYbNejQOLiO0jU7-s7hUqKUKJe0MR3df58eEDA93-gGm_7MBUHDv1HFGVYLRI2XaY5JcbQZw5TTJJJqik93oxf76bCgBbVn4sCY9T39xg9l4Gomz8_EM"
+          />
+        </div>
+        <h1
+          class="font-headline-xl text-headline-xl text-secondary mb-4 tracking-wider text-center"
+        >
+          寺 Monastery
+        </h1>
+        <p
+          class="font-label-sm text-label-sm text-on-surface-variant tracking-[0.2em] uppercase text-center max-w-2xl"
+        >
+          SERENE MEDITATION SERIES
+        </p>
+        <div
+          class="w-24 h-[1px] bg-gradient-to-r from-transparent via-secondary to-transparent mt-12"
+        ></div>
+      </section>
+      <!-- Artifact Grid -->
+      <section
+        class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter"
+      >
+        <!-- Card 1 -->
+        <article
+          class="glass-panel flex flex-col rounded-sm overflow-hidden group relative transition-all duration-500 hover:-translate-y-2"
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-transparent to-void-black/80 z-10 pointer-events-none opacity-60"
+          ></div>
+          <div class="p-unit bg-void-black relative">
+            <!-- The Digital Frame -->
+            <div class="border border-secondary/30 relative w-full aspect-[1.07] overflow-hidden">
+              <img
+                alt="Ethereal Sanctum Artwork"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                src="https://lh3.googleusercontent.com/aida/AEtjO1UuKRkSArsNO_8uPedyeY0Y_3-O1avhcMevkTLuqOj0U23xBiqj4LHRsHsttNqN2nem5nsjuuAvrPrYqKb9FCsIUgF20SOLLqub4cOa5pvZVtgzMopKbq_iqnjpsUNL_QDEtYSqQi9hI0aB1MZ33nm6bvLJY91EuhR_U2gdsb8nesMsgD__qR2b5jLaOJ5xBYpEneAffu4DWsYxliM1q8kMA607zXSqJ9D5le7nreKlkdlrnFD1YVXiXM9X5m2OFWX_Bs83oB4R"
+              />
+            </div>
+          </div>
+          <div
+            class="p-6 flex flex-col flex-grow z-20 bg-gradient-to-t from-surface-container-low to-transparent"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-starlight-white">
+                Ethereal Sanctum
+              </h2>
+            </div>
+            <p
+              class="font-label-sm text-label-sm text-on-surface-variant mb-6 uppercase tracking-widest"
+            >
+              Digital Fresco / 001
+            </p>
+            <div class="mt-auto">
+              <div class="flex justify-between items-center mb-6">
+                <span class="font-label-sm text-label-sm text-secondary">CURRENT BID</span>
+                <span class="font-headline-lg-mobile text-[24px] text-neon-cyan">4.2 ETH</span>
+              </div>
+              <div class="flex gap-4">
+                <button
+                  class="flex-1 bg-secondary text-void-black font-label-sm text-label-sm py-3 px-4 uppercase transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] hover:bg-neon-cyan"
+                >
+                  Collect
+                </button>
+                <button
+                  class="flex-1 border border-secondary text-neon-cyan font-label-sm text-label-sm py-3 px-4 uppercase transition-all duration-300 hover:bg-secondary/10"
+                >
+                  Explore
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+        <!-- Card 2 -->
+        <article
+          class="glass-panel flex flex-col rounded-sm overflow-hidden group relative transition-all duration-500 hover:-translate-y-2"
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-transparent to-void-black/80 z-10 pointer-events-none opacity-60"
+          ></div>
+          <div class="p-unit bg-void-black relative">
+            <div class="border border-secondary/30 relative w-full aspect-[1.08] overflow-hidden">
+              <img
+                alt="Neon Sutra Artwork"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                src="https://lh3.googleusercontent.com/aida/AEtjO1W7kVz_bApEcBmSCVnMP7p3bnmUWhye5PGTvHG15Ic9bwH-wl_7OMpkAs-bihET1HCL1SJhQLRk3hxcrcMblml5ZuQvkIYdwjAv58wgXJyYalizOthrZZZ1Q-iCqMovWiu8W_liK1R2_iCA3rHEwqZ-_2f_FGN3nsTqig84dXNBPreq0Bl-B-aIS8DnsVfX9xShrC3AStuyEJld_wEVYZDtG2V9cXKwGH-2OK2hSeGtq0bg33LiwIZwR1PdfWqQFxamKqQdReje"
+              />
+            </div>
+          </div>
+          <div
+            class="p-6 flex flex-col flex-grow z-20 bg-gradient-to-t from-surface-container-low to-transparent"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-starlight-white">
+                Neon Sutra
+              </h2>
+            </div>
+            <p
+              class="font-label-sm text-label-sm text-on-surface-variant mb-6 uppercase tracking-widest"
+            >
+              Holographic Scroll / 002
+            </p>
+            <div class="mt-auto">
+              <div class="flex justify-between items-center mb-6">
+                <span class="font-label-sm text-label-sm text-secondary">CURRENT BID</span>
+                <span class="font-headline-lg-mobile text-[24px] text-neon-cyan">3.8 ETH</span>
+              </div>
+              <div class="flex gap-4">
+                <button
+                  class="flex-1 bg-secondary text-void-black font-label-sm text-label-sm py-3 px-4 uppercase transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] hover:bg-neon-cyan"
+                >
+                  Collect
+                </button>
+                <button
+                  class="flex-1 border border-secondary text-neon-cyan font-label-sm text-label-sm py-3 px-4 uppercase transition-all duration-300 hover:bg-secondary/10"
+                >
+                  Explore
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+        <!-- Card 3 (Placeholder for Grid layout demonstration) -->
+        <article
+          class="glass-panel flex flex-col rounded-sm overflow-hidden group relative transition-all duration-500 hover:-translate-y-2"
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-transparent to-void-black/80 z-10 pointer-events-none opacity-60"
+          ></div>
+          <div class="p-unit bg-void-black relative">
+            <div
+              class="border border-secondary/30 relative w-full aspect-square overflow-hidden bg-surface-container-low flex items-center justify-center"
+            >
+              <img
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 mix-blend-luminosity"
+                data-alt="A striking digital installation art piece featuring a glowing, generative minimalist zen garden suspended in a vast, dark gallery space. The room is illuminated by high-contrast, moody lighting that creates a sleek, futuristic dark-mode aesthetic. The artwork relies on a sophisticated palette of deep void blacks, punctured by intense accents of glowing gold and neon cyan. The mood is serene yet technologically mysterious."
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD57EeBmdE7s1YuQx-ezYebBznT59V_cLChvi0-l_JOGUoLRaFv-2MLS6gl_7oRaj_C7JpEULr0ng3HBD0WSm-W9MA9cLxzNZc3L20rw2Fvn1ho_lZS6ITQOihV7iOKRlislcgrQl_zJuiK0hawfvVbHrcbCHgy3SqR9WGXx5kfoC63fnCakigPhaqGLOybTKsaJ2gr8Ktsj9a5KF1biDPepkKaIyPr4xq01nfTy7J3XV_Qmdv8cOY"
+              />
+            </div>
+          </div>
+          <div
+            class="p-6 flex flex-col flex-grow z-20 bg-gradient-to-t from-surface-container-low to-transparent"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-starlight-white">
+                Zenith Point
+              </h2>
+            </div>
+            <p
+              class="font-label-sm text-label-sm text-on-surface-variant mb-6 uppercase tracking-widest"
+            >
+              Kinetic Sculpture / 003
+            </p>
+            <div class="mt-auto">
+              <div class="flex justify-between items-center mb-6">
+                <span class="font-label-sm text-label-sm text-secondary">CURRENT BID</span>
+                <span class="font-headline-lg-mobile text-[24px] text-neon-cyan">5.0 ETH</span>
+              </div>
+              <div class="flex gap-4">
+                <button
+                  class="flex-1 bg-secondary text-void-black font-label-sm text-label-sm py-3 px-4 uppercase transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] hover:bg-neon-cyan"
+                >
+                  Collect
+                </button>
+                <button
+                  class="flex-1 border border-secondary text-neon-cyan font-label-sm text-label-sm py-3 px-4 uppercase transition-all duration-300 hover:bg-secondary/10"
+                >
+                  Explore
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+        <!-- Card 4 (Placeholder for Grid layout demonstration) -->
+        <article
+          class="glass-panel flex flex-col rounded-sm overflow-hidden group relative transition-all duration-500 hover:-translate-y-2"
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-transparent to-void-black/80 z-10 pointer-events-none opacity-60"
+          ></div>
+          <div class="p-unit bg-void-black relative">
+            <div
+              class="border border-secondary/30 relative w-full aspect-square overflow-hidden bg-surface-container-low flex items-center justify-center"
+            >
+              <img
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 mix-blend-luminosity"
+                data-alt="A striking digital installation art piece featuring glowing, generative abstract lotus flowers blooming in a vast, dark minimalist gallery space. The room is illuminated by focused, dramatic spotlighting that creates a luxurious, modern dark-mode aesthetic. The artwork relies on a sophisticated palette of deep pure blacks, punctuated by intense accents of vibrant neon cyan and galactic purple. The mood is meditative yet highly advanced."
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvSfg0QnxrM0NSxlBnEAQyfHU9MCR1_NAxeGEagimwEWuh2Crw2GeUYAcTQz6q7q2qU_41DJa3JvZyBg1Wqo42gChIsTHg0r_BtczIfsJVDvVB6R8kFgM4uP34QkOh-f8MmPCE-FfIM-NdtvG35Au0_twRMlPrelbmsnEzeOG9N2rgVT8OaSwcxBPrPFu0x2QHVnazlEwkSQG7QCpQN3hvoi6jy54YoHSGgW1yqWcvwKOk6470eIM"
+              />
+            </div>
+          </div>
+          <div
+            class="p-6 flex flex-col flex-grow z-20 bg-gradient-to-t from-surface-container-low to-transparent"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-starlight-white">
+                Lotus Matrix
+              </h2>
+            </div>
+            <p
+              class="font-label-sm text-label-sm text-on-surface-variant mb-6 uppercase tracking-widest"
+            >
+              Generative Art / 004
+            </p>
+            <div class="mt-auto">
+              <div class="flex justify-between items-center mb-6">
+                <span class="font-label-sm text-label-sm text-secondary">CURRENT BID</span>
+                <span class="font-headline-lg-mobile text-[24px] text-neon-cyan">2.9 ETH</span>
+              </div>
+              <div class="flex gap-4">
+                <button
+                  class="flex-1 bg-secondary text-void-black font-label-sm text-label-sm py-3 px-4 uppercase transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] hover:bg-neon-cyan"
+                >
+                  Collect
+                </button>
+                <button
+                  class="flex-1 border border-secondary text-neon-cyan font-label-sm text-label-sm py-3 px-4 uppercase transition-all duration-300 hover:bg-secondary/10"
+                >
+                  Explore
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+      <div class="mt-24 text-center">
+        <button
+          class="text-secondary font-label-sm text-label-sm uppercase tracking-widest border-b border-secondary/30 pb-1 hover:text-neon-cyan hover:border-neon-cyan transition-all duration-300"
+        >
+          View Full Collection
+        </button>
+      </div>
+    </main>
+  </body>
+</html>

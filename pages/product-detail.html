@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>商品詳情 | WAVE ART MALL</title>
+
+<!-- ============================================
+     PWA 設定（讓網站可以「加到主畫面」變成手機 App 圖示）
+     ============================================ -->
+<link rel="manifest" href="../manifest.json" />
+<meta name="theme-color" content="#020203" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+<!-- ============================================
+     社群分享預覽設定（LINE / Facebook / Twitter）
+     載入商品後會由 applyOpenGraph() 覆寫成該商品的標題與圖片；
+     下方靜態值為爬蟲（不執行 JS）看到的基本版本。
+     ============================================ -->
+<meta name="description" content="探索 WAVE ART MALL 精選藝術商品，從宗教文物、軟實力療癒到當代創作。" />
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="WAVE ART MALL" />
+<meta property="og:title" content="商品詳情 | WAVE ART MALL" />
+<meta property="og:description" content="探索 WAVE ART MALL 精選藝術商品，從宗教文物、軟實力療癒到當代創作。" />
+<meta property="og:image" content="https://wave-art-mall.vercel.app/icons/icon-512.png" />
+<meta property="og:url" content="https://wave-art-mall.vercel.app/pages/product-detail.html" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/material-symbols.css">
+<script src="../js/tailwind-config.js"></script>
+<link rel="stylesheet" href="../css/style.css" />
+
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .material-symbols-outlined.filled {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+</style>
+</head>
+<body class="font-body-md text-body-md antialiased pb-32 pt-16">
+
+<!-- 顶部导览列 -->
+<header class="site-header">
+  <div class="flex items-center gap-4">
+    <button onclick="history.back()" class="text-secondary active:scale-95 transition-transform">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <a href="../index.html" class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-widest text-secondary hidden md:block">WAVE ART MALL</a>
+  </div>
+  <div class="flex items-center gap-4">
+    <a id="nav-auth-link" href="auth.html" class="font-label-sm text-[11px] uppercase tracking-widest text-secondary hover:text-neon-cyan transition-colors">登入</a>
+    <a href="cart.html" class="relative text-starlight-white hover:text-secondary transition-colors">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span class="js-cart-badge cart-badge hidden">0</span>
+    </a>
+  </div>
+</header>
+
+<main class="pt-8 pb-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+  <!-- 载入中骨架屏，等资料回来后会被替换 -->
+  <div id="loading-block" class="text-center text-on-surface-variant py-24">
+    <span class="loading-spinner"></span>
+    <p class="mt-4">正在載入商品資訊...</p>
+  </div>
+
+  <!-- 商品内容主体，一开始隐藏，拿到资料后才显示 -->
+  <div id="product-content" class="hidden">
+    <!-- 商品主图 -->
+    <section class="mt-2">
+      <div class="art-frame group">
+        <div class="relative aspect-[16/10] overflow-hidden bg-void-black">
+          <img id="product-image" class="w-full h-full object-cover" src="" alt="商品图片" onerror="this.src='https://placehold.co/800x500/141314/e9c349?text=WAVE+ART'" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 商品资讯 -->
+    <section class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+      <div class="lg:col-span-8">
+        <header class="mb-8">
+          <span class="font-label-sm text-label-sm text-neon-cyan uppercase tracking-widest mb-2 block" id="product-artist">Premium Selection</span>
+          <h2 class="font-headline-lg text-headline-lg md:font-headline-xl md:text-headline-xl text-secondary mb-4" id="product-name">载入中...</h2>
+          <div class="flex items-center gap-6 mb-6 flex-wrap">
+            <div class="flex items-baseline gap-2">
+              <span class="text-3xl font-bold text-starlight-white" id="product-price">NT$ 0</span>
+              <span class="text-on-surface-variant/50 line-through text-sm" id="product-original-price"></span>
+            </div>
+            <div class="h-4 w-px bg-secondary/30"></div>
+            <div class="flex items-center gap-2">
+              <div class="flex text-secondary" id="product-stars"></div>
+              <span class="font-label-sm text-label-sm text-on-surface-variant" id="product-rating-text"></span>
+            </div>
+          </div>
+        </header>
+        <div class="glass-card p-8 rounded-lg mb-8">
+          <p class="text-on-surface-variant leading-relaxed" id="product-description">商品描述载入中...</p>
+          <div class="mt-6 grid grid-cols-2 gap-4">
+            <div class="p-4 bg-void-black border border-secondary/20">
+              <span class="font-label-sm text-xs text-secondary block mb-1">庫存</span>
+              <span class="text-starlight-white text-sm" id="product-stock">-</span>
+            </div>
+            <div class="p-4 bg-void-black border border-secondary/20">
+              <span class="font-label-sm text-xs text-secondary block mb-1">已售出</span>
+              <span class="text-starlight-white text-sm" id="product-sold">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             商品评价列表（从 reviews 表拉资料，公开可读）
+             ========================================================= -->
+        <div class="mt-12">
+          <div class="flex items-center gap-4 mb-6">
+            <h3 class="font-headline-lg text-headline-lg text-starlight-white">商品評價</h3>
+            <div class="flex-grow h-px bg-gradient-to-r from-secondary/40 to-transparent"></div>
+          </div>
+          <div id="review-list" class="space-y-4">
+            <p class="text-on-surface-variant text-sm">正在載入評價...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 侧边栏：操作按钮（加入购物车/收藏），桌面版固定在右侧 -->
+      <div class="lg:col-span-4">
+        <div class="lg:sticky lg:top-24 space-y-6">
+          <div class="glass-card p-6 rounded-lg border-l-4 border-l-secondary">
+            <h4 class="font-label-sm text-label-sm text-secondary uppercase mb-4">Limited Edition</h4>
+            <p class="text-sm text-on-surface-variant">此藝術品為 Wave Art Mall 精選珍藏，融合傳統工藝與現代數位美學。</p>
+          </div>
+          <div class="flex flex-col gap-4">
+            <button id="btn-add-cart" class="w-full bg-secondary text-void-black font-bold py-4 px-6 rounded hover:shadow-[0_0_20px_rgba(233,195,73,0.4)] transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined">shopping_cart</span>
+              加入購物車
+            </button>
+            <button id="btn-toggle-favorite" class="w-full border border-secondary text-secondary font-bold py-4 px-6 rounded hover:bg-secondary/10 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined" id="favorite-icon">favorite</span>
+              <span id="favorite-text">加入收藏</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 找不到商品时显示 -->
+  <div id="not-found-block" class="hidden text-center text-on-surface-variant py-24">
+    <p>找不到這個商品，它可能已經下架。</p>
+    <a href="../index.html" class="text-secondary underline">回到首頁</a>
+  </div>
+</main>
+
+<!-- 底部固定操作栏（手机版） -->
+<div class="fixed bottom-0 left-0 w-full flex justify-around items-center h-24 px-4 pb-4 z-[60] bg-surface-container-lowest/90 backdrop-blur-xl border-t border-secondary/30 lg:hidden">
+  <div class="flex w-full gap-3 max-w-md mx-auto">
+    <button id="btn-add-cart-mobile" class="flex-1 bg-surface-container-high text-secondary border border-secondary/40 font-bold rounded-lg py-4 px-2 text-center active:scale-95 transition-transform">
+      加入購物車
+    </button>
+    <button id="btn-toggle-favorite-mobile" class="flex-[1.5] bg-secondary text-void-black font-bold rounded-lg py-4 px-2 text-center shadow-[0_0_15px_rgba(233,195,73,0.3)] active:scale-95 transition-transform">
+      收藏此作品
+    </button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabaseClient.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+  /*
+    =========================================================
+    商品详情页专属逻辑
+    =========================================================
+    这一段负责：
+    1. 从网址取出 ?id= 参数，知道要显示哪一个商品
+    2. 去 products 表拿这笔商品的完整资料并显示出来
+    3. 判断这个商品目前是否已被收藏，切换爱心图示的样式
+    4. 处理「加入购物车」「收藏/取消收藏」按钮的点击事件
+    5. 去 reviews 表拿这个商品的评价列表显示出来
+  */
+
+  // 从网址上拿 id，例如 product-detail.html?id=5 就会拿到 "5"
+  const productId = getQueryParam("id");
+
+  // -----------------------------------------------------
+  // 这一段是去资料库拿「这一件商品」的详细资料
+  // -----------------------------------------------------
+  async function loadProductDetail() {
+    const loadingBlock = document.getElementById("loading-block");
+    const contentBlock = document.getElementById("product-content");
+    const notFoundBlock = document.getElementById("not-found-block");
+
+    // 如果网址根本没带 id，直接显示「找不到商品」
+    if (!productId) {
+      loadingBlock.classList.add("hidden");
+      notFoundBlock.classList.remove("hidden");
+      return;
+    }
+
+    try {
+      const { data: product, error } = await supabaseClient
+        .from("products")
+        .select("*")
+        .eq("id", productId)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (!product) {
+        loadingBlock.classList.add("hidden");
+        notFoundBlock.classList.remove("hidden");
+        return;
+      }
+
+      // 把商品资料一个一个填进画面上对应的元素
+      document.getElementById("product-image").src = product.image_urls || "";
+      document.getElementById("product-name").textContent = product.name;
+      document.getElementById("product-artist").textContent = product.artist ? `藝術家：${product.artist}` : "Premium Selection";
+      document.getElementById("product-price").textContent = formatPrice(product.price);
+      document.getElementById("product-description").textContent = product.description || "暫無商品描述";
+      document.getElementById("product-stock").textContent = "暫無庫存資訊";
+      document.getElementById("product-sold").textContent = (product.sold_count ?? 0) + " 件";
+
+      // 原价（如果有的话才显示画线价）
+      const originalPriceEl = document.getElementById("product-original-price");
+      if (product.original_price && product.original_price > product.price) {
+        originalPriceEl.textContent = formatPrice(product.original_price);
+      } else {
+        originalPriceEl.textContent = "";
+      }
+
+      // 评分星星（依照 rating 栏位画出实心/空心星星）
+      renderStars(product.rating || 0);
+      document.getElementById("product-rating-text").textContent =
+        product.rating ? `${product.rating} 分 (已售 ${product.sold_count || 0})` : "尚無評分";
+
+      // 显示商品内容、隐藏载入中区块
+      loadingBlock.classList.add("hidden");
+      contentBlock.classList.remove("hidden");
+
+      // 商品资料显示完后，再去检查收藏状态、设定按钮事件
+      await refreshFavoriteButton();
+      bindActionButtons();
+      applyOpenGraph(product);
+      loadReviews();
+    } catch (err) {
+      console.error("[loadProductDetail] 拿商品详情失败:", err);
+      loadingBlock.classList.add("hidden");
+      notFoundBlock.classList.remove("hidden");
+      notFoundBlock.querySelector("p").textContent = "商品載入失敗，請稍後再試";
+    }
+  }
+
+  // -----------------------------------------------------
+  // 這段負責把商品資料寫進社群分享預覽標籤
+  // 注意：社群平台的爬蟲不執行 JS，因此爬蟲看到的是 <head> 裡的靜態值；
+  //       這裡的覆寫是給「站內或已載入頁面後再用分享 API」的場景。
+  // -----------------------------------------------------
+  function applyOpenGraph(product) {
+    const origin = "https://wave-art-mall.vercel.app";
+    const rawImage = Array.isArray(product.image_urls)
+      ? (product.image_urls[0] || "")
+      : (product.image_urls || "");
+    const imageUrl = !rawImage
+      ? origin + "/icons/icon-512.png"
+      : (rawImage.startsWith("http") ? rawImage : origin + "/" + String(rawImage).replace(/^\/+/, ""));
+
+    const description = product.description || "WAVE ART MALL 精選藝術商品";
+    const setMeta = (selector, value) => {
+      const el = document.querySelector(selector);
+      if (el && value) el.setAttribute("content", value);
+    };
+
+    setMeta('meta[property="og:title"]', `${product.name} | WAVE ART MALL`);
+    setMeta('meta[property="og:description"]', description);
+    setMeta('meta[property="og:image"]', imageUrl);
+    setMeta('meta[property="og:url"]', window.location.href);
+    setMeta('meta[name="description"]', description);
+
+    document.title = `${product.name} | WAVE ART MALL`;
+  }
+
+  // 画出评分星星（例如 4.5 分会画 4 颗实心 + 1 颗半空心，这里简化成四舍五入）
+  function renderStars(rating) {
+    const container = document.getElementById("product-stars");
+    const rounded = Math.round(rating);
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+      html += `<span class="material-symbols-outlined text-sm ${i <= rounded ? 'filled star-filled' : 'star-empty'}">star</span>`;
+    }
+    container.innerHTML = html;
+  }
+
+  // -----------------------------------------------------
+  // 这一段负责更新「收藏按钮」的外观（已收藏 vs 未收藏）
+  // -----------------------------------------------------
+  async function refreshFavoriteButton() {
+    const favorited = await isFavorited(productId);
+    updateFavoriteButtonUI(favorited);
+  }
+
+  function updateFavoriteButtonUI(favorited) {
+    const icon = document.getElementById("favorite-icon");
+    const text = document.getElementById("favorite-text");
+    if (favorited) {
+      icon.classList.add("filled");
+      icon.style.color = "#ff6b6b";
+      text.textContent = "已收藏";
+    } else {
+      icon.classList.remove("filled");
+      icon.style.color = "";
+      text.textContent = "加入收藏";
+    }
+  }
+
+  // -----------------------------------------------------
+  // 这一段是把按钮的点击事件绑定好
+  // -----------------------------------------------------
+  function bindActionButtons() {
+    // 加入购物车（桌面版 + 手机版共用同一个函式）
+    const handleAddCart = async () => {
+      await addToCart(productId, 1);
+    };
+    document.getElementById("btn-add-cart").onclick = handleAddCart;
+    document.getElementById("btn-add-cart-mobile").onclick = handleAddCart;
+
+    // 收藏/取消收藏（桌面版 + 手机版共用同一个函式）
+    const handleToggleFavorite = async () => {
+      const result = await toggleFavorite(productId);
+      if (result !== null) {
+        updateFavoriteButtonUI(result);
+      }
+    };
+    document.getElementById("btn-toggle-favorite").onclick = handleToggleFavorite;
+    document.getElementById("btn-toggle-favorite-mobile").onclick = handleToggleFavorite;
+  }
+
+  // -----------------------------------------------------
+  // 这一段是去资料库拿「这个商品的评价列表」(reviews 表)
+  // reviews 表是公开可读的，所以未登入也能看到别人的评价
+  // -----------------------------------------------------
+  async function loadReviews() {
+    const list = document.getElementById("review-list");
+    try {
+      const { data, error } = await supabaseClient
+        .from("reviews")
+        .select("id, rating, comment, created_at")
+        .eq("product_id", productId)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        list.innerHTML = `<p class="text-on-surface-variant text-sm">目前尚無評價，成為第一位評論的人吧！</p>`;
+        return;
+      }
+
+      list.innerHTML = data.map((r) => {
+        const dateStr = new Date(r.created_at).toLocaleDateString("zh-TW");
+        let starsHtml = "";
+        for (let i = 1; i <= 5; i++) {
+          starsHtml += `<span class="material-symbols-outlined text-xs ${i <= r.rating ? 'filled star-filled' : 'star-empty'}">star</span>`;
+        }
+        return `
+          <div class="glass-card p-4 rounded-lg">
+            <div class="flex justify-between items-center mb-2">
+              <div class="flex">${starsHtml}</div>
+              <span class="font-label-sm text-[10px] text-on-surface-variant">${dateStr}</span>
+            </div>
+            <p class="text-sm text-on-surface-variant">${escapeHtml(r.comment || "")}</p>
+          </div>
+        `;
+      }).join("");
+    } catch (err) {
+      console.error("[loadReviews] 拿评价列表失败:", err);
+      list.innerHTML = `<p class="text-error text-sm">評價載入失敗</p>`;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadProductDetail);
+</script>
+
+<!-- ============================================
+     註冊 Service Worker（讓網站支援離線快取、可安裝成 App）
+     ============================================ -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch((err) => {
+      console.warn("Service Worker 註冊失敗：", err);
+    });
+  }
+</script>
+</body>
+</html>

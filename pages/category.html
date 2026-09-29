@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>分類探索 | WAVE ART MALL</title>
+
+<!-- ============================================
+     PWA 設定（讓網站可以「加到主畫面」變成手機 App 圖示）
+     ============================================ -->
+<link rel="manifest" href="../manifest.json" />
+<meta name="theme-color" content="#020203" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-icon" href="../icons/icon-192.png" />
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/material-symbols.css">
+<script src="../js/tailwind-config.js"></script>
+<link rel="stylesheet" href="../css/style.css" />
+
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+</style>
+</head>
+<body class="font-body-md text-body-md antialiased pb-24 pt-16">
+
+<header class="site-header">
+  <div class="flex items-center gap-4">
+    <button onclick="window.location.href='../index.html'" class="text-secondary active:scale-95 transition-transform" aria-label="返回首頁">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <a href="../index.html" class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-widest text-secondary hidden md:block">WAVE ART MALL</a>
+  </div>
+  <div class="flex items-center gap-4">
+    <a id="nav-auth-link" href="auth.html" class="font-label-sm text-[11px] uppercase tracking-widest text-secondary hover:text-neon-cyan transition-colors">登入</a>
+    <a href="cart.html" class="relative text-starlight-white hover:text-secondary transition-colors">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span class="js-cart-badge cart-badge hidden">0</span>
+    </a>
+  </div>
+</header>
+
+<main class="pt-8 pb-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+
+  <!-- 分类标题区 -->
+  <div class="mb-10">
+    <div class="flex items-center gap-2 mb-2 font-label-sm text-label-sm text-neon-cyan">
+      <span class="w-8 h-px bg-neon-cyan"></span>
+      <span>探索分類</span>
+    </div>
+    <h2 class="font-headline-xl text-headline-xl text-starlight-white mb-2" id="category-title">全部商品</h2>
+    <p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">探索由頂尖藝術家打造的珍藏作品，每一件都獨一無二。</p>
+  </div>
+
+  <!-- 分类快速切换列（横向可滑动） -->
+  <div class="flex gap-3 overflow-x-auto hide-scrollbar pb-4 mb-6" id="category-tabs">
+    <a href="category.html" class="px-4 py-2 font-label-sm text-label-sm uppercase border border-secondary/40 text-secondary hover:bg-secondary/10 transition-colors whitespace-nowrap rounded">全部</a>
+  </div>
+
+  <!-- 商品网格 -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10" id="product-grid">
+    <div class="col-span-full text-center text-on-surface-variant py-12">
+      <span class="loading-spinner"></span>
+      <p class="mt-4">正在載入商品...</p>
+    </div>
+  </div>
+
+  <section id="special-events-panel" class="hidden mt-16">
+    <div class="glass-card p-6 rounded-lg border border-secondary/20">
+      <div class="flex items-center gap-3 mb-5">
+        <span class="material-symbols-outlined text-secondary">event</span>
+        <div>
+          <h2 class="font-headline-lg text-headline-lg text-secondary">相關特殊節日</h2>
+          <p class="text-sm text-on-surface-variant">前面已建立的特殊節日會集中列在這裡。</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <a href="holiday-entry.html" class="p-4 border border-secondary/30 rounded bg-surface-container-low hover:bg-secondary/10"><strong class="text-secondary">地赦日</strong><p class="mt-2 text-sm text-on-surface-variant">查看地赦日方案入口</p></a>
+        <div class="p-4 border border-secondary/20 rounded bg-surface-container-low"><strong class="text-secondary">天赦日</strong><p class="mt-2 text-sm text-on-surface-variant">農曆九月九日</p></div>
+        <div class="p-4 border border-secondary/20 rounded bg-surface-container-low"><strong class="text-secondary">元赦日</strong><p class="mt-2 text-sm text-on-surface-variant">國曆一月一日</p></div>
+        <div class="p-4 border border-secondary/20 rounded bg-surface-container-low"><strong class="text-secondary">聖赦日</strong><p class="mt-2 text-sm text-on-surface-variant">國曆十二月二十五日</p></div>
+        <div class="p-4 border border-secondary/20 rounded bg-surface-container-low"><strong class="text-secondary">財赦日</strong><p class="mt-2 text-sm text-on-surface-variant">農曆八月十五日</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="special-event-admin" class="hidden mt-16 max-w-3xl">
+    <div class="glass-card p-6 rounded-lg border border-secondary/30">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="material-symbols-outlined text-secondary">event_upcoming</span>
+        <div>
+          <h2 class="font-headline-lg text-headline-lg text-secondary">新增特殊節日（待審核）</h2>
+          <p class="text-sm text-on-surface-variant">只有管理者可輸入；送出後先存為待審核，不會立即公開。</p>
+        </div>
+      </div>
+      <form id="special-event-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input id="event-name" required class="bg-void-black border border-outline-variant text-starlight-white px-4 py-3 rounded" placeholder="節日名稱">
+        <input id="event-date" required class="bg-void-black border border-outline-variant text-starlight-white px-4 py-3 rounded" placeholder="日期規則，例如農曆十月十日">
+        <textarea id="event-description" required class="md:col-span-2 bg-void-black border border-outline-variant text-starlight-white px-4 py-3 rounded" rows="3" placeholder="節日說明"></textarea>
+        <div class="md:col-span-2 flex items-center gap-4">
+          <button type="submit" class="bg-secondary text-void-black font-bold px-5 py-3 rounded">送出審核</button>
+          <span id="special-event-status" class="text-sm text-on-surface-variant" role="status"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<nav class="site-bottom-nav md:hidden">
+  <a class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-secondary transition-all" href="../index.html">
+    <span class="material-symbols-outlined">home</span>
+    <span class="font-label-sm text-[10px] uppercase mt-1">首頁</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-secondary filter drop-shadow-[0_0_8px_rgba(233,195,73,0.6)] scale-110" href="category.html">
+    <span class="material-symbols-outlined">explore</span>
+    <span class="font-label-sm text-[10px] uppercase mt-1">探索</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-secondary transition-all" href="cart.html">
+    <span class="material-symbols-outlined">shopping_cart</span>
+    <span class="font-label-sm text-[10px] uppercase mt-1">購物車</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-secondary transition-all" href="order-history.html">
+    <span class="material-symbols-outlined">person</span>
+    <span class="font-label-sm text-[10px] uppercase mt-1">個人</span>
+  </a>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabaseClient.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+  /*
+    =========================================================
+    分类列表页专属逻辑
+    =========================================================
+    这一段负责：
+    1. 从网址取出 ?category_id= 参数，知道要显示哪个分类的商品
+    2. 去 categories 表拿全部分类，画出上方可切换的分类标签列
+    3. 去 products 表依照分类 id 筛选出对应商品，画出商品网格
+    如果网址没带 category_id，就显示「全部商品」
+  */
+
+  const SPECIAL_EVENT_CATEGORY_ID = "c2ace2f7-03e3-49c6-968b-04ea4078ee52";
+  const categoryId = getQueryParam("category_id");
+
+  function showSpecialEventPanel() {
+    document.getElementById("category-title").textContent = "特殊節日";
+    document.getElementById("special-events-panel").classList.remove("hidden");
+  }
+
+  if (String(categoryId) === SPECIAL_EVENT_CATEGORY_ID) {
+    showSpecialEventPanel();
+  }
+
+  // -----------------------------------------------------
+  // 这一段是去资料库拿「所有分类」，画出上方可切换的标签列
+  // -----------------------------------------------------
+  async function loadCategoryTabs() {
+    const tabsContainer = document.getElementById("category-tabs");
+    try {
+      const { data, error } = await supabaseClient
+        .from("categories")
+        .select("id, name, sort_order")
+        .order("sort_order", { ascending: true });
+
+      if (error) throw error;
+
+      const allTab = `<a href="category.html" class="px-4 py-2 font-label-sm text-label-sm uppercase border ${!categoryId ? 'bg-secondary text-void-black font-bold border-secondary' : 'border-secondary/40 text-secondary hover:bg-secondary/10'} transition-colors whitespace-nowrap rounded">全部</a>`;
+
+      const categoryTabs = (data || []).map((cat) => {
+        const isActive = String(cat.id) === String(categoryId);
+        const target = `category.html?category_id=${cat.id}`;
+        return `<a href="${target}" class="px-4 py-2 font-label-sm text-label-sm uppercase border ${isActive ? 'bg-secondary text-void-black font-bold border-secondary' : 'border-secondary/40 text-secondary hover:bg-secondary/10'} transition-colors whitespace-nowrap rounded">${escapeHtml(cat.name)}</a>`;
+      }).join("");
+
+      tabsContainer.innerHTML = allTab + categoryTabs;
+
+      // 顺便更新标题文字
+      if (categoryId) {
+        const matched = (data || []).find((c) => String(c.id) === String(categoryId));
+        if (matched) {
+          document.getElementById("category-title").textContent = matched.name;
+          if (matched.name === '特殊節日') initSpecialEventAdmin();
+        }
+      }
+    } catch (err) {
+      console.error("[loadCategoryTabs] 拿分类标签失败:", err);
+    }
+  }
+
+  // -----------------------------------------------------
+  // 这一段是去资料库拿「该分类底下的商品列表」
+  // -----------------------------------------------------
+  async function initSpecialEventAdmin() {
+    document.getElementById('special-events-panel').classList.remove('hidden');
+    const user = await getCurrentUser();
+    if (!user || user.email !== '2022lingyun@gmail.com') return;
+    const adminPanel = document.getElementById('special-event-admin');
+    adminPanel.classList.remove('hidden');
+    document.getElementById('special-event-form').addEventListener('submit', submitSpecialEvent);
+  }
+
+  async function submitSpecialEvent(event) {
+    event.preventDefault();
+    const status = document.getElementById('special-event-status');
+    const user = await getCurrentUser();
+    if (!user || user.email !== '2022lingyun@gmail.com') {
+      status.textContent = '只有管理者可以送出特殊節日。';
+      return;
+    }
+    const payload = {
+      name: document.getElementById('event-name').value.trim(),
+      date_rule: document.getElementById('event-date').value.trim(),
+      description: document.getElementById('event-description').value.trim(),
+      submitted_by: user.id
+    };
+    if (!payload.name || !payload.date_rule || !payload.description) {
+      status.textContent = '請完整填寫節日名稱、日期與說明。';
+      return;
+    }
+    const { error } = await supabaseClient.from('special_event_submissions').insert(payload);
+    status.textContent = error ? '送審失敗，請確認資料庫補丁已執行。' : '已送出待審核，確認後才會公開。';
+    if (!error) event.target.reset();
+  }
+
+  async function loadProductsByCategory() {
+    const grid = document.getElementById("product-grid");
+    try {
+      let query = supabaseClient.from("products").select("*");
+      if (categoryId) {
+        query = query.eq("category_id", categoryId);
+      }
+      const { data, error } = await query.order("id", { ascending: true });
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center text-on-surface-variant/50 py-12">此分類目前尚無商品</div>`;
+        return;
+      }
+
+      grid.innerHTML = data.map((p) => `
+        <a href="product-detail.html?id=${p.id}" class="glass-card group flex flex-col h-full">
+          <div class="art-frame relative aspect-[4/5] overflow-hidden">
+            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="${escapeHtml(p.image_urls || '')}" alt="${escapeHtml(p.name)}" onerror="this.src='https://placehold.co/400x500/141314/e9c349?text=WAVE+ART'" />
+          </div>
+          <div class="p-6 flex flex-col gap-4 flex-grow">
+            <div>
+              <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-starlight-white group-hover:text-secondary transition-colors">${escapeHtml(p.name)}</h3>
+              ${p.artist ? `<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">藝術家: ${escapeHtml(p.artist)}</p>` : ""}
+            </div>
+            <div class="mt-auto border-t border-secondary/10 pt-4 flex justify-between items-center">
+              <div>
+                <p class="font-label-sm text-label-sm text-on-surface-variant uppercase">售價</p>
+                <p class="font-label-sm text-lg text-secondary font-bold">${formatPrice(p.price)}</p>
+              </div>
+              <span class="bg-secondary text-void-black px-6 py-2 font-label-sm text-label-sm font-bold uppercase">查看詳情</span>
+            </div>
+          </div>
+        </a>
+      `).join("");
+    } catch (err) {
+      console.error("[loadProductsByCategory] 拿商品列表失败:", err);
+      grid.innerHTML = `<div class="col-span-full text-center text-error py-12">商品載入失敗，請重新整理頁面</div>`;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadCategoryTabs();
+    loadProductsByCategory();
+  });
+</script>
+
+<!-- ============================================
+     註冊 Service Worker（讓網站支援離線快取、可安裝成 App）
+     ============================================ -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch((err) => {
+      console.warn("Service Worker 註冊失敗：", err);
+    });
+  }
+</script>
+</body>
+</html>

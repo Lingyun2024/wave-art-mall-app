@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登記成功確認｜火星療癒 - WAVE ART MALL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Serif+TC:wght@400;500;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cosmic: { 950: "#030407", 900: "#07080d", 800: "#12141c" },
+              gold: { 200: "#f9e8a2", 300: "#f3d360", 400: "#e5be38", 500: "#cca125" },
+            },
+            fontFamily: {
+              cinzel: ["Cinzel", "serif"],
+              tc: ["Noto Serif TC", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Noto Serif TC", serif;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-cosmic-950 text-white overflow-x-hidden">
+    <div
+      class="fixed inset-0 pointer-events-none"
+      style="
+        background:
+          radial-gradient(circle at 50% 5%, rgba(204, 161, 37, 0.2), transparent 36%),
+          radial-gradient(circle at 10% 90%, rgba(34, 211, 238, 0.08), transparent 35%),
+          radial-gradient(circle at 90% 80%, rgba(204, 161, 37, 0.08), transparent 32%);
+      "
+    ></div>
+
+    <main class="relative min-h-screen flex items-center justify-center px-5 py-12">
+      <section
+        class="w-full max-w-2xl rounded-3xl border border-gold-400/30 bg-cosmic-900/90 p-7 sm:p-10 text-center shadow-[0_0_60px_rgba(229,190,56,.16)]"
+      >
+        <div
+          class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-gold-300/60 bg-gold-400/15 shadow-[0_0_35px_rgba(229,190,56,.3)]"
+        >
+          <svg
+            class="h-10 w-10 text-gold-300"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <p class="font-cinzel text-xs tracking-[.28em] text-gold-300">MARS HEALING</p>
+        <h1 class="mt-3 text-3xl font-bold tracking-wide text-gold-200 sm:text-4xl">
+          登記已成功送出
+        </h1>
+        <p class="mt-5 leading-8 text-gray-300">
+          感謝您的請領登記。您的資料與照片已安全保存，管理員將依您填寫的匯款帳號末五碼進行人工核對。
+        </p>
+
+        <div
+          class="mt-7 rounded-2xl border border-gold-400/25 bg-cosmic-950/70 px-5 py-5 text-left"
+        >
+          <div class="flex items-center justify-between gap-4 border-b border-gold-400/15 pb-3">
+            <span class="text-sm text-gray-400">登記編號</span>
+            <span
+              id="registration-id"
+              class="max-w-[65%] break-all text-right text-sm font-semibold text-gold-300"
+            >
+              資料處理中
+            </span>
+          </div>
+          <div class="flex items-center justify-between gap-4 border-b border-gold-400/15 py-3">
+            <span class="text-sm text-gray-400">申請方案</span>
+            <span id="plan-name" class="text-right text-sm text-gold-200">火星療癒旨令</span>
+          </div>
+          <div class="flex items-center justify-between gap-4 pt-3">
+            <span class="text-sm text-gray-400">應納功德金</span>
+            <span id="total-fee" class="text-right text-sm font-semibold text-gold-300">--</span>
+          </div>
+        </div>
+
+        <div class="mt-7 rounded-xl border border-gold-400/25 bg-gold-400/10 p-4 text-left">
+          <p class="font-semibold text-gold-200">下一步</p>
+          <p class="mt-2 text-sm leading-7 text-gray-300">
+            請依登記頁提供的銀行資訊完成轉帳。核對完成後，管理員將依您留下的聯絡方式與您聯繫。
+          </p>
+        </div>
+
+        <p id="auto-redirect-notice" class="mt-7 text-sm text-gray-400">
+          將在
+          <span id="countdown" class="font-semibold text-gold-300">8</span>
+          秒後自動前往軟實力總覽頁
+          <button
+            type="button"
+            id="cancel-redirect"
+            class="ml-2 underline text-gold-300 hover:text-gold-200"
+          >
+            取消
+          </button>
+        </p>
+        <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <a
+            href="./mars-healing-history.html"
+            class="inline-flex items-center justify-center rounded-xl border border-gold-300/70 px-7 py-3 font-bold text-gold-200 transition hover:bg-gold-400/10"
+          >
+            查看我的火星療癒登記
+          </a>
+          <a
+            href="./soft-power.html"
+            class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-gold-400 to-gold-300 px-7 py-3 font-bold text-cosmic-950 transition hover:brightness-110"
+          >
+            立即前往軟實力總覽
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      document.getElementById("registration-id").textContent = params.get("id") || "已建立登記資料";
+      document.getElementById("plan-name").textContent = params.get("plan") || "火星療癒旨令";
+      document.getElementById("total-fee").textContent = params.get("fee") || "--";
+
+      let seconds = 8;
+      let timer = null;
+      const countdown = document.getElementById("countdown");
+      const notice = document.getElementById("auto-redirect-notice");
+      const cancelBtn = document.getElementById("cancel-redirect");
+
+      function startTimer() {
+        timer = window.setInterval(() => {
+          seconds -= 1;
+          countdown.textContent = seconds;
+          if (seconds <= 0) {
+            window.clearInterval(timer);
+            window.location.href = "./soft-power.html";
+          }
+        }, 1000);
+      }
+
+      function cancelTimer() {
+        if (timer) {
+          window.clearInterval(timer);
+          timer = null;
+        }
+        notice.textContent = "已取消自動跳轉";
+        notice.classList.add("text-gray-500");
+      }
+
+      cancelBtn.addEventListener("click", cancelTimer);
+
+      ["scroll", "touchstart", "keydown"].forEach((event) => {
+        window.addEventListener(event, cancelTimer, { once: true });
+      });
+
+      startTimer();
+    </script>
+  </body>
+</html>

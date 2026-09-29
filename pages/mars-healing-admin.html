@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="zh-Hant" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>火星療癒登記管理 - WAVE ART MALL Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabaseClient.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap");
+      body {
+        font-family: "Noto Sans TC", sans-serif;
+      }
+      .mars-table {
+        font-size: 13px;
+      }
+      .mars-table th {
+        background: #1f2937;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .mars-table td {
+        border-bottom: 1px solid #374151;
+      }
+      .mars-table tr:hover {
+        background: #1f2937;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 500;
+      }
+      .status-submitted {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .status-reviewing {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .status-approved {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .status-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .payment-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .payment-verified {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .payment-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-gray-100 min-h-screen">
+    <header
+      class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center"
+    >
+      <div>
+        <h1 class="text-xl font-bold text-yellow-400">火星療癒登記管理</h1>
+        <p class="text-sm text-gray-400 mt-1">Mars Healing Registration Admin</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <span id="admin-email" class="text-sm text-gray-300"></span>
+        <button
+          onclick="handleLogout()"
+          class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-sm"
+        >
+          登出
+        </button>
+      </div>
+    </header>
+
+    <main class="p-6 max-w-[1600px] mx-auto">
+      <div class="bg-gray-800 rounded-lg p-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <div class="text-gray-400 text-xs uppercase mb-1">總登記數</div>
+            <div id="stat-total" class="text-2xl font-bold text-yellow-400">-</div>
+          </div>
+          <div class="bg-gray-700 rounded-lg p-4">
+            <div class="text-gray-400 text-xs uppercase mb-1">待審核</div>
+            <div id="stat-pending" class="text-2xl font-bold text-blue-400">-</div>
+          </div>
+          <div class="bg-gray-700 rounded-lg p-4">
+            <div class="text-gray-400 text-xs uppercase mb-1">已通過</div>
+            <div id="stat-approved" class="text-2xl font-bold text-green-400">-</div>
+          </div>
+          <div class="bg-gray-700 rounded-lg p-4">
+            <div class="text-gray-400 text-xs uppercase mb-1">應收總額</div>
+            <div id="stat-amount" class="text-2xl font-bold text-gray-100">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gray-800 rounded-lg p-4 mb-4 flex gap-4 items-center flex-wrap">
+        <input
+          type="text"
+          id="filter-search"
+          placeholder="搜尋姓名、電話、地址..."
+          class="bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded text-sm flex-1 min-w-[200px]"
+        />
+        <select
+          id="filter-status"
+          class="bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded text-sm"
+        >
+          <option value="">全部登記狀態</option>
+          <option value="submitted">已提交</option>
+          <option value="reviewing">審核中</option>
+          <option value="approved">已通過</option>
+          <option value="rejected">已拒絕</option>
+        </select>
+        <select
+          id="filter-payment"
+          class="bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded text-sm"
+        >
+          <option value="">全部付款狀態</option>
+          <option value="pending">待核對</option>
+          <option value="verified">已核對</option>
+          <option value="rejected">核對失敗</option>
+        </select>
+        <button
+          onclick="loadRegistrations()"
+          class="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 rounded text-sm font-medium"
+        >
+          查詢
+        </button>
+        <button
+          onclick="exportToCSV()"
+          class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-sm"
+        >
+          匯出 CSV
+        </button>
+      </div>
+
+      <div class="bg-gray-800 rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="mars-table w-full">
+            <thead>
+              <tr class="text-left text-xs text-gray-300 uppercase tracking-wider">
+                <th class="px-4 py-3">登記時間</th>
+                <th class="px-4 py-3">方案</th>
+                <th class="px-4 py-3">代表人</th>
+                <th class="px-4 py-3">虛歲</th>
+                <th class="px-4 py-3">電話</th>
+                <th class="px-4 py-3">職業</th>
+                <th class="px-4 py-3">地址</th>
+                <th class="px-4 py-3">功德金</th>
+                <th class="px-4 py-3">轉帳末5碼</th>
+                <th class="px-4 py-3">付款狀態</th>
+                <th class="px-4 py-3">審核狀態</th>
+                <th class="px-4 py-3 text-center">操作</th>
+              </tr>
+            </thead>
+            <tbody id="registration-table-body" class="text-gray-200">
+              <tr><td colspan="12" class="px-4 py-8 text-center text-gray-500">載入中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <div
+      id="detail-modal"
+      class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+    >
+      <div class="bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div
+          class="sticky top-0 bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center"
+        >
+          <h2 class="text-lg font-bold text-yellow-400">登記詳情</h2>
+          <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-200">✕</button>
+        </div>
+        <div id="detail-content" class="p-6"></div>
+      </div>
+    </div>
+
+    <script>
+      let allRegistrations = [];
+
+      async function init() {
+        const user = await supabaseClient.auth.getUser();
+        if (!user.data.user) {
+          window.location.href = "../pages/auth.html?redirect=mars-healing-admin.html";
+          return;
+        }
+        const email = user.data.user.email;
+        if (email !== "2022lingyun@gmail.com") {
+          alert("您沒有管理權限。");
+          window.location.href = "../index.html";
+          return;
+        }
+        document.getElementById("admin-email").textContent = email;
+        await loadRegistrations();
+      }
+
+      async function loadRegistrations() {
+        try {
+          const searchText = document.getElementById("filter-search").value.trim().toLowerCase();
+          const statusFilter = document.getElementById("filter-status").value;
+          const paymentFilter = document.getElementById("filter-payment").value;
+
+          let query = supabaseClient
+            .from("mars_healing_registrations")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+          if (statusFilter) query = query.eq("registration_status", statusFilter);
+          if (paymentFilter) query = query.eq("payment_status", paymentFilter);
+
+          const { data, error } = await query;
+          if (error) throw error;
+
+          allRegistrations = data;
+
+          if (searchText) {
+            allRegistrations = allRegistrations.filter(
+              (r) =>
+                r.representative_name.toLowerCase().includes(searchText) ||
+                r.phone.includes(searchText) ||
+                (r.address && r.address.toLowerCase().includes(searchText))
+            );
+          }
+
+          updateStats();
+          renderTable();
+        } catch (error) {
+          console.error("[loadRegistrations]", error);
+          alert("載入失敗：" + error.message);
+        }
+      }
+
+      function updateStats() {
+        const total = allRegistrations.length;
+        const pending = allRegistrations.filter(
+          (r) => r.registration_status === "submitted"
+        ).length;
+        const approved = allRegistrations.filter(
+          (r) => r.registration_status === "approved"
+        ).length;
+        const totalAmount = allRegistrations.reduce(
+          (sum, r) => sum + Number(r.total_amount || 0),
+          0
+        );
+
+        document.getElementById("stat-total").textContent = total;
+        document.getElementById("stat-pending").textContent = pending;
+        document.getElementById("stat-approved").textContent = approved;
+        document.getElementById("stat-amount").textContent = "NT$ " + totalAmount.toLocaleString();
+      }
+
+      function renderTable() {
+        const tbody = document.getElementById("registration-table-body");
+        if (allRegistrations.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="12" class="px-4 py-8 text-center text-gray-500">目前無登記資料</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = allRegistrations
+          .map(
+            (r) => `
+        <tr>
+          <td class="px-4 py-3">${new Date(r.created_at).toLocaleString("zh-TW")}</td>
+          <td class="px-4 py-3 font-medium">${r.plan_label}</td>
+          <td class="px-4 py-3 font-medium">${escapeHtml(r.representative_name)}</td>
+          <td class="px-4 py-3">${r.age}</td>
+          <td class="px-4 py-3">${escapeHtml(r.phone)}</td>
+          <td class="px-4 py-3">${escapeHtml(r.occupation || "-")}</td>
+          <td class="px-4 py-3 max-w-[200px] truncate" title="${escapeHtml(r.address || "")}">${escapeHtml(r.address || "-")}</td>
+          <td class="px-4 py-3 text-yellow-400 font-medium">NT$ ${Number(r.total_amount).toLocaleString()}</td>
+          <td class="px-4 py-3 font-mono">${r.transfer_last_five}</td>
+          <td class="px-4 py-3">
+            <span class="status-badge payment-${r.payment_status}">${getPaymentStatusLabel(r.payment_status)}</span>
+          </td>
+          <td class="px-4 py-3">
+            <span class="status-badge status-${r.registration_status}">${getRegistrationStatusLabel(r.registration_status)}</span>
+          </td>
+          <td class="px-4 py-3 text-center">
+            <button onclick="viewDetail('${r.id}')" class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-xs">檢視</button>
+          </td>
+        </tr>
+      `
+          )
+          .join("");
+      }
+
+      async function viewDetail(id) {
+        const registration = allRegistrations.find((r) => r.id === id);
+        if (!registration) return;
+
+        let photoPreviewHtml = '<p class="text-gray-400">照片載入中...</p>';
+        try {
+          const { data: signedUrl } = await supabaseClient.storage
+            .from("mars-healing-photos")
+            .createSignedUrl(registration.photo_path, 3600);
+          if (signedUrl) {
+            photoPreviewHtml = `<img src="${signedUrl.signedUrl}" alt="個人照片" class="max-w-xs rounded border border-gray-600">`;
+          }
+        } catch (error) {
+          photoPreviewHtml = '<p class="text-red-400">照片載入失敗</p>';
+        }
+
+        document.getElementById("detail-content").innerHTML = `
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div><span class="text-gray-400">登記編號：</span><span class="font-mono text-sm">${registration.id}</span></div>
+            <div><span class="text-gray-400">登記時間：</span>${new Date(registration.created_at).toLocaleString("zh-TW")}</div>
+            <div><span class="text-gray-400">方案：</span><strong class="text-yellow-400">${registration.plan_label}</strong></div>
+            <div><span class="text-gray-400">功德金：</span><strong class="text-yellow-400">NT$ ${Number(registration.total_amount).toLocaleString()}</strong></div>
+          </div>
+          <hr class="border-gray-700">
+          <div class="grid grid-cols-2 gap-4">
+            <div><span class="text-gray-400">代表人姓名：</span>${escapeHtml(registration.representative_name)}</div>
+            <div><span class="text-gray-400">虛歲：</span>${registration.age}</div>
+            <div><span class="text-gray-400">聯絡電話：</span>${escapeHtml(registration.phone)}</div>
+            <div><span class="text-gray-400">職業：</span>${escapeHtml(registration.occupation || "-")}</div>
+            <div class="col-span-2"><span class="text-gray-400">通訊地址：</span>${escapeHtml(registration.address)}</div>
+            ${registration.agent_name ? `<div class="col-span-2"><span class="text-gray-400">代理人：</span>${escapeHtml(registration.agent_name)}</div>` : ""}
+          </div>
+          <hr class="border-gray-700">
+          <div><span class="text-gray-400">轉帳帳號末 5 碼：</span><strong class="font-mono text-lg text-yellow-400">${registration.transfer_last_five}</strong></div>
+          ${registration.transfer_memo ? `<div><span class="text-gray-400">轉帳備註：</span>${escapeHtml(registration.transfer_memo)}</div>` : ""}
+          ${registration.reference_note ? `<div><span class="text-gray-400">請領備註：</span>${escapeHtml(registration.reference_note)}</div>` : ""}
+          <hr class="border-gray-700">
+          <div><span class="text-gray-400">個人照片：</span><div class="mt-2">${photoPreviewHtml}</div></div>
+          <hr class="border-gray-700">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-400 mb-2">付款狀態</label>
+              <select id="edit-payment-status" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">
+                <option value="pending" ${registration.payment_status === "pending" ? "selected" : ""}>待核對</option>
+                <option value="verified" ${registration.payment_status === "verified" ? "selected" : ""}>已核對</option>
+                <option value="rejected" ${registration.payment_status === "rejected" ? "selected" : ""}>核對失敗</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">審核狀態</label>
+              <select id="edit-registration-status" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">
+                <option value="submitted" ${registration.registration_status === "submitted" ? "selected" : ""}>已提交</option>
+                <option value="reviewing" ${registration.registration_status === "reviewing" ? "selected" : ""}>審核中</option>
+                <option value="approved" ${registration.registration_status === "approved" ? "selected" : ""}>已通過</option>
+                <option value="rejected" ${registration.registration_status === "rejected" ? "selected" : ""}>已拒絕</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-2">管理備註</label>
+            <textarea id="edit-admin-note" rows="3" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">${escapeHtml(registration.admin_note || "")}</textarea>
+          </div>
+          <div class="flex gap-4 pt-4">
+            <button onclick="saveRegistrationUpdate('${registration.id}')" class="px-6 py-2 bg-green-600 hover:bg-green-500 rounded font-medium">儲存變更</button>
+            <button onclick="closeDetailModal()" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded">取消</button>
+          </div>
+        </div>
+      `;
+
+        document.getElementById("detail-modal").classList.remove("hidden");
+      }
+
+      async function saveRegistrationUpdate(id) {
+        const paymentStatus = document.getElementById("edit-payment-status").value;
+        const registrationStatus = document.getElementById("edit-registration-status").value;
+        const adminNote = document.getElementById("edit-admin-note").value.trim();
+
+        try {
+          const user = await supabaseClient.auth.getUser();
+          const { error } = await supabaseClient
+            .from("mars_healing_registrations")
+            .update({
+              payment_status: paymentStatus,
+              registration_status: registrationStatus,
+              admin_note: adminNote || null,
+              reviewed_by: user.data.user.id,
+              reviewed_at: new Date().toISOString(),
+            })
+            .eq("id", id);
+
+          if (error) throw error;
+
+          alert("更新成功");
+          closeDetailModal();
+          await loadRegistrations();
+        } catch (error) {
+          console.error("[saveRegistrationUpdate]", error);
+          alert("更新失敗：" + error.message);
+        }
+      }
+
+      function closeDetailModal() {
+        document.getElementById("detail-modal").classList.add("hidden");
+      }
+
+      function exportToCSV() {
+        if (allRegistrations.length === 0) {
+          alert("目前無資料可匯出");
+          return;
+        }
+
+        const headers = [
+          "登記時間",
+          "方案",
+          "代表人",
+          "虛歲",
+          "電話",
+          "職業",
+          "地址",
+          "功德金",
+          "轉帳末5碼",
+          "付款狀態",
+          "審核狀態",
+          "管理備註",
+        ];
+        const rows = allRegistrations.map((r) => [
+          new Date(r.created_at).toLocaleString("zh-TW"),
+          r.plan_label,
+          r.representative_name,
+          r.age,
+          r.phone,
+          r.occupation || "",
+          r.address,
+          r.total_amount,
+          r.transfer_last_five,
+          getPaymentStatusLabel(r.payment_status),
+          getRegistrationStatusLabel(r.registration_status),
+          r.admin_note || "",
+        ]);
+
+        const csv = [headers, ...rows]
+          .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+          .join("\n");
+        const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `火星療癒登記_${new Date().toISOString().split("T")[0]}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function getPaymentStatusLabel(status) {
+        const labels = { pending: "待核對", verified: "已核對", rejected: "核對失敗" };
+        return labels[status] || status;
+      }
+
+      function getRegistrationStatusLabel(status) {
+        const labels = {
+          submitted: "已提交",
+          reviewing: "審核中",
+          approved: "已通過",
+          rejected: "已拒絕",
+        };
+        return labels[status] || status;
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      async function handleLogout() {
+        await supabaseClient.auth.signOut();
+        window.location.href = "../index.html";
+      }
+
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>

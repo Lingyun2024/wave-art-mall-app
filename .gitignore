@@ -1,0 +1,61 @@
+.vercel
+
+# 本机数据库连接串，绝不能提交到 Git
+scripts/.env
+
+# 含客户资料的本地数据库备份，绝不能提交到 Git
+backups/
+
+.vercel
+.env*
+
+# 瀏覽器使用者資料（含 Cookies、登入憑證、瀏覽紀錄），絕不能提交
+_rh_browser_profile/
+
+# ============================================================
+# 以下為 2026-09-12 追加：避免大型素材與歷史備份進入版控
+# 原則：只版控「網站原始碼」與「網站實際使用的小圖」，
+#       大型媒體、歷史素材、備份快照一律排除。
+# ============================================================
+
+# 歷史素材庫（17 GB）與舊版混亂目錄（722 MB）
+頁面輸入指示/
+_legacy_messed_up/
+
+# 各時期備份快照
+_local_backup/
+_online_snapshot/
+_online_source/
+_restore_backup/
+
+# 依賴與暫存
+node_modules/
+_tmp_font/
+_tmp_probe/
+test-results/
+playwright-report/
+
+# 影片檔：站上已改用 YouTube 嵌入，原始 mp4 不進版控
+*.mp4
+
+# 工具／偵錯暫存（含 .env 一律排除）
+*.env
+.opencode/
+.dbg/
+supabase/.temp/
+
+# 根目錄探測／草稿檔（非網站內容，僅供本機除錯）
+# 注意：必須保留 index.html、sw.js、manifest.json、package.json
+/_*.js
+/_*.mjs
+/_*.py
+/_*.png
+/_*.html
+/*.ps1
+/*.png
+
+# 對話存檔（本地整理用，不入版控）
+docs/對話存檔_*.md
+docs/七七地赦對話存檔_*.md
+docs/0830_1軟實力.md
+.opencode

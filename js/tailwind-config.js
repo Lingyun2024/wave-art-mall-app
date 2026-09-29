@@ -1,0 +1,106 @@
+/*
+  =========================================================
+  Tailwind CDN 版本的主题设定档
+  =========================================================
+  新手说明：
+  我们用的 Tailwind 是「CDN 版」（<script src="https://cdn.tailwindcss.com">），
+  不需要额外安装或打包工具。但 CDN 版本一样可以客制化颜色、字体、圆角等设定，
+  只要在 <script> 里面写 tailwind.config = {...} 即可。
+
+  为了让 9 个页面都长得一模一样（暗黑奢华艺术品电商风），
+  我们把这份设定档抽出来变成共用的 js 档案，
+  每个 html 页面只要这样引入：
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="../js/tailwind-config.js"></script>
+  就会套用一样的颜色配置，不用每页都贴一大串重复的设定。
+
+  这份配色/字体/圆角设定是直接比照使用者上传的设计稿（Wave Art Mall）整理出来的。
+*/
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        // 品牌主色：暗夜黑、金色、青色霓光
+        "void-black": "#020203",
+        background: "#141314",
+        surface: "#141314",
+        "surface-dim": "#141314",
+        "surface-bright": "#3a3939",
+        "surface-container-lowest": "#0e0e0e",
+        "surface-container-low": "#1c1b1c",
+        "surface-container": "#201f20",
+        "surface-container-high": "#2a2a2a",
+        "surface-container-highest": "#353435",
+        "surface-variant": "#353435",
+        "on-background": "#e5e2e2",
+        "on-surface": "#e5e2e2",
+        "on-surface-variant": "#c7c6cb",
+        outline: "#919095",
+        "outline-variant": "#46464b",
+        "starlight-white": "#F9F9F9",
+        "neon-cyan": "#00FFFF",
+        "galactic-purple": "#8A2BE2",
+        secondary: "#e9c349",
+        "secondary-fixed": "#ffe088",
+        "secondary-fixed-dim": "#e9c349",
+        "secondary-container": "#af8d11",
+        "on-secondary": "#3c2f00",
+        "on-secondary-container": "#342800",
+        "on-secondary-fixed": "#241a00",
+        "on-secondary-fixed-variant": "#574500",
+        primary: "#c7c6cd",
+        "primary-container": "#0a0b10",
+        "primary-fixed": "#e3e1e9",
+        "primary-fixed-dim": "#c7c6cd",
+        "on-primary": "#2f3036",
+        "on-primary-container": "#797980",
+        "on-primary-fixed": "#1a1b21",
+        "on-primary-fixed-variant": "#46464c",
+        tertiary: "#d2c4b9",
+        "tertiary-fixed": "#efe0d5",
+        "tertiary-fixed-dim": "#d2c4b9",
+        "tertiary-container": "#100a05",
+        "on-tertiary": "#372f27",
+        "on-tertiary-container": "#83786f",
+        "on-tertiary-fixed": "#211a14",
+        "on-tertiary-fixed-variant": "#4e453d",
+        error: "#ffb4ab",
+        "error-container": "#93000a",
+        "on-error": "#690005",
+        "on-error-container": "#ffdad6",
+        "inverse-surface": "#e5e2e2",
+        "inverse-on-surface": "#313030",
+        "inverse-primary": "#5e5e64",
+        "surface-tint": "#c7c6cd",
+      },
+      borderRadius: {
+        DEFAULT: "0.125rem",
+        lg: "0.25rem",
+        xl: "0.5rem",
+        full: "0.75rem",
+      },
+      spacing: {
+        "margin-desktop": "80px",
+        gutter: "24px",
+        "margin-mobile": "20px",
+        "container-max": "1440px",
+        unit: "8px",
+      },
+      fontFamily: {
+        "body-md": ["Manrope"],
+        "label-sm": ["JetBrains Mono"],
+        "headline-lg-mobile": ["Playfair Display"],
+        "headline-xl": ["Playfair Display"],
+        "headline-lg": ["Playfair Display"],
+      },
+      fontSize: {
+        "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+        "label-sm": ["12px", { lineHeight: "1.0", letterSpacing: "0.1em", fontWeight: "500" }],
+        "headline-lg-mobile": ["28px", { lineHeight: "1.3", fontWeight: "600" }],
+        "headline-xl": ["48px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "600" }],
+      },
+    },
+  },
+};

@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>七七地赦管理結案總表 | WAVE ART MALL</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabaseClient.js"></script>
+    <style>
+      :root {
+        --ink: #171717;
+        --paper: #fff;
+        --screen: #151515;
+        --panel: #222;
+        --gold: #e9c349;
+        --muted: #aaa;
+        --danger: #d86d6d;
+        --ok: #71c995;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--screen);
+        color: #f4f4f4;
+        font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      .app-bar {
+        min-height: 64px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px max(20px, calc((100vw - 1440px) / 2));
+        background: #0d0d0d;
+        border-bottom: 1px solid #444;
+      }
+      .app-title {
+        margin: 0 auto 0 0;
+        color: var(--gold);
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+      }
+      .button {
+        min-height: 40px;
+        padding: 0 14px;
+        border: 1px solid #656565;
+        border-radius: 4px;
+        color: #f4f4f4;
+        background: transparent;
+      }
+      .button.primary {
+        color: #111;
+        background: var(--gold);
+        border-color: var(--gold);
+        font-weight: 700;
+      }
+      .shell {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 28px 20px 56px;
+      }
+      .status {
+        margin: 0 0 18px;
+        color: #ccc;
+        font-size: 14px;
+      }
+      .notice {
+        max-width: 720px;
+        margin: 80px auto;
+        padding: 28px;
+        text-align: center;
+        background: var(--panel);
+        border: 1px solid #777;
+      }
+      .notice h1 {
+        margin: 0 0 8px;
+        color: var(--gold);
+        font-size: 24px;
+      }
+      .section {
+        margin: 0 0 24px;
+        padding: 20px;
+        background: var(--panel);
+        border: 1px solid #444;
+        border-left: 4px solid var(--gold);
+      }
+      .section h2 {
+        margin: 0 0 16px;
+        color: var(--gold);
+        font-size: 18px;
+        letter-spacing: 0.08em;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 24px;
+        color: #ccc;
+        font-size: 13px;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .stat {
+        min-height: 94px;
+        padding: 14px;
+        background: #191919;
+        border: 1px solid #4c4c4c;
+      }
+      .stat span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .stat strong {
+        display: block;
+        margin-top: 10px;
+        color: var(--gold);
+        font-size: 25px;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #191919;
+        font-size: 13px;
+      }
+      th,
+      td {
+        padding: 10px 11px;
+        border: 1px solid #4a4a4a;
+        text-align: left;
+        vertical-align: middle;
+      }
+      th {
+        color: var(--gold);
+        background: #101010;
+        white-space: nowrap;
+      }
+      td.amount {
+        text-align: right;
+        white-space: nowrap;
+      }
+      .ok {
+        color: var(--ok);
+      }
+      .danger {
+        color: var(--danger);
+      }
+      .empty {
+        color: var(--muted);
+        text-align: center;
+        padding: 20px;
+      }
+      .print-note {
+        color: #bbb;
+        font-size: 12px;
+      }
+      @media (max-width: 900px) {
+        .stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .app-bar {
+          padding: 10px 14px;
+        }
+        .app-title {
+          font-size: 14px;
+        }
+        .button {
+          padding: 0 9px;
+        }
+      }
+      @media print {
+        @page {
+          size: A4 portrait;
+          margin: 12mm;
+        }
+        body {
+          background: #fff;
+          color: #111;
+        }
+        .app-bar,
+        .status,
+        .screen-only,
+        .notice {
+          display: none !important;
+        }
+        .shell {
+          max-width: none;
+          padding: 0;
+        }
+        .section {
+          padding: 0 0 14px;
+          margin: 0 0 18px;
+          background: #fff;
+          border: 0;
+          border-bottom: 1px solid #222;
+        }
+        .section h2 {
+          color: #111;
+          font-size: 16px;
+        }
+        .stats {
+          grid-template-columns: repeat(5, 1fr);
+          gap: 6px;
+        }
+        .stat {
+          min-height: 70px;
+          padding: 7px;
+          background: #fff;
+          border: 1px solid #555;
+        }
+        .stat span {
+          color: #444;
+          font-size: 10px;
+        }
+        .stat strong {
+          margin-top: 5px;
+          color: #111;
+          font-size: 17px;
+        }
+        table {
+          background: #fff;
+          font-size: 10px;
+        }
+        th {
+          color: #111;
+          background: #eee;
+        }
+        th,
+        td {
+          padding: 5px 6px;
+          border-color: #555;
+        }
+        .section.page-break {
+          break-before: page;
+        }
+        .print-note {
+          color: #333;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-bar screen-only">
+      <button class="button" type="button" onclick="window.location.href = 'admin-roster.html'">
+        返回名冊
+      </button>
+      <h1 class="app-title">七七地赦 · 管理結案總表</h1>
+      <button class="button" type="button" onclick="loadSummary()">重新載入</button>
+      <button class="button primary" type="button" onclick="window.print()">列印 / 另存 PDF</button>
+    </header>
+    <main class="shell">
+      <p id="status" class="status">正在確認管理員權限與讀取報名資料...</p>
+      <section id="no-permission" class="notice" hidden>
+        <h1>無權限存取</h1>
+        <p>本頁僅供授權管理員查看與輸出總公司交付報表。</p>
+      </section>
+      <div id="report" hidden>
+        <section class="section">
+          <h2>本2026（丙午）年度七七地赦日管理結案總表</h2>
+          <div class="meta">
+            <span>承辦單位：大直分會</span>
+            <span>
+              製表日期：
+              <strong id="report-date"></strong>
+            </span>
+            <span>
+              資料筆數：
+              <strong id="report-count"></strong>
+            </span>
+          </div>
+        </section>
+        <section class="section">
+          <h2>一、總覽</h2>
+          <div id="overview" class="stats"></div>
+        </section>
+        <section class="section page-break">
+          <h2>二、代理登記人彙總</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>代理登記人</th>
+                  <th>學員編號</th>
+                  <th>筆數</th>
+                  <th>金額</th>
+                  <th>已付款</th>
+                  <th>實付總額</th>
+                </tr>
+              </thead>
+              <tbody id="agent-summary"></tbody>
+            </table>
+          </div>
+        </section>
+        <section class="section page-break">
+          <h2>三、異常與待辦</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>訂單編號</th>
+                  <th>代表人</th>
+                  <th>問題</th>
+                  <th>處理備註</th>
+                </tr>
+              </thead>
+              <tbody id="issue-list"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script>
+      const ADMIN_EMAILS = ["2022lingyun@gmail.com"];
+      const PLAN_COLUMNS = [
+        { key: "personal", label: "個人者乎" },
+        { key: "family", label: "家庭者乎" },
+        { key: "business", label: "事業者乎" },
+        { key: "society", label: "社會者乎" },
+        { key: "savior", label: "救世(主)者乎" },
+      ];
+      const SELF_GROUP = "自行登記";
+      const SELF_GROUP_DEFAULT_AGENT = "魏正隆";
+      const SELF_GROUP_EXCEPTION_NAME = "謝幸汝";
+      const PAYMENT_LABELS = {
+        bank_transfer: "銀行轉帳",
+        credit_card: "信用卡",
+        line_pay: "LINE Pay",
+      };
+      const STATUS_LABELS = {
+        pending: "已付款",
+        待處理: "已付款",
+        paid: "已付款",
+        confirmed: "已付款",
+        processing: "已付款",
+        shipped: "已付款",
+        delivered: "已付款",
+        已完成: "已付款",
+        已取消: "已付款",
+      };
+      const SPECIAL_PAID_AGENTS = new Set([
+        "黃雅吟",
+        "王學文",
+        "魏正隆",
+        "葉俊良",
+        "謝菁樺",
+        "陳幸容",
+      ]);
+      const NO_DISCOUNT_AGENTS = new Set(["顏瑞蘭"]);
+      async function init() {
+        const user = await getCurrentUser();
+        if (!user) {
+          window.location.href = getPathTo("pages/auth.html");
+          return;
+        }
+        if (!ADMIN_EMAILS.includes(user.email)) {
+          document.getElementById("status").hidden = true;
+          document.getElementById("no-permission").hidden = false;
+          return;
+        }
+        await loadSummary();
+      }
+      async function loadSummary() {
+        const status = document.getElementById("status");
+        status.hidden = false;
+        status.textContent = "正在讀取七七地赦報名資料...";
+        const { data, error } = await supabaseClient
+          .from("orders")
+          .select("*")
+          .or("identity_type.not.is.null,customer_note.ilike.%特赦方案%")
+          .neq("status", "已取消")
+          .order("created_at", { ascending: true });
+        if (error) {
+          status.textContent = "讀取總表失敗：" + error.message;
+          return;
+        }
+        renderReport(data || []);
+        status.textContent = `已載入 ${data.length} 筆有效報名資料。`;
+      }
+      function renderReport(rows) {
+        document.getElementById("report").hidden = false;
+        document.getElementById("report-date").textContent = new Date().toLocaleDateString("zh-TW");
+        document.getElementById("report-count").textContent = rows.length;
+        const paid = rows;
+        const pending = [];
+        const total = sum(rows);
+        const paidTotal = sumPaid(rows);
+        document.getElementById("overview").innerHTML = [
+          stat("有效登記", rows.length),
+          stat("總金額", money(total)),
+          stat("實付總額", money(paidTotal)),
+          stat("已付款", paid.length),
+          stat("代理人數", new Set(rows.map(agent)).size),
+        ].join("");
+        renderAgents(rows);
+        renderIssues(rows);
+      }
+      function renderPlan(rows, paid, pending) {
+        const html = PLAN_COLUMNS.map((plan) => {
+          const own = rows.filter((row) => identity(row) === plan.key);
+          return `<tr><td>${plan.label}</td><td>${own.length}</td><td class="amount">${money(sum(own))}</td><td>${own.filter((row) => isPaid(row)).length}</td><td>${money(sumPaid(own))}</td></tr>`;
+        }).join("");
+        document.getElementById("plan-summary").innerHTML =
+          html +
+          `<tr><th>合計</th><th>${rows.length}</th><th class="amount">${money(sum(rows))}</th><th>${rows.filter((row) => isPaid(row)).length}</th><th>${money(sumPaid(rows))}</th></tr>`;
+      }
+      function renderAgents(rows) {
+        const groups = new Map();
+        rows.forEach((row) => {
+          const name = agent(row);
+          if (!groups.has(name)) groups.set(name, []);
+          groups.get(name).push(row);
+        });
+        const html = Array.from(groups.entries())
+          .sort(([nameA], [nameB]) => nameA.localeCompare(nameB, "zh-Hant"))
+          .map(([name, own]) => {
+            const accountSuffixes = [
+              ...new Set(own.map((row) => String(row.transfer_note || "").trim()).filter(Boolean)),
+            ];
+            const accountLabel = accountSuffixes.length
+              ? `（後五碼：${escapeHtml(accountSuffixes.join("、"))}）`
+              : "";
+            const studentNumbers = [
+              ...new Set(own.map((row) => String(row.student_number || "").trim()).filter(Boolean)),
+            ];
+            const studentNumberLabel = studentNumbers.length
+              ? escapeHtml(studentNumbers.join("、"))
+              : "-";
+            return `<tr><td>${escapeHtml(name)}${accountLabel}</td><td>${studentNumberLabel}</td><td>${own.length}</td><td class="amount">${money(sum(own))}</td><td>${own.filter((row) => isPaid(row)).length}</td><td>${money(sumPaid(own))}</td></tr>`;
+          })
+          .join("");
+        const total = rows.length;
+        const totalAmount = sum(rows);
+        document.getElementById("agent-summary").innerHTML =
+          (html || '<tr><td colspan="6" class="empty">目前沒有報名資料</td></tr>') +
+          `<tr><td>合計</td><td>-</td><td>${total}</td><td class="amount">${money(totalAmount)}</td><td>${rows.filter((row) => isPaid(row)).length}</td><td class="amount">${money(sumPaid(rows))}</td></tr>`;
+      }
+      function sumPaid(rows) {
+        const totalsByAgent = new Map();
+        rows.forEach((row) => {
+          const name = agent(row);
+          totalsByAgent.set(name, (totalsByAgent.get(name) || 0) + (Number(row.total_amount) || 0));
+        });
+        let total = 0;
+        totalsByAgent.forEach((agentTotal, name) => {
+          if (NO_DISCOUNT_AGENTS.has(name)) {
+            total += agentTotal;
+            return;
+          }
+          total += SPECIAL_PAID_AGENTS.has(name) ? Math.round(agentTotal * 0.9) : agentTotal;
+        });
+        return total;
+      }
+      function renderIssues(rows) {
+        const issues = [];
+        rows.forEach((row) => {
+          const missing = [];
+          if (!row.recipient_name) missing.push("代表人姓名");
+          if (!row.phone) missing.push("電話");
+          if (!row.street_address) missing.push("地址");
+          if (!row.identity_type && !legacy(row.customer_note).identity) missing.push("方案");
+          if (missing.length)
+            issues.push(
+              `<tr><td>${escapeHtml(row.order_number || row.id || "-")}</td><td>${escapeHtml(row.recipient_name || "-")}</td><td class="danger">${escapeHtml(missing.join("、"))}</td><td>${escapeHtml(row.admin_note || "待承辦確認")}</td></tr>`
+            );
+        });
+        document.getElementById("issue-list").innerHTML =
+          issues.join("") || '<tr><td colspan="4" class="empty ok">目前沒有待辦異常資料</td></tr>';
+      }
+      function renderDetails(rows) {
+        const totalAmount = sum(rows);
+        const paidTotalAmount = rows.reduce((total, row) => total + agentPaidAmount(row), 0);
+        const items = rows
+          .map(
+            (row, index) =>
+              `<tr><td>${index + 1}</td><td>${date(row.created_at)}</td><td>${escapeHtml(row.recipient_name || "-")}</td><td>${escapeHtml(planLabel(identity(row)))}</td><td class="amount">${money(row.total_amount)}</td><td>${escapeHtml(agent(row))}</td></tr>`
+          )
+          .join("");
+        document.getElementById("detail-list").innerHTML =
+          items +
+          `<tr><th colspan="4">總金額</th><th class="amount">${money(totalAmount)}</th><th>實付總金額 ${money(paidTotalAmount)}</th></tr>`;
+      }
+      function identity(row) {
+        return row.identity_type || legacy(row.customer_note).identity || "";
+      }
+      function agent(row) {
+        const explicitAgent = (row.agent_name || legacy(row.customer_note).agent || "").trim();
+        if (explicitAgent && explicitAgent !== "無") return explicitAgent;
+        const recipientName = (row.recipient_name || "").trim();
+        if (recipientName === SELF_GROUP_EXCEPTION_NAME) return SELF_GROUP_DEFAULT_AGENT;
+        return SELF_GROUP_DEFAULT_AGENT;
+      }
+      function agentPaidAmount(row) {
+        const value = Number(row.total_amount) || 0;
+        if (!value) return 0;
+        const agentName = agent(row);
+        if (NO_DISCOUNT_AGENTS.has(agentName)) return value;
+        return SPECIAL_PAID_AGENTS.has(agentName) ? value * 0.9 : value;
+      }
+      function legacy(note) {
+        const content = note || "";
+        return {
+          identity: (content.match(/身分:([^｜]+)/) || [])[1] || "",
+          agent: (content.match(/代理人:([^｜]+)/) || [])[1] || "",
+        };
+      }
+      function planLabel(key) {
+        return (PLAN_COLUMNS.find((plan) => plan.key === key) || {}).label || key || "-";
+      }
+      function isPaid(row) {
+        return true;
+      }
+      function status(row) {
+        return "已付款";
+      }
+      function sum(rows) {
+        return rows.reduce((total, row) => total + (Number(row.total_amount) || 0), 0);
+      }
+      function money(value) {
+        return "NT$" + Number(value || 0).toLocaleString("zh-TW");
+      }
+      function date(value) {
+        const d = new Date(value);
+        return Number.isNaN(d.getTime())
+          ? "-"
+          : `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")}`;
+      }
+      function stat(label, value) {
+        return `<div class="stat"><span>${label}</span><strong>${value}</strong></div>`;
+      }
+      function escapeHtml(value) {
+        return String(value ?? "").replace(
+          /[&<>'"]/g,
+          (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]
+        );
+      }
+    </script>
+  </body>
+</html>

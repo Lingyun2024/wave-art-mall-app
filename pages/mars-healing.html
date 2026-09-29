@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-Hant" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>火星療癒旨令請領專案 - WAVE ART MALL</title>
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "void-black": "#020203",
+              background: "#141314",
+              surface: "#141314",
+              secondary: "#e9c349",
+              "starlight-white": "#F9F9F9",
+              "on-surface": "#e5e2e2",
+              "on-secondary": "#342800",
+              outline: "#919095",
+              "outline-variant": "#46464b",
+              "neon-cyan": "#00FFFF",
+            },
+            fontFamily: {
+              "headline-xl": ["Playfair Display"],
+              "body-md": ["Manrope"],
+              "headline-lg": ["Playfair Display"],
+              "label-sm": ["JetBrains Mono"],
+            },
+            fontSize: {
+              "headline-xl": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" },
+              ],
+              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+              "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "600" }],
+              "label-sm": [
+                "12px",
+                { lineHeight: "1.0", letterSpacing: "0.1em", fontWeight: "500" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @layer base {
+        html,
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        body {
+          overscroll-behavior: none;
+        }
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-void-black text-on-surface font-body-md text-body-md selection:bg-secondary selection:text-on-secondary antialiased"
+  >
+    <main class="relative min-h-screen bg-void-black w-full flex items-center justify-center p-0">
+      <div class="flex flex-col w-full h-screen gap-0">
+        <!-- 影片區塊 -->
+        <div class="relative z-10 w-full h-full flex-1">
+          <div class="w-full h-full overflow-hidden relative">
+            <iframe
+              id="mars-healing-video"
+              class="absolute inset-0 w-full h-full"
+              src="https://www.youtube.com/embed/qhTqCq7CfHA?autoplay=1&rel=0&modestbranding=1&playsinline=1"
+              title="火星療癒教學影片"
+              frameborder="0"
+              allow="
+                accelerometer;
+                autoplay;
+                clipboard-write;
+                encrypted-media;
+                gyroscope;
+                picture-in-picture;
+                web-share;
+              "
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- 登記按鈕 -->
+        <div class="relative z-10 w-full flex justify-center py-6 px-4 bg-void-black/95">
+          <a
+            href="./mars-healing-register.html"
+            class="group px-10 py-4 rounded-xl bg-gradient-to-r from-secondary via-secondary to-secondary text-on-secondary font-bold text-lg flex items-center gap-3 shadow-[0_0_25px_rgba(233,195,73,0.4)] hover:shadow-[0_0_40px_rgba(233,195,73,0.6)] hover:scale-105 transition-all duration-300"
+          >
+            <span class="material-symbols-outlined text-2xl">assignment</span>
+            <span>立即登記</span>
+            <span
+              class="material-symbols-outlined text-2xl group-hover:translate-x-1 transition-transform"
+            >
+              arrow_forward
+            </span>
+          </a>
+          <a
+            href="./mars-healing-history.html"
+            class="mt-3 inline-flex items-center gap-2 rounded-xl border border-secondary/60 px-6 py-3 font-bold text-secondary transition hover:bg-secondary/10"
+          >
+            <span class="material-symbols-outlined text-xl">receipt_long</span>
+            <span>查看我的火星療癒登記</span>
+          </a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

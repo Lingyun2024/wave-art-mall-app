@@ -1,0 +1,286 @@
+<!doctype html>
+<html class="dark" lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的火星療癒登記 | WAVE ART MALL</title>
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="theme-color" content="#030407" />
+    <link rel="apple-touch-icon" href="../icons/icon-192.png" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <script src="../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      body {
+        background:
+          radial-gradient(circle at 50% 0%, rgba(204, 161, 37, 0.14), transparent 36%), #030407;
+      }
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen pb-24 text-starlight-white">
+    <header class="site-header">
+      <div class="flex items-center gap-4">
+        <a
+          href="./order-history.html"
+          class="text-secondary active:scale-95 transition-transform"
+          aria-label="返回歷史訂單"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <a
+          href="../index.html"
+          class="hidden md:block font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-widest text-secondary"
+        >
+          WAVE ART MALL
+        </a>
+      </div>
+      <a
+        href="./auth.html"
+        id="nav-auth-link"
+        class="font-label-sm text-[11px] uppercase tracking-widest text-secondary hover:text-neon-cyan transition-colors"
+      >
+        登入
+      </a>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-4 pt-28">
+      <div class="mb-8">
+        <p class="font-label-sm text-secondary tracking-[0.2em]">MARS HEALING</p>
+        <h1 class="mt-3 text-3xl font-bold text-gold-200">我的火星療癒登記</h1>
+        <p class="mt-3 text-sm leading-7 text-on-surface-variant">
+          這裡只會顯示目前登入帳號自己的登記資料。待付款或待處理的登記可以在此取消。
+        </p>
+      </div>
+
+      <section
+        id="guest-block"
+        class="hidden rounded-2xl border border-secondary/25 bg-surface-container-low p-8 text-center"
+      >
+        <span class="material-symbols-outlined text-5xl text-secondary/60">lock</span>
+        <p class="mt-4 text-on-surface-variant">請先登入，才能查看您的火星療癒登記。</p>
+        <a
+          href="auth.html"
+          class="mt-5 inline-flex rounded-xl bg-secondary px-6 py-3 font-bold text-void-black"
+        >
+          前往登入
+        </a>
+      </section>
+
+      <section id="loading-block" class="py-20 text-center text-on-surface-variant">
+        <span class="loading-spinner"></span>
+        <p class="mt-4">正在載入您的登記資料...</p>
+      </section>
+
+      <section
+        id="empty-block"
+        class="hidden rounded-2xl border border-secondary/25 bg-surface-container-low p-10 text-center"
+      >
+        <span class="material-symbols-outlined text-5xl text-secondary/60">receipt_long</span>
+        <p class="mt-4 text-on-surface-variant">目前沒有火星療癒登記資料。</p>
+        <a
+          href="mars-healing-intro.html"
+          class="mt-5 inline-flex rounded-xl bg-secondary px-6 py-3 font-bold text-void-black"
+        >
+          查看火星療癒專案
+        </a>
+      </section>
+
+      <section id="registration-list" class="hidden space-y-5"></section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabaseClient.js"></script>
+    <script src="../js/nav.js"></script>
+    <script>
+      const statusText = {
+        pending: "待付款",
+        verified: "已核對",
+        rejected: "付款未通過",
+      };
+
+      const registrationText = {
+        submitted: "已送出",
+        reviewing: "審核中",
+        approved: "已核准",
+        rejected: "未通過",
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(
+          /[&<>'"]/g,
+          (character) =>
+            ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]
+        );
+      }
+
+      function statusClass(status) {
+        if (status === "verified" || status === "approved") return "bg-green-500/15 text-green-300";
+        if (status === "rejected") return "bg-red-500/15 text-red-300";
+        return "bg-secondary/15 text-secondary";
+      }
+
+      function canCancel(item) {
+        return (
+          item.payment_status === "pending" &&
+          ["submitted", "reviewing"].includes(item.registration_status)
+        );
+      }
+
+      function renderRegistrations(items) {
+        const list = document.getElementById("registration-list");
+        list.innerHTML = items
+          .map((item) => {
+            const createdAt = new Date(item.created_at).toLocaleString("zh-TW");
+            const transferButton = canCancel(item)
+              ? `<button type="button" class="edit-transfer rounded-lg border border-secondary/50 px-4 py-2 text-sm text-secondary hover:bg-secondary/10" data-id="${escapeHtml(item.id)}">填寫匯款後五碼</button>`
+              : "";
+            const cancelButton = canCancel(item)
+              ? `<button type="button" class="cancel-registration rounded-lg border border-red-400/50 px-4 py-2 text-sm text-red-300 hover:bg-red-400/10" data-id="${escapeHtml(item.id)}">取消登記</button>`
+              : "";
+            return `
+          <article class="rounded-2xl border border-secondary/25 bg-surface-container-low p-5 shadow-[0_14px_38px_rgba(0,0,0,.2)] sm:p-7">
+            <div class="flex flex-col gap-4 border-b border-secondary/15 pb-5 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p class="text-xs tracking-widest text-secondary">登記編號</p>
+                <p class="mt-2 break-all font-mono text-sm text-on-surface-variant">${escapeHtml(item.id)}</p>
+                <p class="mt-2 text-xs text-on-surface-variant">建立時間：${escapeHtml(createdAt)}</p>
+              </div>
+              <div class="flex gap-2">
+                <span class="status-badge ${statusClass(item.payment_status)}">付款：${escapeHtml(statusText[item.payment_status] || item.payment_status)}</span>
+                <span class="status-badge ${statusClass(item.registration_status)}">審核：${escapeHtml(registrationText[item.registration_status] || item.registration_status)}</span>
+              </div>
+            </div>
+            <div class="grid gap-4 pt-5 text-sm sm:grid-cols-2">
+              <div><span class="text-on-surface-variant">方案</span><p class="mt-1 text-gold-200">${escapeHtml(item.plan_label)}</p></div>
+              <div><span class="text-on-surface-variant">功德金</span><p class="mt-1 text-gold-200">NT$ ${Number(item.total_amount || 0).toLocaleString("zh-TW")}</p></div>
+              <div><span class="text-on-surface-variant">代表人</span><p class="mt-1">${escapeHtml(item.representative_name)}</p></div>
+              <div><span class="text-on-surface-variant">匯款末五碼</span><p class="mt-1">${escapeHtml(item.transfer_last_five)}</p></div>
+            </div>
+            ${
+              transferButton
+                ? `<div class="mt-5 rounded-xl border border-secondary/20 bg-void-black/20 p-4">
+                    <label class="text-sm text-on-surface-variant" for="transfer-${escapeHtml(item.id)}">匯款後五碼</label>
+                    <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+                      <input id="transfer-${escapeHtml(item.id)}" class="transfer-last-five min-w-0 flex-1 rounded-lg border border-secondary/30 bg-void-black px-3 py-2 text-sm text-starlight-white" type="text" inputmode="numeric" maxlength="5" pattern="[0-9]{5}" placeholder="請輸入 5 位數字" value="${escapeHtml(item.transfer_last_five)}" data-id="${escapeHtml(item.id)}" />
+                      <button type="button" class="save-transfer rounded-lg bg-secondary px-4 py-2 text-sm font-bold text-void-black hover:bg-yellow-300" data-id="${escapeHtml(item.id)}">儲存後五碼</button>
+                    </div>
+                  </div>`
+                : ""
+            }
+            ${item.admin_note ? `<div class="mt-5 rounded-xl border border-secondary/15 bg-void-black/30 p-4 text-sm text-on-surface-variant">管理員備註：${escapeHtml(item.admin_note)}</div>` : ""}
+            ${transferButton || cancelButton ? `<div class="mt-5 flex flex-wrap justify-end gap-2">${cancelButton}</div>` : ""}
+          </article>`;
+          })
+          .join("");
+        list.classList.remove("hidden");
+      }
+
+      async function loadRegistrations() {
+        const user = await getCurrentUser();
+        const loading = document.getElementById("loading-block");
+        if (!user) {
+          loading.classList.add("hidden");
+          document.getElementById("guest-block").classList.remove("hidden");
+          return;
+        }
+
+        const { data, error } = await supabaseClient
+          .from("mars_healing_registrations")
+          .select(
+            "id, plan_label, total_amount, representative_name, transfer_last_five, payment_status, registration_status, admin_note, created_at"
+          )
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false });
+
+        loading.classList.add("hidden");
+        if (error) {
+          showToast("登記資料載入失敗，請重新整理頁面", "error");
+          return;
+        }
+        if (!data || data.length === 0) {
+          document.getElementById("empty-block").classList.remove("hidden");
+          return;
+        }
+        renderRegistrations(data);
+      }
+
+      async function cancelRegistration(id, button) {
+        if (!window.confirm("確定要取消這筆火星療癒登記嗎？取消後無法恢復。")) return;
+        button.disabled = true;
+        button.textContent = "取消中...";
+        const user = await getCurrentUser();
+        if (!user) {
+          showToast("請先登入", "error");
+          button.disabled = false;
+          button.textContent = "取消登記";
+          return;
+        }
+        const { data, error } = await supabaseClient
+          .from("mars_healing_registrations")
+          .update({ registration_status: "rejected", payment_status: "rejected" })
+          .eq("id", id)
+          .eq("user_id", user.id)
+          .eq("payment_status", "pending")
+          .in("registration_status", ["submitted", "reviewing"])
+          .select("id")
+          .single();
+        if (error || !data) {
+          showToast("取消失敗，可能已經進入核對流程", "error");
+          button.disabled = false;
+          button.textContent = "取消登記";
+          return;
+        }
+        showToast("火星療癒登記已取消");
+        window.location.reload();
+      }
+
+      async function saveTransferLastFive(id, button) {
+        const input = document.querySelector(`.transfer-last-five[data-id="${CSS.escape(id)}"]`);
+        const value = input?.value.trim() || "";
+        if (!/^\d{5}$/.test(value)) {
+          showToast("請輸入 5 位數字的匯款後五碼", "error");
+          input?.focus();
+          return;
+        }
+        button.disabled = true;
+        button.textContent = "儲存中...";
+        const { data, error } = await supabaseClient
+          .from("mars_healing_registrations")
+          .update({ transfer_last_five: value })
+          .eq("id", id)
+          .select("id")
+          .single();
+        if (error || !data) {
+          showToast("匯款後五碼儲存失敗，請確認資料庫權限已更新", "error");
+          button.disabled = false;
+          button.textContent = "儲存後五碼";
+          return;
+        }
+        showToast("匯款後五碼已更新");
+        button.disabled = false;
+        button.textContent = "已儲存";
+      }
+
+      document.getElementById("registration-list").addEventListener("click", (event) => {
+        const transferButton = event.target.closest(".save-transfer");
+        if (transferButton) {
+          saveTransferLastFive(transferButton.dataset.id, transferButton);
+          return;
+        }
+        const button = event.target.closest(".cancel-registration");
+        if (button) cancelRegistration(button.dataset.id, button);
+      });
+
+      document.addEventListener("DOMContentLoaded", loadRegistrations);
+    </script>
+  </body>
+</html>

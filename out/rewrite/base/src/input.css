@@ -1,0 +1,236 @@
+/*
+  =========================================================
+  input.css —— base.css 的編譯輸入（H1 凍結）
+  =========================================================
+  依 ADR-0003：共享元件樣式集中在此（@layer components），
+  由 Tailwind v3 CLI 編譯成 ../base.css。
+
+  來源對照：本檔 @layer components 段承繼 css/style.css 的
+  「全站共用段」（第 1~242 行，2026-09-13 快照），值未更動；
+  css/style.css 後半的 gallery-* 商城專屬覆寫刻意不進基座
+  （屬商城過渡期資產，商城模組重寫時另行處理）。
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-body-md antialiased;
+    overflow-x: hidden;
+  }
+
+  html {
+    background: #0a0b10;
+  }
+
+  /* 全站卷軸樣式（金色卷軸滑块，比照設計稿的 custom-scrollbar） */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0b10;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #e9c349;
+  }
+}
+
+@layer components {
+  /* 毛玻璃卡片：背景半透明 + 模糊，營造高級感的懸浮卡片效果 */
+  .glass-card,
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(233, 195, 73, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card:hover {
+    border-color: #00ffff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+  }
+
+  /* 金色畫框：用來包住商品圖片，模擬真實畫框的邊界 */
+  .gold-frame,
+  .art-frame {
+    border: 1px solid #e9c349;
+    padding: 8px;
+    background: #020203;
+    position: relative;
+  }
+
+  .gold-frame::after,
+  .art-frame::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 1px solid rgba(233, 195, 73, 0.4);
+    pointer-events: none;
+  }
+
+  /* 霓光青色的發光文字/圖示效果 */
+  .neon-glow {
+    filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.6));
+  }
+
+  .neon-glow-hover:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+  }
+
+  /* 輸入框聚焦時的青色發光效果 */
+  .input-glow:focus {
+    outline: none;
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+  }
+
+  /* 隱藏卷軸但仍可橫向滑動 */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* 背景光斑漸層，營造深空氛圍 */
+  .gradient-mesh {
+    background:
+      radial-gradient(circle at top left, rgba(138, 43, 226, 0.15), transparent),
+      radial-gradient(circle at bottom right, rgba(0, 255, 255, 0.1), transparent);
+  }
+
+  /* 頂部導覽列：固定在上方，半透明背景 + 模糊 */
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background: rgba(20, 19, 20, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(233, 195, 73, 0.2);
+  }
+
+  /* 購物車數量角標 */
+  .cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: #00ffff;
+    color: #020203;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* 底部導覽列（手機版 App 風格導覽） */
+  .site-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 72px;
+    z-index: 50;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 16px;
+    background: rgba(14, 14, 14, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(233, 195, 73, 0.3);
+    box-shadow: 0 -4px 20px rgba(138, 43, 226, 0.2);
+  }
+
+  /* 訊息提示框 (Toast)：顯示「加入購物車成功」等簡單提示，不用會擋操作的 alert */
+  #toast-container {
+    position: fixed;
+    top: 80px;
+    right: 16px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+  }
+
+  .toast {
+    min-width: 200px;
+    max-width: 320px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: rgba(20, 19, 20, 0.95);
+    border: 1px solid #e9c349;
+    color: #f9f9f9;
+    font-size: 14px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    animation: toast-in 0.25s ease-out;
+  }
+
+  .toast.toast-error {
+    border-color: #ffb4ab;
+    color: #ffdad6;
+  }
+
+  .toast.toast-success {
+    border-color: #00ffff;
+  }
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 載入中動畫 spinner */
+  .loading-spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(233, 195, 73, 0.2);
+    border-top-color: #e9c349;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* 星星評分顯示用的填色樣式 */
+  .star-filled {
+    color: #e9c349;
+    font-variation-settings: "FILL" 1;
+  }
+  .star-empty {
+    color: #46464b;
+    font-variation-settings: "FILL" 0;
+  }
+}

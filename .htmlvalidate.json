@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/html-validate/schema/config.json",
+  "extends": [],
+  "rules": {
+    "close-attr": "error",
+    "close-order": "error",
+    "no-dup-attr": "error",
+    "no-dup-id": "error",
+    "valid-id": "error",
+    "unrecognized-char-ref": "error",
+    "no-utf8-bom": "off",
+    "doctype-html": "error",
+    "no-missing-references": "off",
+    "element-permitted-content": "off",
+    "attribute-allowed-values": "off",
+    "no-unknown-elements": "off"
+  }
+}

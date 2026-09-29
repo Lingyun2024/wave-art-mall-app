@@ -1,0 +1,446 @@
+﻿<!doctype html>
+<html class="dark" lang="zh-Hant" style="">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>活佛專區 | WAVE ART MALL</title>
+    <!-- 社群分享預覽設定（LINE / Facebook） -->
+    <meta
+      name="description"
+      content="活佛本殿各類內容總覽——宗教、五術、密宗、奇門與軟實力，選擇後即可加入您的藝術收藏清單。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="WAVE ART MALL" />
+    <meta property="og:title" content="活佛專區 | WAVE ART MALL" />
+    <meta
+      property="og:description"
+      content="活佛本殿各類內容總覽——宗教、五術、密宗、奇門與軟實力，選擇後即可加入您的藝術收藏清單。"
+    />
+    <meta property="og:image" content="https://wave-art-mall.vercel.app/icons/icon-512.png" />
+    <meta property="og:url" content="https://wave-art-mall.vercel.app/pages/living-buddha.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Manrope:wght@400;500;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <link rel="stylesheet" href="../css/material-symbols.css" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              secondary: "#e9c349",
+              "on-error": "#690005",
+              "surface-dim": "#141314",
+              "primary-fixed": "#e3e1e9",
+              "primary-container": "#0a0b10",
+              "on-secondary": "#3c2f00",
+              "inverse-surface": "#e5e2e2",
+              "on-secondary-container": "#342800",
+              "on-tertiary-fixed": "#211a14",
+              surface: "#141314",
+              "outline-variant": "#46464b",
+              "galactic-purple": "#8A2BE2",
+              "neon-cyan": "#00FFFF",
+              "tertiary-fixed": "#efe0d5",
+              "inverse-on-surface": "#313030",
+              primary: "#c7c6cd",
+              "surface-container-low": "#1c1b1c",
+              "surface-container-highest": "#353435",
+              "surface-tint": "#c7c6cd",
+              "on-primary-fixed-variant": "#46464c",
+              "on-error-container": "#ffdad6",
+              "on-primary-container": "#797980",
+              "inverse-primary": "#5e5e64",
+              "secondary-fixed-dim": "#e9c349",
+              "on-secondary-container": "#342800",
+              "secondary-fixed": "#ffe088",
+              outline: "#919095",
+              "surface-container-high": "#2a2a2a",
+              "secondary-container": "#af8d11",
+              "on-background": "#e5e2e2",
+              "on-primary-fixed": "#1a1b21",
+              "on-primary": "#2f3036",
+              "starlight-white": "#F9F9F9",
+              "error-container": "#93000a",
+              background: "#141314",
+              "on-surface-variant": "#c7c6cb",
+              "on-surface": "#e5e2e2",
+              "tertiary-container": "#100a05",
+              "primary-fixed-dim": "#c7c6cd",
+              tertiary: "#d2c4b9",
+              "surface-container": "#201f20",
+              "surface-bright": "#3a3939",
+              "surface-container-lowest": "#0e0e0e",
+              "on-tertiary": "#372f27",
+              "on-secondary-fixed-variant": "#574500",
+              "tertiary-fixed-dim": "#d2c4b9",
+              error: "#ffb4ab",
+              "on-tertiary-fixed-variant": "#4e453d",
+              "surface-variant": "#353435",
+              "on-secondary-fixed": "#241a00",
+              "void-black": "#020203",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              gutter: "24px",
+              "container-max": "1440px",
+              unit: "8px",
+              "margin-mobile": "20px",
+              "margin-desktop": "80px",
+            },
+            fontFamily: {
+              "label-sm": ["JetBrains Mono"],
+              "headline-xl": ["Playfair Display"],
+              "headline-lg": ["Playfair Display"],
+              "headline-lg-mobile": ["Playfair Display"],
+              "body-md": ["Manrope"],
+            },
+            fontSize: {
+              "label-sm": [
+                "12px",
+                { lineHeight: "1.0", letterSpacing: "0.1em", fontWeight: "500" },
+              ],
+              "headline-xl": [
+                "48px",
+                { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" },
+              ],
+              "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "600" }],
+              "headline-lg-mobile": ["28px", { lineHeight: "1.3", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #141314;
+        color: #e5e2e2;
+        -webkit-font-smoothing: antialiased;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(233, 195, 73, 0.2);
+      }
+      .art-frame {
+        border: 1px solid #e9c349;
+        padding: 8px;
+        background: #020203;
+      }
+      .glow-cyan:hover {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      }
+      .glow-gold {
+        box-shadow: 0 0 15px rgba(233, 195, 73, 0.2);
+      }
+      .scroll-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+  </head>
+  <body class="font-body-md text-body-md overflow-x-hidden">
+    <!-- Top Navigation Shell -->
+    <nav
+      class="flex justify-between items-center px-margin-mobile h-16 w-full fixed top-0 bg-background/80 backdrop-blur-md text-secondary border-b border-secondary/20 z-50"
+    >
+      <div class="flex items-center gap-4">
+        <a
+          href="../index.html"
+          aria-label="返回首頁"
+          class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-secondary/10 active:scale-95 transition-all"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+      </div>
+      <h1
+        class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-widest text-secondary"
+      >
+        WAVE ART MALL
+      </h1>
+      <div class="flex items-center gap-4">
+        <span
+          class="material-symbols-outlined cursor-pointer active:opacity-70 transition-all scale-95"
+          data-icon="search"
+        >
+          search
+        </span>
+      </div>
+    </nav>
+    <main class="pt-16 pb-32 max-w-[1440px] mx-auto min-h-screen">
+      <!-- Hero Section: Art Frame Logic -->
+      <section class="px-0 md:px-margin-desktop mt-8">
+        <div
+          class="relative group overflow-hidden rounded-lg border border-secondary/30 bg-void-black"
+        >
+          <div class="flex transition-transform duration-500 ease-in-out" id="video-slider">
+            <div
+              class="min-w-full aspect-[1.79] flex items-center justify-center bg-surface-container-low"
+            >
+              <span class="material-symbols-outlined text-6xl text-secondary/20">play_circle</span>
+            </div>
+            <div
+              class="min-w-full aspect-[1.79] flex items-center justify-center bg-surface-container-high"
+            >
+              <span class="material-symbols-outlined text-6xl text-secondary/20">play_circle</span>
+            </div>
+            <div
+              class="min-w-full aspect-[1.79] flex items-center justify-center bg-surface-container-low"
+            >
+              <span class="material-symbols-outlined text-6xl text-secondary/20">play_circle</span>
+            </div>
+            <div
+              class="min-w-full aspect-[1.79] flex items-center justify-center bg-surface-container-high"
+            >
+              <span class="material-symbols-outlined text-6xl text-secondary/20">play_circle</span>
+            </div>
+            <div
+              class="min-w-full aspect-[1.79] flex items-center justify-center bg-surface-container-low"
+            >
+              <span class="material-symbols-outlined text-6xl text-secondary/20">play_circle</span>
+            </div>
+          </div>
+          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            <div class="w-2 h-2 rounded-full bg-secondary"></div>
+            <div class="w-2 h-2 rounded-full bg-secondary/30"></div>
+            <div class="w-2 h-2 rounded-full bg-secondary/30"></div>
+            <div class="w-2 h-2 rounded-full bg-secondary/30"></div>
+            <div class="w-2 h-2 rounded-full bg-secondary/30"></div>
+          </div>
+          <button
+            class="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-void-black/50 text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          <button
+            class="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-void-black/50 text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+            style="transform: scale(1)"
+          >
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+      </section>
+      <!-- Product Info Grid -->
+      <section
+        class="mt-margin-desktop px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-gutter"
+      >
+        <div class="lg:col-span-8">
+          <div class="space-y-6 animate-in fade-in duration-700">
+            <div class="text-center mb-8">
+              <span
+                class="font-label-sm text-label-sm text-neon-cyan uppercase tracking-widest mb-2 block"
+              >
+                Status Selection
+              </span>
+              <h3 class="font-headline-lg text-headline-lg text-secondary">各類活佛內容</h3>
+              <p class="text-on-surface-variant/70 mt-2">選擇後將自動加入您的藝術收藏清單</p>
+            </div>
+            <div class="grid grid-cols-1 gap-4">
+              <button
+                type="button"
+                onclick="window.location.assign('./religion.html')"
+                class="group flex items-center justify-between p-6 rounded-lg border border-secondary/30 bg-surface-container-low hover:bg-secondary/10 hover:border-secondary transition-all duration-300"
+                aria-label="進入宗教專區"
+              >
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded overflow-hidden border border-secondary/30">
+                    <img
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqsBBkSeyOVfP1LjX6c2cF2_IDteezCGd3FaH0Lew9Ccfg134-IIKutDG9XSboYppZa9wUPmpSvb-fDLuTjqo3dVEjModB1tzy1r3p2aU-mL4L0AWriYaAoR7UqHBIwa17FXUMkP9PdPXS2LVSWkE3yt4URmoo3-AUsuyNeWuust4GCiVhIP-jBwkpD5s2GQit-mf7_LXf80X-la0G-4XXF7WhQiM-K9dVkbU94owQIWG4ciyrm6g"
+                      alt="宗教"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span class="text-headline-lg-mobile text-starlight-white">宗教</span>
+                </div>
+                <span
+                  class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  arrow_forward_ios
+                </span>
+              </button>
+              <button
+                class="group flex items-center justify-between p-6 rounded-lg border border-secondary/30 bg-surface-container-low hover:bg-secondary/10 hover:border-secondary transition-all duration-300"
+              >
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded overflow-hidden border border-secondary/30">
+                    <img
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEqpC10l-s2jM00nciuSck1P5fG8N8QGRi2hBf83sBQXOM8APtXYNcwf2xw2YpzocyrDYzXriAZHJpfqH6I-OwJXPzQSnrJfysNG2UHNjGGhoRtHo6A5zGbLIQsaQbp_VjfcFlmQ-ARpW2sv6EciItCwjgoCUhcF2d28SyLi5jfl96R_jzIPUYIREbeiXKyDdgBAsI6JsqfRK-l9BCWTcrOK5fjtcvAa3WeGK09-AL2U9eUvA82BU"
+                      alt="五術"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span class="text-headline-lg-mobile text-starlight-white">五術</span>
+                </div>
+                <span
+                  class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  arrow_forward_ios
+                </span>
+              </button>
+              <button
+                class="group flex items-center justify-between p-6 rounded-lg border border-secondary/30 bg-surface-container-low hover:bg-secondary/10 hover:border-secondary transition-all duration-300"
+              >
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded overflow-hidden border border-secondary/30">
+                    <img
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8frvSfNnU_i0z489PRBVQIkEIo90-_0hdMj2lLuITj-SBJra9njxOgwbXXW5gF2C1_qLmBbOkAmEvhv-D2HAV8CN9331wgfXA3TyWK2YRQuyu0BncoBc3eqw_N0ytS-PhpmGzE-heW38nCDbTZ9G_c_RXDNVMNVUihgVv_JRCtG9bqiXt03UA3j1SP653dPDuwoOJVnft9BBXqw4ghY6KXejPZc6EU77QW7h8DIDrTI-UVkYLw2U"
+                      alt="密宗"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span class="text-headline-lg-mobile text-starlight-white">密宗</span>
+                </div>
+                <span
+                  class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  arrow_forward_ios
+                </span>
+              </button>
+              <button
+                class="group flex items-center justify-between p-6 rounded-lg border border-secondary/30 bg-surface-container-low hover:bg-secondary/10 hover:border-secondary transition-all duration-300"
+              >
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded overflow-hidden border border-secondary/30">
+                    <img
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrA0s4Jsxg4gv5tpEiqdq15N7fXvdkIV83_ZKB4Xukodd557hAcwYHTrXvIweh2uL7Ar8k7nHtHeKK2SVnQR_EFK1P1V0bm6PcS5II3r4Z6vw7eU3XCKXhMNheSEREGu_q5RKuePehJ7yWc4cv9cx5PYS8-pJk3v9ZMzYyEEb5wEwtGR9Fq_acZk1Zu_0gKuxLibu-3zGWw_UajGjjTWjuK9G729dNhZFvhiNbRe_UAtKsw4iDqVA"
+                      alt="奇門"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span class="text-headline-lg-mobile text-starlight-white">奇門</span>
+                </div>
+                <span
+                  class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  arrow_forward_ios
+                </span>
+              </button>
+              <a
+                href="./soft-power.html"
+                aria-label="進入軟實力專區"
+                class="group flex items-center justify-between p-6 rounded-lg border border-secondary/30 bg-surface-container-low hover:bg-secondary/10 hover:border-secondary transition-all duration-300"
+              >
+                <div class="flex items-center gap-4">
+                  <div
+                    class="w-12 h-12 rounded overflow-hidden border border-secondary/30 shadow-[0_0_10px_rgba(233,195,73,0.4)]"
+                  >
+                    <img
+                      src="../assets/soft-power/soft-power-hero.jpg"
+                      alt="軟實力專區"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span class="text-headline-lg-mobile text-starlight-white">軟實力</span>
+                </div>
+                <span
+                  class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  arrow_forward_ios
+                </span>
+              </a>
+            </div>
+            <button
+              class="w-full mt-8 text-on-surface-variant/50 text-sm hover:text-secondary transition-colors"
+              onclick="window.location.reload()"
+            >
+              返回產品詳情
+            </button>
+          </div>
+        </div>
+        <div class="lg:col-span-4 hidden lg:block">
+          <div class="sticky top-24 space-y-6">
+            <div class="glass-card p-6 rounded-lg border-l-4 border-l-secondary">
+              <h4 class="font-label-sm text-label-sm text-secondary uppercase mb-4">
+                Limited Edition
+              </h4>
+              <p class="text-sm text-on-surface-variant">
+                此藝術禮盒為 Wave Art Mall 限時供應，融合傳統莊園工藝與現代數位美學。
+              </p>
+            </div>
+            <div class="flex flex-col gap-4">
+              <button
+                class="w-full bg-secondary text-void-black font-bold py-4 px-6 rounded hover:shadow-[0_0_20px_rgba(233,195,73,0.4)] transition-all active:scale-[0.98]"
+              >
+                立即珍藏
+              </button>
+              <button
+                class="w-full border border-secondary text-secondary font-bold py-4 px-6 rounded hover:bg-secondary/10 transition-all active:scale-[0.98]"
+              >
+                加入購物車
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Product Details Section -->
+    </main>
+    <!-- Bottom Action Bar (Fixed Mobile) -->
+    <div
+      class="fixed bottom-0 left-0 w-full flex justify-around items-center h-24 px-4 pb-4 z-[60] bg-surface-container-lowest/90 backdrop-blur-xl border-t border-secondary/30 lg:hidden"
+    >
+      <div class="flex w-full gap-3 max-w-md mx-auto">
+        <button
+          class="flex flex-col items-center justify-center px-4 text-secondary active:scale-95 transition-transform"
+        >
+          <span class="material-symbols-outlined">chat</span>
+          <span class="text-[10px] font-bold mt-1">聊聊</span>
+        </button>
+        <button
+          class="flex-1 bg-surface-container-high text-secondary border border-secondary/40 font-bold rounded-lg py-4 px-2 text-center active:scale-95 transition-transform"
+        >
+          加入購物車
+        </button>
+        <button
+          class="flex-[1.5] bg-secondary text-void-black font-bold rounded-lg py-4 px-2 text-center shadow-[0_0_15px_rgba(233,195,73,0.3)] active:scale-95 transition-transform"
+          style="transform: scale(1)"
+        >
+          直接購買
+        </button>
+      </div>
+    </div>
+    <!-- Micro-interaction Script -->
+    <script>
+      document.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("mousedown", () => {
+          button.style.transform = "scale(0.96)";
+        });
+        button.addEventListener("mouseup", () => {
+          button.style.transform = "scale(1)";
+        });
+        button.addEventListener("mouseleave", () => {
+          button.style.transform = "scale(1)";
+        });
+      });
+
+      // Simple scroll parallax for frames
+      window.addEventListener("scroll", () => {
+        const frames = document.querySelectorAll(".art-frame img");
+        frames.forEach((img) => {
+          const speed = 0.1;
+          const rect = img.getBoundingClientRect();
+          const offset = (window.innerHeight - rect.top) * speed;
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            img.style.objectPosition = `center ${50 + offset * 0.1}%`;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
