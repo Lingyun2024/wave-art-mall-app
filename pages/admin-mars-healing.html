@@ -105,9 +105,10 @@
         line-height: 1.2;
         text-align: center;
         overflow: hidden;
-        transform: rotate(180deg);
-        writing-mode: vertical-lr;
-        text-orientation: mixed;
+        writing-mode: vertical-rl;
+      }
+      .row-label.photo-label {
+        grid-row: span 3;
       }
       .row-label.empty {
         color: transparent;
@@ -250,7 +251,7 @@
       }
 
       function renderRecordBlock(rows, position) {
-        const labels = ["照", "", "", "姓名", "虛歲", "電話", "地址", "職業", "日期"];
+        const labels = ["照片", null, null, "姓名", "虛歲", "電話", "地址", "職業", "日期"];
         const fields = [
           (row) =>
             row?.photo_path
@@ -269,7 +270,20 @@
         return `<div class="record-block ${position}">
           ${labels
             .map((label, rowIndex) => {
-              const labelCell = label ? `<div class="row-label">${label}</div>` : '<div class="row-label empty"></div>';
+              if (label === "照片") {
+                const labelCell = `<div class="row-label photo-label">照片</div>`;
+                const dataCells = rows
+                  .map((row) => (row ? fields[rowIndex](row) : '<div class="record-cell empty"></div>'))
+                  .join("");
+                return labelCell + dataCells;
+              }
+              if (label === null) {
+                const dataCells = rows
+                  .map((row) => (row ? fields[rowIndex](row) : '<div class="record-cell empty"></div>'))
+                  .join("");
+                return dataCells;
+              }
+              const labelCell = `<div class="row-label">${label}</div>`;
               const dataCells = rows
                 .map((row) => (row ? fields[rowIndex](row) : '<div class="record-cell empty"></div>'))
                 .join("");
