@@ -117,7 +117,7 @@
         padding: 1mm;
         overflow: hidden;
         color: #222;
-        font-size: 12px;
+        font-size: 13px;
         line-height: 1.25;
         text-align: center;
         overflow-wrap: anywhere;
@@ -257,7 +257,7 @@
           (row) => `<div class="record-cell">${escapeHtml(row?.age)}</div>`,
           (row) => `<div class="record-cell">${escapeHtml(row?.phone)}</div>`,
           (row) => `<div class="record-cell">${escapeHtml(row?.address)}</div>`,
-          () => '<div class="record-cell empty"></div>',
+          (row) => `<div class="record-cell">${escapeHtml(row?.occupation)}</div>`,
           (row) => `<div class="record-cell">${escapeHtml(new Date(row.created_at).toLocaleDateString("zh-TW"))}</div>`,
         ];
 
