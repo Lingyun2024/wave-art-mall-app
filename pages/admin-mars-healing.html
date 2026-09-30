@@ -71,10 +71,12 @@
         text-align: center;
       }
       .branch-name {
-        left: 65%;
+        left: calc(65% - 15mm);
         width: 13%;
+        font-size: 16px;
       }
       .report-date {
+        top: 9.65%;
         left: 80%;
         width: 8%;
         font-size: 9px;
@@ -221,7 +223,7 @@
         const reportDate = new Date().toLocaleDateString("zh-TW");
         const fixedRows = [...rows, ...Array.from({ length: PAGE_SIZE - rows.length }, () => null)];
         return `<section class="sheet">
-          <div class="branch-name">大直分會</div>
+          <div class="branch-name">大直</div>
           <div class="report-date">${escapeHtml(reportDate)}</div>
           ${renderRecordBlock(fixedRows.slice(0, 5), "first")}
           ${renderRecordBlock(fixedRows.slice(5, 10), "second")}
