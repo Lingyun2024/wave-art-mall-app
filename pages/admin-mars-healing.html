@@ -136,15 +136,21 @@
       .record-cell.photo-cell.photo-3 img {
         transform: translate(-3mm, -1.5mm);
       }
-      .record-cell.name-cell,
-      .record-cell.age-cell,
+      .record-cell.name-cell {
+        position: relative;
+        top: -5mm;
+      }
+      .record-cell.age-cell {
+        position: relative;
+        top: -6mm;
+      }
       .record-cell.phone-cell {
         position: relative;
         top: -8mm;
       }
       .record-cell.address-cell {
         position: relative;
-        top: -12mm;
+        top: -7mm;
         width: 100%;
         max-height: 100%;
         padding: 0.5mm 1mm;
@@ -154,10 +160,13 @@
         overflow-wrap: anywhere;
         word-break: break-all;
       }
-      .record-cell.occupation-cell,
+      .record-cell.occupation-cell {
+        position: relative;
+        top: -11mm;
+      }
       .record-cell.date-cell {
         position: relative;
-        top: -16mm;
+        top: -14mm;
       }
       .record-cell.empty {
         color: transparent;
