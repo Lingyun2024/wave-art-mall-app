@@ -105,13 +105,25 @@
         align-items: center;
         justify-content: center;
         min-width: 0;
+        min-height: 0;
         padding: 1mm;
         overflow: hidden;
         color: #222;
         font-size: 13px;
-        line-height: 1.25;
+        line-height: 1.15;
         text-align: center;
         overflow-wrap: anywhere;
+        word-break: break-all;
+        white-space: normal;
+      }
+      .record-cell.name-cell,
+      .record-cell.age-cell,
+      .record-cell.phone-cell,
+      .record-cell.address-cell,
+      .record-cell.occupation-cell,
+      .record-cell.date-cell {
+        width: 100%;
+        max-width: 30.8mm;
       }
       .record-cell.photo-cell {
         padding: 0;
@@ -155,7 +167,7 @@
         max-height: 100%;
         padding: 0.5mm 1mm;
         overflow: hidden;
-        font-size: 11px;
+        font-size: 16px;
         line-height: 1.1;
         overflow-wrap: anywhere;
         word-break: break-all;
@@ -252,9 +264,28 @@
         for (let index = 0; index < rows.length; index += PAGE_SIZE) {
           const pageRows = rows.slice(index, index + PAGE_SIZE);
           sheets.insertAdjacentHTML("beforeend", renderSheet(pageRows, index / PAGE_SIZE + 1));
+          fitRecordText();
           await loadPhotos(pageRows);
         }
         status.textContent = `已載入 ${rows.length} 筆資料，每張表固定 ${PAGE_SIZE} 位客戶。`;
+      }
+
+      function fitRecordText() {
+        document
+          .querySelectorAll(
+            ".record-cell.name-cell, .record-cell.age-cell, .record-cell.phone-cell, .record-cell.address-cell, .record-cell.occupation-cell, .record-cell.date-cell"
+          )
+          .forEach((cell) => {
+            let size = 16;
+            cell.style.fontSize = `${size}px`;
+            while (
+              size > 8 &&
+              (cell.scrollHeight > cell.clientHeight + 1 || cell.scrollWidth > cell.clientWidth + 1)
+            ) {
+              size -= 0.5;
+              cell.style.fontSize = `${size}px`;
+            }
+          });
       }
 
       function renderSheet(rows, pageNumber) {
