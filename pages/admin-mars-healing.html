@@ -96,20 +96,6 @@
         top: 51.74%;
         height: 40.57%;
       }
-      .label-mask {
-        position: absolute;
-        left: 8.57%;
-        width: 6.13%;
-        background: #fff;
-      }
-      .label-mask.first {
-        top: 11.18%;
-        height: 40.57%;
-      }
-      .label-mask.second {
-        top: 51.74%;
-        height: 40.57%;
-      }
       .record-cell {
         display: flex;
         align-items: center;
@@ -236,8 +222,6 @@
         return `<section class="sheet">
           <div class="branch-name">大直分會</div>
           <div class="report-date">${escapeHtml(reportDate)}</div>
-          <div class="label-mask first"></div>
-          <div class="label-mask second"></div>
           ${renderRecordBlock(fixedRows.slice(0, 5), "first")}
           ${renderRecordBlock(fixedRows.slice(5, 10), "second")}
         </section>`;
