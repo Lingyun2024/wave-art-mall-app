@@ -126,9 +126,22 @@
         object-position: center top;
         background: #fff;
         border-radius: 1mm;
+        transform: translateX(-1.5mm);
       }
       .record-cell.photo-cell.shift-right img {
-        transform: translateX(1mm);
+        transform: translateX(-0.5mm);
+      }
+      .record-cell.name-cell,
+      .record-cell.age-cell,
+      .record-cell.phone-cell {
+        position: relative;
+        top: -8.71%;
+      }
+      .record-cell.address-cell,
+      .record-cell.occupation-cell,
+      .record-cell.date-cell {
+        position: relative;
+        top: -17.24%;
       }
       .record-cell.empty {
         color: transparent;
@@ -236,13 +249,14 @@
             row?.photo_path
               ? `<div class="record-cell photo-cell ${row.id === "6f814771-fe89-4cef-800c-e34182184ad2" ? "shift-right" : ""}" data-photo-id="${escapeHtml(row.id)}"></div>`
               : '<div class="record-cell empty"></div>',
-          (row) => `<div class="record-cell">${escapeHtml(row?.representative_name)}</div>`,
-          (row) => `<div class="record-cell">${escapeHtml(row?.age)}</div>`,
-          (row) => `<div class="record-cell">${escapeHtml(row?.phone)}</div>`,
-          (row) => `<div class="record-cell">${escapeHtml(row?.address)}</div>`,
-          (row) => `<div class="record-cell">${escapeHtml(row?.occupation)}</div>`,
           (row) =>
-            `<div class="record-cell">${escapeHtml(new Date(row.created_at).toLocaleDateString("zh-TW"))}</div>`,
+            `<div class="record-cell name-cell">${escapeHtml(row?.representative_name)}</div>`,
+          (row) => `<div class="record-cell age-cell">${escapeHtml(row?.age)}</div>`,
+          (row) => `<div class="record-cell phone-cell">${escapeHtml(row?.phone)}</div>`,
+          (row) => `<div class="record-cell address-cell">${escapeHtml(row?.address)}</div>`,
+          (row) => `<div class="record-cell occupation-cell">${escapeHtml(row?.occupation)}</div>`,
+          (row) =>
+            `<div class="record-cell date-cell">${escapeHtml(new Date(row.created_at).toLocaleDateString("zh-TW"))}</div>`,
         ];
 
         return `<div class="record-block ${position}">
