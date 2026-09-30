@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabaseClient.js"></script>
+    <script src="../js/auth.js"></script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap");
       body {
@@ -191,18 +192,14 @@
       let allRegistrations = [];
 
       async function init() {
-        const user = await supabaseClient.auth.getUser();
-        if (!user.data.user) {
-          window.location.href = "../pages/auth.html?redirect=mars-healing-admin.html";
+        // 使用統一守門：未登入、未驗證或非管理員會自動導向
+        const user = await requireAdminLogin();
+        if (!user) {
+          // requireAdminLogin 已處理導向，此處直接返回
           return;
         }
-        const email = user.data.user.email;
-        if (email !== "2022lingyun@gmail.com") {
-          alert("您沒有管理權限。");
-          window.location.href = "../index.html";
-          return;
-        }
-        document.getElementById("admin-email").textContent = email;
+
+        document.getElementById("admin-email").textContent = user.email;
         await loadRegistrations();
       }
 
@@ -322,18 +319,44 @@
             <div><span class="text-gray-400">功德金：</span><strong class="text-yellow-400">NT$ ${Number(registration.total_amount).toLocaleString()}</strong></div>
           </div>
           <hr class="border-gray-700">
-          <div class="grid grid-cols-2 gap-4">
-            <div><span class="text-gray-400">代表人姓名：</span>${escapeHtml(registration.representative_name)}</div>
-            <div><span class="text-gray-400">虛歲：</span>${registration.age}</div>
-            <div><span class="text-gray-400">聯絡電話：</span>${escapeHtml(registration.phone)}</div>
-            <div><span class="text-gray-400">職業：</span>${escapeHtml(registration.occupation || "-")}</div>
-            <div class="col-span-2"><span class="text-gray-400">通訊地址：</span>${escapeHtml(registration.address)}</div>
-            ${registration.agent_name ? `<div class="col-span-2"><span class="text-gray-400">代理人：</span>${escapeHtml(registration.agent_name)}</div>` : ""}
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-400 mb-2" for="edit-representative-name">代表人姓名</label>
+              <input id="edit-representative-name" type="text" value="${escapeHtml(registration.representative_name || "")}" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2" for="edit-age">虛歲</label>
+              <input id="edit-age" type="number" min="1" step="1" value="${registration.age}" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2" for="edit-phone">聯絡電話</label>
+              <input id="edit-phone" type="text" value="${escapeHtml(registration.phone || "")}" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2" for="edit-occupation">職業</label>
+              <input id="edit-occupation" type="text" value="${escapeHtml(registration.occupation || "")}" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-gray-400 mb-2" for="edit-address">通訊地址</label>
+              <input id="edit-address" type="text" value="${escapeHtml(registration.address || "")}" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-gray-400 mb-2" for="edit-agent-name">代理人</label>
+              <input id="edit-agent-name" type="text" value="${escapeHtml(registration.agent_name || "")}" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2" for="edit-transfer-last-five">轉帳帳號末 5 碼</label>
+              <input id="edit-transfer-last-five" type="text" inputmode="numeric" maxlength="5" value="${escapeHtml(registration.transfer_last_five || "")}" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded font-mono">
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2" for="edit-transfer-memo">轉帳備註</label>
+              <input id="edit-transfer-memo" type="text" value="${escapeHtml(registration.transfer_memo || "")}" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-gray-400 mb-2" for="edit-reference-note">請領備註</label>
+              <textarea id="edit-reference-note" rows="3" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">${escapeHtml(registration.reference_note || "")}</textarea>
+            </div>
           </div>
-          <hr class="border-gray-700">
-          <div><span class="text-gray-400">轉帳帳號末 5 碼：</span><strong class="font-mono text-lg text-yellow-400">${registration.transfer_last_five}</strong></div>
-          ${registration.transfer_memo ? `<div><span class="text-gray-400">轉帳備註：</span>${escapeHtml(registration.transfer_memo)}</div>` : ""}
-          ${registration.reference_note ? `<div><span class="text-gray-400">請領備註：</span>${escapeHtml(registration.reference_note)}</div>` : ""}
           <hr class="border-gray-700">
           <div><span class="text-gray-400">個人照片：</span><div class="mt-2">${photoPreviewHtml}</div></div>
           <hr class="border-gray-700">
@@ -360,8 +383,9 @@
             <label class="block text-gray-400 mb-2">管理備註</label>
             <textarea id="edit-admin-note" rows="3" class="w-full bg-gray-700 border-gray-600 text-gray-100 px-3 py-2 rounded">${escapeHtml(registration.admin_note || "")}</textarea>
           </div>
-          <div class="flex gap-4 pt-4">
+          <div class="flex gap-4 pt-4 flex-wrap">
             <button onclick="saveRegistrationUpdate('${registration.id}')" class="px-6 py-2 bg-green-600 hover:bg-green-500 rounded font-medium">儲存變更</button>
+            ${registration.registration_status === "rejected" ? `<button onclick="restoreRegistration('${registration.id}')" class="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded font-medium">恢復</button>` : `<button onclick="cancelRegistration('${registration.id}')" class="px-6 py-2 bg-red-700 hover:bg-red-600 rounded font-medium">移到已取消</button>`}
             <button onclick="closeDetailModal()" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded">取消</button>
           </div>
         </div>
@@ -371,15 +395,55 @@
       }
 
       async function saveRegistrationUpdate(id) {
+        const representativeName = document.getElementById("edit-representative-name").value.trim();
+        const ageValue = document.getElementById("edit-age").value.trim();
+        const age = Number(ageValue);
+        const phone = document.getElementById("edit-phone").value.trim();
+        const occupation = document.getElementById("edit-occupation").value.trim();
+        const address = document.getElementById("edit-address").value.trim();
+        const agentName = document.getElementById("edit-agent-name").value.trim();
+        const transferLastFive = document.getElementById("edit-transfer-last-five").value.trim();
+        const transferMemo = document.getElementById("edit-transfer-memo").value.trim();
+        const referenceNote = document.getElementById("edit-reference-note").value.trim();
         const paymentStatus = document.getElementById("edit-payment-status").value;
         const registrationStatus = document.getElementById("edit-registration-status").value;
         const adminNote = document.getElementById("edit-admin-note").value.trim();
+
+        if (!representativeName) {
+          alert("代表人姓名不可空白");
+          return;
+        }
+        if (!ageValue || !Number.isInteger(age) || age <= 0) {
+          alert("虛歲必須是正整數");
+          return;
+        }
+        if (!phone) {
+          alert("聯絡電話不可空白");
+          return;
+        }
+        if (!address) {
+          alert("通訊地址不可空白");
+          return;
+        }
+        if (!/^\d{5}$/.test(transferLastFive)) {
+          alert("轉帳帳號末 5 碼必須是 5 位數字");
+          return;
+        }
 
         try {
           const user = await supabaseClient.auth.getUser();
           const { error } = await supabaseClient
             .from("mars_healing_registrations")
             .update({
+              representative_name: representativeName,
+              age,
+              phone,
+              occupation: occupation || null,
+              address,
+              agent_name: agentName || null,
+              transfer_last_five: transferLastFive,
+              transfer_memo: transferMemo || null,
+              reference_note: referenceNote || null,
               payment_status: paymentStatus,
               registration_status: registrationStatus,
               admin_note: adminNote || null,
@@ -396,6 +460,64 @@
         } catch (error) {
           console.error("[saveRegistrationUpdate]", error);
           alert("更新失敗：" + error.message);
+        }
+      }
+
+      async function updateRegistrationStatus(id, paymentStatus, registrationStatus, note) {
+        const user = await supabaseClient.auth.getUser();
+        const registration = allRegistrations.find((item) => item.id === id);
+        if (!registration) throw new Error("找不到登記資料");
+
+        const existingNote = registration.admin_note ? `${registration.admin_note}\n` : "";
+        const { error } = await supabaseClient
+          .from("mars_healing_registrations")
+          .update({
+            payment_status: paymentStatus,
+            registration_status: registrationStatus,
+            admin_note: `${existingNote}${note}`,
+            reviewed_by: user.data.user.id,
+            reviewed_at: new Date().toISOString(),
+          })
+          .eq("id", id);
+
+        if (error) throw error;
+      }
+
+      async function cancelRegistration(id) {
+        if (!confirm("確定要將此登記移到已取消嗎？")) return;
+
+        try {
+          await updateRegistrationStatus(
+            id,
+            "rejected",
+            "rejected",
+            `[系統操作] 已取消，操作時間：${new Date().toLocaleString("zh-TW")}`
+          );
+          alert("已移到已取消");
+          closeDetailModal();
+          await loadRegistrations();
+        } catch (error) {
+          console.error("[cancelRegistration]", error);
+          alert("移到已取消失敗：" + error.message);
+        }
+      }
+
+      async function restoreRegistration(id) {
+        if (!confirm("確定要恢復此登記嗎？")) return;
+
+        try {
+          await updateRegistrationStatus(
+            id,
+            "pending",
+            "submitted",
+            `[系統操作] 已恢復，操作時間：${new Date().toLocaleString("zh-TW")}`
+          );
+          alert("登記已恢復");
+          closeDetailModal();
+          await loadRegistrations();
+        } catch (error) {
+          console.error("[restoreRegistration]", error);
+          alert("恢復失敗：" + error.message);
         }
       }
 

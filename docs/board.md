@@ -36,6 +36,8 @@ Phase 3.5 ✅ 營運層疊加完成（docs/ops/：異常手冊／指標／風險
 | 12 | 金流 e2e（改價斷言） | 開發 | ✅ 完成 | — | `tools/test_money_guard.mjs`（11 項斷言，已納 gates） |
 | 13 | 線上監控（Supabase 每日報告） | 主理人 | ⚪ 未開 | ⚠️ 族族放行（動線上） | — |
 | 14 | Supabase SMTP 根因修復 | 主理人 | ⚪ 未開 | ⚠️ 族族放行（動線上） | — |
+| 15 | 火星療癒管理與總部報表交接 | 主理人 | 🟡 Brief 草稿完成 | 使用者確認 Brief 是否凍結 | `docs/briefs/2026-09-30_火星療癒管理與總部報表交接-v1-draft.md`、`.trae/documents/mars-healing-headquarters-report-format.md` |
+| 16 | 會員登入與權限入口全盤規劃 | 主理人 | 🔵 開發完成，待評審 | Auth 設計、安全核對與測試產物匯合 | `docs/design/auth-guard-contract-v1-draft.md`、`js/auth.js` |
 
 圖例：⚪ 未開 ｜ 🟡 進行中 ｜ 🔵 待評審 ｜ 🔴 卡住 ｜ ✅ 完成
 
@@ -95,3 +97,4 @@ Phase 3.5 ✅ 營運層疊加完成（docs/ops/：異常手冊／指標／風險
 | 2026-09-13 | 族族拍板 ADR-0002（維持 MPA）／0003（Tailwind CLI 編譯單一 CSS）／0004（統一 db.js）；Phase 3 開工：H1 基座 ∥ 內容查證並行 | 族族拍板 |
 | 2026-09-13 | H1 基座凍結 commit 2549af0：base.css 66.9KB（tokens→CLI 編譯）、db.js/nav.js/meta.js、CONTRACT.md 七條紅線、build:css + hash 門禁；五門檻全綠（39 冒煙） | AI |
 | 2026-09-13 | 內容查證完成 `docs/content-audit.md`：新發現 A1 火星第三套色票（cosmic/gold 未進 H1 tokens）、A2 三頁可見「GALACTIC GALLERY」殘留；P1 確認 7/17 截止日已過；四項送族族拍板 | AI（內容查證） |
+| 2026-09-30 | 建立火星療癒管理與總部報表交接 Brief 草稿；正式規範已更新，等待使用者確認 Brief 凍結後才進入設計、測試、獨立評審與發布流程 | AI（主理人） |

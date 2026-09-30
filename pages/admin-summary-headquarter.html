@@ -7,6 +7,7 @@
     <meta name="robots" content="noindex, nofollow" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabaseClient.js"></script>
+    <script src="../js/auth.js"></script>
     <style>
       :root {
         --ink: #171717;
@@ -359,7 +360,6 @@
       </div>
     </main>
     <script>
-      const ADMIN_EMAILS = ["2022lingyun@gmail.com"];
       const PLAN_COLUMNS = [
         { key: "personal", label: "個人者乎" },
         { key: "family", label: "家庭者乎" },
@@ -396,15 +396,10 @@
         "顏瑞蘭",
       ]);
       async function init() {
-        const status = document.getElementById("status");
-        const user = await getCurrentUser();
+        // 使用統一守門：未登入、未驗證或非管理員會自動導向
+        const user = await requireAdminLogin();
         if (!user) {
-          status.textContent = "尚未登入管理員帳號，請先登入後再載入總表。";
-          return;
-        }
-        if (!ADMIN_EMAILS.includes(user.email)) {
-          document.getElementById("status").hidden = true;
-          document.getElementById("no-permission").hidden = false;
+          // requireAdminLogin 已處理導向，此處直接返回
           return;
         }
         await loadSummary();

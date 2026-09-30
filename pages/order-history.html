@@ -256,6 +256,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/supabaseClient.js"></script>
+<script src="../js/auth.js"></script>
 <script src="../js/nav.js"></script>
 <script>
   /*
@@ -297,16 +298,15 @@
   // 記錄哪些訂單的商品明細已經載入過，避免重複查資料庫
   const loadedOrderDetails = new Set();
 
-  // 初始化頁面：先檢查是否登入，再抓訂單
+  // 初始化頁面：使用統一守門，未登入會自動導向登入頁
   async function initOrderHistoryPage() {
-    const guestBlock = document.getElementById("guest-block");
     const loadingBlock = document.getElementById("loading-block");
     const emptyBlock = document.getElementById("empty-block");
 
-    const user = await getCurrentUser();
+    // 使用統一守門：未登入或未驗證會自動導向並保存回跳
+    const user = await requireMemberLogin();
     if (!user) {
-      loadingBlock.classList.add("hidden");
-      guestBlock.classList.remove("hidden");
+      // requireMemberLogin 已處理導向，此處直接返回
       return;
     }
 

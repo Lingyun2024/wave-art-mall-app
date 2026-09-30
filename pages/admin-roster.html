@@ -354,8 +354,8 @@
     </main>
 
     <script src="../js/supabaseClient.js"></script>
+    <script src="../js/auth.js"></script>
     <script>
-      const ADMIN_EMAILS = ["2022lingyun@gmail.com"];
       const PAGE_SIZE = 10;
       const PLAN_COLUMNS = [
         { key: "personal", label: "個人者乎", original: 7700, special: 770 },
@@ -368,14 +368,10 @@
       document.addEventListener("DOMContentLoaded", initRoster);
 
       async function initRoster() {
-        const user = await getCurrentUser();
+        // 使用統一守門：未登入、未驗證或非管理員會自動導向
+        const user = await requireAdminLogin();
         if (!user) {
-          window.location.href = getPathTo("pages/auth.html");
-          return;
-        }
-        if (!ADMIN_EMAILS.includes(user.email)) {
-          document.getElementById("status-line").hidden = true;
-          document.getElementById("no-permission").hidden = false;
+          // requireAdminLogin 已處理導向，此處直接返回
           return;
         }
         await loadRoster();

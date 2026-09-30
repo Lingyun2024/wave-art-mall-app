@@ -120,6 +120,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/supabaseClient.js"></script>
+<script src="../js/auth.js"></script>
 <script>
   /*
     =========================================================
@@ -173,34 +174,18 @@
   }
 
   // -----------------------------------------------------
-  // 登入成功 / 注册成功后，导向「原本要去的页面」或首页
+  // 登入成功 / 注册成功后，使用統一回跳工具（依角色分流）
   // -----------------------------------------------------
-  function redirectAfterAuth() {
-    const rawBackUrl = localStorage.getItem("wave_redirect_after_login");
-    localStorage.removeItem("wave_redirect_after_login");
-
-    if (rawBackUrl) {
-      try {
-        const normalizedBackUrl = /^(https?:)?\/\//.test(rawBackUrl) || rawBackUrl.startsWith("/")
-          ? rawBackUrl
-          : rawBackUrl.startsWith("pages/")
-            ? `/${rawBackUrl}`
-            : `/pages/${rawBackUrl}`;
-        const backUrl = new URL(normalizedBackUrl, window.location.origin);
-        // 安全校验：只允许同域、且不是 auth 页本身（避免循环），才跳回
-        const isAuthPage = backUrl.pathname.endsWith("/pages/auth.html") ||
-                           backUrl.pathname.endsWith("/auth.html") ||
-                           backUrl.pathname === "/pages/auth" ||
-                           backUrl.pathname === "/auth";
-        if (backUrl.origin === window.location.origin && !isAuthPage) {
-          window.location.href = backUrl.href;
-          return;
-        }
-      } catch (e) {
-        // URL 不合法，直接 fallthrough 回首页
-      }
+  async function redirectAfterAuth() {
+    const user = await getCurrentUser();
+    if (!user) {
+      // 理論上不會發生，但保險起見還是回首頁
+      window.location.href = "../index.html";
+      return;
     }
-    window.location.href = "../index.html";
+
+    // 使用 auth.js 的統一回跳（會依角色分流）
+    await redirectAfterLogin(user);
   }
 
   // -----------------------------------------------------

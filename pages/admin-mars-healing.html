@@ -7,8 +7,21 @@
     <!-- 觸發 Vercel 部署 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabaseClient.js"></script>
+    <script src="../js/auth.js"></script>
     <style>
       :root {
+        --photo-original-width: 35mm;
+        --photo-original-height: 45mm;
+        --photo-crop-horizontal: 1.5mm;
+        --photo-crop-vertical: 5mm;
+        --photo-width: calc(var(--photo-original-width) - (var(--photo-crop-horizontal) * 2));
+        --photo-height: calc(var(--photo-original-height) - var(--photo-crop-vertical));
+        --photo-top-offset: -1.5mm;
+        --photo-column-1-offset: -1mm;
+        --photo-column-2-offset: -1mm;
+        --photo-column-3-offset: -3mm;
+        --photo-column-4-offset: -1mm;
+        --photo-column-5-offset: -1mm;
         font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
         color: #111;
         background: #e8e8e8;
@@ -133,20 +146,34 @@
       }
       .record-cell.photo-cell img {
         display: block;
-        width: calc(100% - 3mm);
-        height: 40mm;
-        margin: 0 auto;
+        width: var(--photo-width);
+        height: var(--photo-height);
+        margin: 0;
         object-fit: cover;
         object-position: center top;
         background: #fff;
         border-radius: 1mm;
+        transform: translate(var(--photo-column-offset), var(--photo-top-offset));
       }
-      .record-cell.photo-cell.photo-1 img,
-      .record-cell.photo-cell.photo-2 img {
-        transform: translate(-1mm, -1.5mm);
+      .record-cell.photo-cell.photo-1,
+      .record-cell.photo-cell.photo-6 {
+        --photo-column-offset: var(--photo-column-1-offset);
       }
-      .record-cell.photo-cell.photo-3 img {
-        transform: translate(-3mm, -1.5mm);
+      .record-cell.photo-cell.photo-2,
+      .record-cell.photo-cell.photo-7 {
+        --photo-column-offset: var(--photo-column-2-offset);
+      }
+      .record-cell.photo-cell.photo-3,
+      .record-cell.photo-cell.photo-8 {
+        --photo-column-offset: var(--photo-column-3-offset);
+      }
+      .record-cell.photo-cell.photo-4,
+      .record-cell.photo-cell.photo-9 {
+        --photo-column-offset: var(--photo-column-4-offset);
+      }
+      .record-cell.photo-cell.photo-5,
+      .record-cell.photo-cell.photo-10 {
+        --photo-column-offset: var(--photo-column-5-offset);
       }
       .record-cell.name-cell {
         position: relative;
@@ -223,7 +250,6 @@
     <p id="status">正在確認管理員權限...</p>
     <main id="sheets"></main>
     <script>
-      const ADMIN_EMAIL = "2022lingyun@gmail.com";
       const PAGE_SIZE = 10;
       const BUCKET = "mars-healing-photos";
 
@@ -232,15 +258,14 @@
       async function loadRegistrations() {
         const status = document.getElementById("status");
         const sheets = document.getElementById("sheets");
-        const user = await getCurrentUser();
+
+        // 使用統一守門：未登入、未驗證或非管理員會自動導向
+        const user = await requireAdminLogin();
         if (!user) {
-          window.location.href = "auth.html";
+          // requireAdminLogin 已處理導向，此處直接返回
           return;
         }
-        if (user.email !== ADMIN_EMAIL) {
-          status.textContent = "無權限存取。";
-          return;
-        }
+
         status.textContent = "正在載入火星療癒登記資料...";
         const { data, error } = await supabaseClient
           .from("mars_healing_registrations")
