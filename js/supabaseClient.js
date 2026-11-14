@@ -88,10 +88,14 @@ async function getCurrentUser() {
 async function requireLogin(redirectBackUrl) {
   const user = await getCurrentUser();
   if (!user) {
-    // 把目前页面网址记下来，存到 localStorage，
-    // 这样登入成功后可以知道要导回哪一页
+    // 改用 auth.js 的安全回跳函式（有同源與防循環檢查）
+    // 若該頁面未引入 auth.js，則退回直接寫入（相容舊行為）
     const backUrl = redirectBackUrl || window.location.href;
-    localStorage.setItem("wave_redirect_after_login", backUrl);
+    if (typeof saveRedirectUrl === "function") {
+      saveRedirectUrl(backUrl);
+    } else {
+      localStorage.setItem("wave_redirect_after_login", backUrl);
+    }
     showToast("請先登入才能進行這個操作", "error");
     setTimeout(() => {
       window.location.href = getPathTo("pages/auth.html");
@@ -103,7 +107,11 @@ async function requireLogin(redirectBackUrl) {
   // email_confirmed_at 有時間代表使用者已點過驗證信；沒有值就一律拒絕。
   if (!user.email_confirmed_at) {
     const backUrl = redirectBackUrl || window.location.href;
-    localStorage.setItem("wave_redirect_after_login", backUrl);
+    if (typeof saveRedirectUrl === "function") {
+      saveRedirectUrl(backUrl);
+    } else {
+      localStorage.setItem("wave_redirect_after_login", backUrl);
+    }
     showToast("請先到 Email 信箱完成驗證，才可以下單", "error");
     setTimeout(() => {
       window.location.href = getPathTo("pages/auth.html?notice=verify-email");

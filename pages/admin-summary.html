@@ -541,6 +541,9 @@
           (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]
         );
       }
+
+      // 頁面載入後立即執行管理員守門與報表載入
+      document.addEventListener("DOMContentLoaded", init);
     </script>
   </body>
 </html>
